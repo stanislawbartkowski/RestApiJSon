@@ -1,0 +1,2 @@
+echo $TMPFILE
+echo "{}" >$TMPFILE

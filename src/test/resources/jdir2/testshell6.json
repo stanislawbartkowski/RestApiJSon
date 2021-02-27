@@ -1,0 +1,6 @@
+{
+  "proc": "SHELL",
+  "output" : "TMPFILE",
+  "format" : "JSON",
+  "action" : "./run6.sh"
+}

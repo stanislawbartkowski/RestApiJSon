@@ -1,0 +1,4 @@
+{
+  "proc": "SHELL",
+  "action" : "echo \"hello\""
+}

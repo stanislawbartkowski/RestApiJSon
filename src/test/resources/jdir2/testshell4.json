@@ -1,0 +1,6 @@
+{
+  "proc": "SHELL",
+  "output" : "STRING",
+  "format" : "TEXT",
+  "action" : "pwd"
+}

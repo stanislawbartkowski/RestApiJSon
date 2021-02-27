@@ -1,0 +1,5 @@
+{
+  "proc": "SHELL",
+  "output" : "STDOUT",
+  "action" : "echo hello"
+}

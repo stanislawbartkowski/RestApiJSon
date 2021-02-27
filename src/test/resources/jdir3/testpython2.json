@@ -1,0 +1,6 @@
+{
+  "proc": "PYTHON3",
+  "output" : "TMPFILE",
+  "format" : "JSON",
+  "action" : "test1.py"
+}

@@ -71,6 +71,14 @@
 
     </build>
 
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub stanislawbartkowski Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/stanislawbartkowski/RestService/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
@@ -107,13 +115,12 @@
             <version>42.2.18</version>
         </dependency>
 
-
+        <!-- https://maven.pkg.github.com/stanislawbartkowski/RestService/ -->
         <dependency>
             <groupId>com.restservice</groupId>
-            <artifactId>RestService</artifactId>
+            <artifactId>restservice</artifactId>
             <version>1.0</version>
         </dependency>
-
 
     </dependencies>
 

@@ -12,6 +12,17 @@ import static com.rest.readjson.Helper.readTextFile;
 
 public class RestActionJSON {
 
+    @FunctionalInterface
+    public static interface FreplaceVariable {
+        String replace(String param) throws RestError;
+    }
+
+    @FunctionalInterface
+    public static interface FverifyAddParam {
+        void verify(IRestActionJSON i) throws RestError;
+    }
+
+
     private static final String PARAMPARNAME = "name";
     private static final String PARAMPARTYPE = "type";
     private static final String PARAMDESCRITPION = "description";
@@ -28,6 +39,10 @@ public class RestActionJSON {
 
     private static final Set<String> allowedKeys = new HashSet<String>();
     private static final Set<String> allowedParKeys = new HashSet<String>();
+
+    private static final Set<String> additionalKeys = new HashSet<String>();
+    private static FverifyAddParam verifyParam = null;
+    private static FreplaceVariable replaceVariable = null;
 
     private static Map<String, PARAMTYPE> tmap = new HashMap<String, PARAMTYPE>();
     private static Map<String, Integer> procmap = new HashMap<String, Integer>();
@@ -64,6 +79,7 @@ public class RestActionJSON {
         private final Path jsonPath;
         private final FORMAT format;
         private final OUTPUT output;
+        private final Map<String, String> addPars;
 
         @Override
         public String getName() {
@@ -112,8 +128,13 @@ public class RestActionJSON {
             return jsonPath;
         }
 
+        @Override
+        public Map<String, String> getAddPars() {
+            return addPars;
+        }
 
-        RestAction(String name, Optional<String> desc, Method method, int proc, String action, List<IRestParam> plist, FORMAT format, OUTPUT output, Path jsonPath) {
+
+        RestAction(String name, Optional<String> desc, Method method, int proc, String action, List<IRestParam> plist, FORMAT format, OUTPUT output, Path jsonPath, Map<String, String> addPars) {
             this.name = name;
             this.desc = desc;
             this.method = method;
@@ -123,6 +144,7 @@ public class RestActionJSON {
             this.format = format;
             this.output = output;
             this.jsonPath = jsonPath;
+            this.addPars = addPars;
         }
     }
 
@@ -149,18 +171,27 @@ public class RestActionJSON {
         allowedParKeys.add(PARAMPARTYPE);
     }
 
+    public static void setAdditionalParams(Set<String> keys, FverifyAddParam pverifyParam, FreplaceVariable preplaceVariable, Map<String, Integer> addmap) {
+        additionalKeys.addAll(keys);
+        verifyParam = pverifyParam;
+        replaceVariable = preplaceVariable;
+        procmap.putAll(addmap);
+    }
 
     public static IRestActionJSON.IRestParam constructIP(String name, PARAMTYPE type) {
         return new RestAction.RestParam(name, type);
     }
 
-
-    private static void verifyAttributes(JSONObject json, Set<String> atts, Path p) throws RestError {
+    private static void verifyAttributes(JSONObject json, Set<String> atts, Set<String> addatt, Path p) throws RestError {
         for (String s : json.keySet()) {
-            if (!atts.contains(s)) {
+            if (!atts.contains(s) && !addatt.contains(s)) {
                 String mess = p.toString() + " incorrect attribute " + s + ".";
                 String keys = "";
                 Iterator<String> i = atts.iterator();
+                while (i.hasNext()) {
+                    keys = keys + " " + i.next();
+                }
+                i = addatt.iterator();
                 while (i.hasNext()) {
                     keys = keys + " " + i.next();
                 }
@@ -203,8 +234,9 @@ public class RestActionJSON {
         return m;
     }
 
-    private static String replaceVariables(String s) throws RestError {
-        return s;
+    private static String preplaceVariable(String s) throws RestError {
+        if (replaceVariable == null) return s;
+        return replaceVariable.replace(s);
     }
 
     private static String getPar(JSONObject json, String key, Optional<String> defa) throws RestError {
@@ -215,18 +247,18 @@ public class RestActionJSON {
                 Helper.throwSevere("Parameter " + key + " is not defined and no default value provided");
             return defa.get();
         }
-        return replaceVariables(o.toString());
+        return preplaceVariable(o.toString());
     }
 
     private static void throwmaperror(String stype, Set<String> se) throws RestError {
 
-        String mess = stype + " value is incorrrect. Expected :";
+        String mess = stype + " value is incorrect. Expected :";
         for (String s : se) mess = mess + " " + s;
         Helper.throwSevere(mess);
     }
 
     private static IRestActionJSON.IRestParam readPar(JSONObject json, Path p) throws RestError {
-        verifyAttributes(json, allowedParKeys, p);
+        verifyAttributes(json, allowedParKeys, new HashSet<String>(), p);
         String name = getPar(json, PARAMPARNAME, null);
         String stype = getPar(json, PARAMPARTYPE, Optional.of("string"));
         PARAMTYPE typ = tmap.get(stype);
@@ -238,7 +270,7 @@ public class RestActionJSON {
         String jsonstring = null;
         jsonstring = readTextFile(p);
         JSONObject json = new JSONObject(jsonstring);
-        verifyAttributes(json, allowedKeys, p);
+        verifyAttributes(json, allowedKeys, additionalKeys, p);
         RestLogger.info(json.toString());
         String name = getName(p);
         Optional<String> descr = getJSon(json, PARAMDESCRITPION);
@@ -260,7 +292,24 @@ public class RestActionJSON {
         IRestActionJSON.OUTPUT output = getJSONAttr(IRestActionJSON.OUTPUT.class, json, IRestActionJSON.OUTPUT.TMPFILE, PARAMOUTPUT);
         IRestActionJSON.FORMAT format = getJSONAttr(IRestActionJSON.FORMAT.class, json, IRestActionJSON.FORMAT.JSON, PARAMFORMAT);
 
-        return new RestAction(name, descr, m, proc, action, plist, format, output, p);
+        Map<String, String> addPars = new HashMap<String, String>();
+
+        json.keySet().stream().forEach(e -> {
+            String key = e;
+            if (additionalKeys.contains(key)) {
+                Object o = json.get(key);
+                if (o != null && o instanceof JSONObject) {
+                    String val = o.toString();
+                    addPars.put(key, val);
+                }
+            }
+        });
+
+        IRestActionJSON ires = new RestAction(name, descr, m, proc, action, plist, format, output, p, addPars);
+
+        if (verifyParam != null)
+            verifyParam.verify(ires);
+        return ires;
     }
 
 }

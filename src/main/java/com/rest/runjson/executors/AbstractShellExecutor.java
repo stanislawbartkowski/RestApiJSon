@@ -14,7 +14,7 @@ import java.util.Optional;
 import com.rest.restservice.ParamValue;
 
 
-abstract class AbstractShellExecutor implements IRunPlugin {
+abstract class AbstractShellExecutor implements IRunPlugin<IRestActionJSON> {
 
     private final String paramKey;
     private static File shellhome;

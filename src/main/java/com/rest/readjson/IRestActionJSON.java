@@ -5,6 +5,7 @@ import com.rest.restservice.PARAMTYPE;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface IRestActionJSON {
@@ -69,5 +70,7 @@ public interface IRestActionJSON {
     List<IRestParam> getParams();
 
     Path getJsonPath();
+
+    Map<String,String> getAddPars();
 
 }

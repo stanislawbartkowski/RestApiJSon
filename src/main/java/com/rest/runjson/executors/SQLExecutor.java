@@ -11,14 +11,12 @@ import com.rest.runjson.executors.sql.SQLParam;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SQLExecutor implements IRunPlugin {
+public class SQLExecutor implements IRunPlugin<IRestActionJSON> {
 
     private final static String URL = "url";
     private final static String USER = "user";

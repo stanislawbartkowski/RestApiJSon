@@ -1,5 +1,6 @@
 package com.rest.conf;
 
+import com.rest.main.RestMainHelper;
 import com.rest.readjson.Helper;
 import com.rest.readjson.RestError;
 
@@ -15,9 +16,12 @@ public class ConstructRestConfig {
     static class RestConfig implements IRestConfig {
 
         private final Properties prop;
+        private final Helper.ListPaths fparam;
 
         RestConfig(Properties  prop) {
             this.prop = prop;
+            // bad practice, method used in constructor
+            this.fparam = new Helper.ListPaths(getJSONDir());
         }
 
         @Override
@@ -29,6 +33,11 @@ public class ConstructRestConfig {
         @Override
         public Properties prop() {
             return prop;
+        }
+
+        @Override
+        public Helper.ListPaths getJSonDirPaths() {
+            return fparam;
         }
     }
 

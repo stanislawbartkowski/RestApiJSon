@@ -1,6 +1,7 @@
 package com.rest.service;
 
 import com.rest.conf.IRestConfig;
+import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestActionJSON;
 import com.rest.readjson.RestError;
@@ -22,7 +23,7 @@ public class RestService extends RestHelper.RestServiceHelper {
     private final boolean corsallowed = true;
     private IRestActionJSON irest = null;
 
-    public RestService(IRestConfig iconfig) {
+    public <T extends IRestConfig > RestService(T iconfig) {
         super("", false);
         this.iconfig = iconfig;
     }
@@ -32,10 +33,16 @@ public class RestService extends RestHelper.RestServiceHelper {
         String[] path = getPath(httpExchange);
         String name = path[0];
         RestLogger.info("Rest method " + name);
-        // dodaj rozszerzenie .json
-        Path p = new File(iconfig.getJSONDir(), name + ".json").toPath();
         try {
-            irest = RestActionJSON.readJSONAction(p);
+            // .json
+            String fname = name + ".json";
+            Optional<Path> p = iconfig.getJSonDirPaths().getPath(fname);
+            if (!p.isPresent()) {
+                String errmess = "File does not exist: " + iconfig.getJSonDirPaths().getErrPath(fname);
+                Helper.throwSevere(errmess);
+            }
+
+            irest = RestActionJSON.readJSONAction(p.get());
         } catch (RestError restError) {
             throw new IOException(restError.getMessage());
         }

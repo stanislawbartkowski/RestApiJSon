@@ -1,42 +1,35 @@
-import org.apache.commons.cli.*;
+import com.rest.conf.ConstructRestConfig;
+import com.rest.conf.IRestConfig;
+import com.rest.main.RestMainHelper;
+import com.rest.readjson.IRestActionJSON;
+import com.rest.readjson.RestError;
+import com.rest.restservice.RestHelper;
+import com.rest.runjson.RestRunJson;
+import com.rest.service.RestService;
+import com.rest.restservice.RestStart;
+
+// -c src/test/resources/testpar/restparam.properties -p 7999
+
 
 import java.util.Optional;
 
-public class RestMain {
+public class RestMain extends RestStart {
 
-
-    private static void P(String s) {
-        System.out.println(s);
-    }
-
-    private static Optional<CommandLine> buildCmd(String[] args) {
-
-        final Options options = new Options();
-        Option port=Option.builder("p").longOpt("port").desc("Port number").numberOfArgs(1).type(Integer.class).required().build();
-        Option  par=Option.builder("c").longOpt("conf").desc("Configuration file").numberOfArgs(1).required().build();
-        options.addOption(port).addOption(par);
-        CommandLineParser parser = new DefaultParser();
-        try {
-            CommandLine cmd =  parser.parse( options, args);
-            return Optional.of(cmd);
-        } catch (ParseException e) {
-            P(e.getMessage());
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp( "java ... RestService", options);
-            P("");
-            P("Example:");
-            P(" -c /home/sbartkowski/run/p.properties -p 9800");
-            return Optional.empty();
-        }
-    }
 
     public static void main(String[] args) throws Exception {
 
-        Optional<CommandLine> cmd = buildCmd(args);
+        Optional<RestMainHelper.RestParams> cmd = RestMainHelper.buildCmd(args);
         if (! cmd.isPresent()) return;
 
-        String configfile = cmd.get().getOptionValue('c');
-        int PORT = Integer.parseInt(cmd.get().getOptionValue('p'));
+        IRestConfig iconfig = ConstructRestConfig.create(cmd.get().getConfigfile());
+
+        RestRunJson.setRestConfig(iconfig);
+        RestMainHelper.registerExecutors(IRestActionJSON.SQL);
+        RestMainHelper.registerExecutors(IRestActionJSON.PYTHON3);
+
+        RestStart(cmd.get().getPORT(), (server) -> {
+            RestHelper.registerService(server, new RestService(iconfig));
+        }, new String[]{});
 
     }
 }

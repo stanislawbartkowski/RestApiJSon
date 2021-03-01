@@ -1,8 +1,10 @@
 package com.rest.readjson;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.Optional;
 import java.util.Properties;
@@ -13,6 +15,38 @@ import com.rest.restservice.RestLogger;
 import com.rest.restservice.ParamValue;
 
 public class Helper {
+
+    public static class ListPaths {
+
+        private final File[] files;
+
+        public ListPaths(String s) {
+            String[] ss = s.split(",");
+            files = new File[ss.length];
+            for (int i = 0; i < ss.length; i++)
+                files[i] = new File(ss[i]);
+        }
+
+        public Optional<Path> getPath(String s) {
+
+            for (File f : files) {
+                File ff = new File(f, s);
+                if (ff.exists() && ff.isFile()) return Optional.of(Paths.get(ff.toURI()));
+            }
+            return Optional.empty();
+        }
+
+        public String getErrPath(String s) {
+            String errmess = null;
+
+            for (File f : files)
+                if (errmess == null) errmess = "Directory: " + f.toString();
+                else errmess = errmess + "," + f.toString();
+
+            return errmess + " File: " + s;
+        }
+
+    }
 
     public static void throwSevere(String mess) throws RestError {
         RestLogger.L.severe(mess);

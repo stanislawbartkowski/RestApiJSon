@@ -9,7 +9,7 @@ import com.rest.restservice.ParamValue;
 import java.io.File;
 import java.util.Map;
 
-public interface IRunPlugin <I extends IRestActionJSON> {
+public interface IRunPlugin  {
 
     String TMPFILE = "TMPFILE";
 
@@ -22,5 +22,5 @@ public interface IRunPlugin <I extends IRestActionJSON> {
     default void verifyProperties(IRestConfig conf) throws RestError {
     }
 
-    void executeJSON(I j, IRestConfig conf, RunResult res, Map<String,ParamValue> values) throws RestError;
+    void executeJSON(IRestActionJSON j, IRestConfig conf, RunResult res, Map<String,ParamValue> values) throws RestError;
 }

@@ -64,7 +64,6 @@ public class RestMainHelper {
         }
     }
 
-
     public static void registerExecutors(int proc) throws RestError {
         switch (proc) {
             case IRestActionJSON.SQL:

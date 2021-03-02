@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SQLExecutor implements IRunPlugin<IRestActionJSON> {
+public class SQLExecutor implements IRunPlugin {
 
     private final static String URL = "url";
     private final static String USER = "user";

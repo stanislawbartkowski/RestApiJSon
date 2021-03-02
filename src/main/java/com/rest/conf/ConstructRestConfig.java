@@ -18,7 +18,7 @@ public class ConstructRestConfig {
         private final Properties prop;
         private final Helper.ListPaths fparam;
 
-        RestConfig(Properties  prop) {
+        RestConfig(Properties prop) {
             this.prop = prop;
             // bad practice, method used in constructor
             this.fparam = new Helper.ListPaths(getJSONDir());
@@ -50,9 +50,9 @@ public class ConstructRestConfig {
             f = new FileInputStream(p.toFile());
             pro.load(f);
         } catch (IOException e) {
-            Helper.throwException(p.toString(),e);
+            Helper.throwException(p.toString(), e);
         }
-        Helper.getValue(pro,JDIR,true);
+        Helper.getValue(pro, JDIR, true);
 
         return new RestConfig(pro);
 

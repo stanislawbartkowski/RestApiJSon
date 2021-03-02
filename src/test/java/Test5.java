@@ -1,3 +1,4 @@
+import com.rest.test.TestRestHelper;
 import org.json.JSONArray;
 import org.junit.Test;
 

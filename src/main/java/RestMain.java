@@ -19,7 +19,7 @@ public class RestMain extends RestStart {
     public static void main(String[] args) throws Exception {
 
         Optional<RestMainHelper.RestParams> cmd = RestMainHelper.buildCmd(args);
-        if (! cmd.isPresent()) return;
+        if (! cmd.isPresent()) System.exit(4);
 
         IRestConfig iconfig = ConstructRestConfig.create(cmd.get().getConfigfile());
 

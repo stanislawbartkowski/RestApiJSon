@@ -63,7 +63,7 @@ public class Helper {
             String s = new String(Files.readAllBytes(path));
             return s;
         } catch (IOException e) {
-            throwException("Error while reding " + path.toString(), e);
+            throwException("Error while reading " + path.toString(), e);
         }
         return null;
     }

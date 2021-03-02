@@ -1,5 +1,8 @@
+package com.rest.test;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.Assert;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +54,7 @@ abstract public class TestRestHelper {
     protected String callok(String meth, String query) throws IOException {
         int res = makegetcall(meth, query);
         P("Result: " + res);
-        assertEquals(200, res);
+        Assert.assertEquals(200, res);
         return getData();
     }
 
@@ -63,7 +66,7 @@ abstract public class TestRestHelper {
     protected void test400(String meth, String query) throws IOException {
         int res = makegetcall(meth, query);
         P("Result: " + res);
-        assertEquals(400, res);
+        Assert.assertEquals(400, res);
         String da = getErrData();
         P(da);
     }
@@ -75,16 +78,16 @@ abstract public class TestRestHelper {
     protected void testok(String meth, String query, String validdata) throws IOException {
         int res = makegetcall(meth, query);
         P("Result: " + res);
-        assertEquals(200, res);
+        Assert.assertEquals(200, res);
         String da = getData();
         P(da);
-        assertEquals(validdata, da.trim());
+        Assert.assertEquals(validdata, da.trim());
     }
 
     protected JSONArray testoka(String meth, String query) throws IOException {
         int res = makegetcall(meth, query);
         P("Result: " + res);
-        assertEquals(200, res);
+        Assert.assertEquals(200, res);
         String da = getData();
         P(da);
         return getA(da);

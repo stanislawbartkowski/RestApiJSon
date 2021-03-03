@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class RestRunJson {
 
@@ -45,12 +46,8 @@ public class RestRunJson {
         boolean tempfile = j.output() == IRestActionJSON.OUTPUT.TMPFILE;
         boolean json = j.format() == IRestActionJSON.FORMAT.JSON;
         if (tempfile) {
-            try {
-                res.tempfile = File.createTempFile("rst", json ? ".json" : ".txt");
-                values.put(IRunPlugin.TMPFILE, new ParamValue(res.tempfile.toString()));
-            } catch (IOException e) {
-                throw new RestError(e.getMessage());
-            }
+            res.tempfile = Helper.createTempFile(json);
+            values.put(IRunPlugin.TMPFILE, new ParamValue(res.tempfile.toString()));
         }
         irun.executeJSON(j, rConfig, res, values);
         if (tempfile) {

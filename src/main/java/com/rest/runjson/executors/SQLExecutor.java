@@ -39,6 +39,7 @@ public class SQLExecutor implements IRunPlugin {
 
     @Override
     public void executeJSON(IRestActionJSON j, IRestConfig conf, RunResult res, Map<String, ParamValue> values) throws RestError {
+        beforeExecute(j,conf,res,values);
         int i = 1;
         List<SQLParam> sqlp = new ArrayList<SQLParam>();
         for (IRestActionJSON.IRestParam re : j.getParams()) sqlp.add(new SQLParam(i++, re));

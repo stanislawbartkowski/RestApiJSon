@@ -250,7 +250,8 @@ public class RestActionJSON {
                 Helper.throwSevere("Parameter " + key + " is not defined and no default value provided");
             return defa.get();
         }
-        return preplaceVariable(o.toString());
+        if (o instanceof String ) return preplaceVariable(json.getString(key));
+        return o.toString();
     }
 
     private static void throwmaperror(String stype, Set<String> se) throws RestError {
@@ -302,7 +303,12 @@ public class RestActionJSON {
             if (additionalKeys.contains(key)) {
                 Object o = json.get(key);
                 if (o != null && (o instanceof String || o instanceof Boolean)) {
-                    addPars.put(key, o.toString());
+                    try {
+                        addPars.put(key, getPar(json,key,Optional.empty()));
+                    } catch (RestError restError) {
+                        // do nothing here
+                        restError.printStackTrace();
+                    }
                 }
             }
         });

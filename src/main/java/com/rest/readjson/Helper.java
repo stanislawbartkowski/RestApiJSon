@@ -102,4 +102,15 @@ public class Helper {
         }
     }
 
+    public static File createTempFile(boolean json) throws RestError {
+        try {
+            return File.createTempFile("rst", json ? ".json" : ".txt");
+        } catch (IOException e) {
+            String errmess = "Error while creating temporary file";
+            Helper.throwException(errmess, e);
+        }
+        return null;
+    }
+
+
 }

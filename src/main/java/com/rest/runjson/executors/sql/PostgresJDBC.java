@@ -21,6 +21,10 @@ public class PostgresJDBC {
         conn = DriverManager.getConnection(url, user, password);
     }
 
+    public static Connection getConnection() {
+        return conn;
+    }
+
     private static JSONObject createRow(ResultSet res) throws SQLException {
         JSONObject j = new JSONObject();
         ResultSetMetaData meta = res.getMetaData();

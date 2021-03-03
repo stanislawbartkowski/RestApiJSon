@@ -37,6 +37,8 @@ public class RestActionJSON {
     private static final String PYTHON3PROC = "PYTHON3";
     private static final String SHELLPROC = "SHELL";
 
+    private static String defaultProc = PYTHON3PROC;
+
     private static final Set<String> allowedKeys = new HashSet<String>();
     private static final Set<String> allowedParKeys = new HashSet<String>();
 
@@ -171,11 +173,12 @@ public class RestActionJSON {
         allowedParKeys.add(PARAMPARTYPE);
     }
 
-    public static void setAdditionalParams(Set<String> keys, FverifyAddParam pverifyParam, FreplaceVariable preplaceVariable, Map<String, Integer> addmap) {
+    public static void setAdditionalParams(Set<String> keys, FverifyAddParam pverifyParam, FreplaceVariable preplaceVariable, Map<String, Integer> addmap, String defaultproc) {
         additionalKeys.addAll(keys);
         verifyParam = pverifyParam;
         replaceVariable = preplaceVariable;
         procmap.putAll(addmap);
+        defaultProc = defaultproc;
     }
 
     public static IRestActionJSON.IRestParam constructIP(String name, PARAMTYPE type) {
@@ -276,7 +279,7 @@ public class RestActionJSON {
         Optional<String> descr = getJSon(json, PARAMDESCRITPION);
         // metoda
         IRestActionJSON.Method m = getJSONAttr(IRestActionJSON.Method.class, json, IRestActionJSON.Method.GET, PARAMMETHOD);
-        String sproc = getPar(json, PARAMPROC, Optional.of(PYTHON3PROC));
+        String sproc = getPar(json, PARAMPROC, Optional.of(defaultProc));
         Integer proc = procmap.get(sproc);
         if (proc == null) throwmaperror(sproc, procmap.keySet());
 
@@ -298,9 +301,8 @@ public class RestActionJSON {
             String key = e;
             if (additionalKeys.contains(key)) {
                 Object o = json.get(key);
-                if (o != null && o instanceof JSONObject) {
-                    String val = o.toString();
-                    addPars.put(key, val);
+                if (o != null && (o instanceof String || o instanceof Boolean)) {
+                    addPars.put(key, o.toString());
                 }
             }
         });

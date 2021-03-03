@@ -18,9 +18,14 @@ abstract public class TestRestHelper {
 //   private final int PORT = 9080;
 //    private final String HOST = "pers";
 
-    private final String HOST = "localhost";
-    private final int PORT = 7999;
+    private final String HOST;
+    private final int PORT;
     protected HttpURLConnection con;
+
+    protected TestRestHelper(String host, int port) {
+        this.HOST = host;
+        this.PORT = port;
+    }
 
     protected void P(String s) {
         System.out.println(s);

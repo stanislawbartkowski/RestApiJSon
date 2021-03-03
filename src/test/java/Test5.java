@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
-public class Test5 extends TestRestHelper {
+public class Test5 extends PTestRestHelper {
 
     @Test
     public void test1() throws IOException {

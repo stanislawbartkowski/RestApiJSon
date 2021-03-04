@@ -32,14 +32,15 @@ public class RestService extends RestHelper.RestServiceHelper {
 
     private final IEnhancer in;
     private final RestRunJson run;
-
+    private final RestActionJSON restJSON;
 
     @Inject
-    public RestService(IRestConfig iconfig,IEnhancer in) {
+    public RestService(IRestConfig iconfig, IEnhancer in, RestActionJSON restJSON, RestRunJson run) {
         super("", false);
         this.in = in;
         this.iconfig = iconfig;
-        run = ModuleBuild.getI().getInstance(RestRunJson.class);
+        this.restJSON = restJSON;
+        this.run = run;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class RestService extends RestHelper.RestServiceHelper {
                 Helper.throwSevere(errmess);
             }
 
-            irest = RestActionJSON.readJSONAction(p.get());
+            irest = restJSON.readJSONAction(p.get());
 
             List<String> aMethods = new ArrayList<>();
             aMethods.add(RestHelper.GET);

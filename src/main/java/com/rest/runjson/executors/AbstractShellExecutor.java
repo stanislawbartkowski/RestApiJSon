@@ -47,8 +47,6 @@ abstract class AbstractShellExecutor implements IRunPlugin {
     @Override
     public void executeJSON(IRestActionJSON j, IRunPlugin.RunResult rres, Map<String, ParamValue> values) throws RestError {
 
-        beforeExecute(j,rres,values);
-
         String cmd = createCmd(j);
         Runtime run = Runtime.getRuntime();
         try {

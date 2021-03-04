@@ -3,6 +3,7 @@ package com.rest.readjson;
 import java.nio.file.Path;
 import java.util.*;
 
+import com.google.inject.Inject;
 import com.rest.restservice.PARAMTYPE;
 import com.rest.restservice.RestLogger;
 import org.json.JSONArray;
@@ -12,15 +13,25 @@ import static com.rest.readjson.Helper.readTextFile;
 
 public class RestActionJSON {
 
-    @FunctionalInterface
-    public static interface FreplaceVariable {
+//    @FunctionalInterface
+//    public static interface FreplaceVariable {
+//        String replace(String param) throws RestError;
+//    }
+
+//    @FunctionalInterface
+//    public static interface FverifyAddParam {
+//        void verify(IRestActionJSON i) throws RestError;
+//    }
+
+    public interface IRestActionEnhancer {
+
+        Set<String> addKeys();
+        void verify(IRestActionJSON i) throws RestError;
         String replace(String param) throws RestError;
+        Set<String> addMap();
+        String defaultProc();
     }
 
-    @FunctionalInterface
-    public static interface FverifyAddParam {
-        void verify(IRestActionJSON i) throws RestError;
-    }
 
 
     private static final String PARAMPARNAME = "name";
@@ -43,8 +54,12 @@ public class RestActionJSON {
     private static final Set<String> allowedParKeys = new HashSet<String>();
 
     private static final Set<String> additionalKeys = new HashSet<String>();
-    private static FverifyAddParam verifyParam = null;
-    private static FreplaceVariable replaceVariable = null;
+
+    @Inject
+    private final IRestActionEnhancer iEnhancer;
+
+//    private static FverifyAddParam verifyParam = null;
+//    private static FreplaceVariable replaceVariable = null;
 
     private static Map<String, PARAMTYPE> tmap = new HashMap<String, PARAMTYPE>();
     private static Set<String> procmap = new HashSet<String>();
@@ -173,13 +188,13 @@ public class RestActionJSON {
         allowedParKeys.add(PARAMPARTYPE);
     }
 
-    public static void setAdditionalParams(Set<String> keys, FverifyAddParam pverifyParam, FreplaceVariable preplaceVariable, Set<String> addmap, String defaultproc) {
-        additionalKeys.addAll(keys);
-        verifyParam = pverifyParam;
-        replaceVariable = preplaceVariable;
-        procmap.addAll(addmap);
-        defaultProc = defaultproc;
-    }
+    @Inject
+     public RestActionJSON(IRestActionEnhancer iEnhancer) {
+        this.iEnhancer = iEnhancer;
+        additionalKeys.addAll(iEnhancer.addKeys());
+        procmap.addAll(iEnhancer.addMap());
+        defaultProc = iEnhancer.defaultProc();
+     }
 
     public static IRestActionJSON.IRestParam constructIP(String name, PARAMTYPE type) {
         return new RestAction.RestParam(name, type);
@@ -237,12 +252,13 @@ public class RestActionJSON {
         return m;
     }
 
-    private static String preplaceVariable(String s) throws RestError {
-        if (replaceVariable == null) return s;
-        return replaceVariable.replace(s);
+    private String preplaceVariable(String s) throws RestError {
+//        if (replaceVariable == null) return s;
+//        return replaceVariable.replace(s);
+        return iEnhancer.replace(s);
     }
 
-    private static String getPar(JSONObject json, String key, Optional<String> defa) throws RestError {
+    private String getPar(JSONObject json, String key, Optional<String> defa) throws RestError {
         Object o = json.opt(key);
         if (o == null) {
             if (defa == null) Helper.throwSevere("Parameter " + key + " is not defined");
@@ -261,7 +277,7 @@ public class RestActionJSON {
         Helper.throwSevere(mess);
     }
 
-    private static IRestActionJSON.IRestParam readPar(JSONObject json, Path p) throws RestError {
+    private IRestActionJSON.IRestParam readPar(JSONObject json, Path p) throws RestError {
         verifyAttributes(json, allowedParKeys, new HashSet<String>(), p);
         String name = getPar(json, PARAMPARNAME, null);
         String stype = getPar(json, PARAMPARTYPE, Optional.of("string"));
@@ -270,7 +286,7 @@ public class RestActionJSON {
         return constructIP(name, typ);
     }
 
-    public static IRestActionJSON readJSONAction(Path p) throws RestError {
+    public IRestActionJSON readJSONAction(Path p) throws RestError {
         String jsonstring = null;
         jsonstring = readTextFile(p);
         JSONObject json = new JSONObject(jsonstring);
@@ -314,8 +330,9 @@ public class RestActionJSON {
 
         IRestActionJSON ires = new RestAction(name, descr, m, proc, action, plist, format, output, p, addPars);
 
-        if (verifyParam != null)
-            verifyParam.verify(ires);
+        iEnhancer.verify(ires);
+//        if (verifyParam != null)
+//            verifyParam.verify(ires);
         return ires;
     }
 

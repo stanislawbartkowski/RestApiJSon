@@ -1,6 +1,9 @@
 package com.rest.runjson.executors;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.rest.readjson.IRestActionJSON;
+import com.rest.runjson.IRunPlugin;
 
 public class Python3Executor extends AbstractShellExecutor {
 

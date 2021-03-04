@@ -6,6 +6,7 @@ import com.rest.conf.ConstructRestConfig;
 import com.rest.conf.IRestConfig;
 import com.rest.main.RestMainHelper;
 import com.rest.readjson.IRestActionJSON;
+import com.rest.readjson.RestActionJSON;
 import com.rest.runjson.IRunPlugin;
 import com.rest.runjson.RestRunJson;
 import com.rest.runjson.executors.Python3Executor;
@@ -25,8 +26,10 @@ public abstract class AbstractCommonModule extends AbstractModule {
                 .to(Python3Executor.class).in(Scopes.SINGLETON);
         bind(IRunPlugin.class).annotatedWith(Names.named(IRestActionJSON.SHELL))
                 .to(ShellExecutor.class).in(Scopes.SINGLETON);
-        bind(RestRunJson.class).in(Singleton.class);
-        bind(RestService.class).in(Singleton.class);
+//        bind(RestActionJSON.class).in(Singleton.class);
+        bind(RestRunJson.class).in(Scopes.SINGLETON);
+
+//        bind(RestService.class).in(Singleton.class);
         bind(RestMainHelper.class).in(Singleton.class);
 //        requestStaticInjection(RegisterExecutors.class);
     }

@@ -22,8 +22,5 @@ public interface IRunPlugin  {
     default void verifyProperties() throws RestError {
     }
 
-    default void beforeExecute(IRestActionJSON j, RunResult res, Map<String,ParamValue> values) throws RestError {
-    }
-
     void executeJSON(IRestActionJSON j, RunResult res, Map<String,ParamValue> values) throws RestError;
 }

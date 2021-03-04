@@ -1,10 +1,7 @@
-import com.rest.conf.ConstructRestConfig;
-import com.rest.conf.IRestConfig;
+import com.rest.guice.rest.RegisterExecutors;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
-import com.rest.runjson.RestRunJson;
-import com.rest.runjson.executors.SQLExecutor;
 import org.json.JSONArray;
 import org.junit.jupiter.api.Test;
 
@@ -28,13 +25,13 @@ public class Test4 extends TestHelper {
     String runJSON(String f, Map<String, ParamValue> values) throws RestError {
         Path p = getPathPar("testpar4.properties");
         P(p.toString());
-        IRestConfig ic = ConstructRestConfig.create(p);
-        RestRunJson.setRestConfig(ic);
-        RestRunJson.registerExecutor(IRestActionJSON.SQL, new SQLExecutor());
+
+        constructIC(p);
+        RegisterExecutors.registerExecutors(IRestActionJSON.SQL);
         Path pp = getPath4(f);
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);
-        return RestRunJson.executeJson(j, values);
+        return R().executeJson(j, values);
     }
 
     @Test

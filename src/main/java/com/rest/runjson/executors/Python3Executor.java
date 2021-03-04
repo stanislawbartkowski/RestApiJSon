@@ -10,7 +10,6 @@ public class Python3Executor extends AbstractShellExecutor {
         super(PYTHONHOME);
     }
 
-
     @Override
     String createCmd(IRestActionJSON j) {
         return "python3 " + j.action();

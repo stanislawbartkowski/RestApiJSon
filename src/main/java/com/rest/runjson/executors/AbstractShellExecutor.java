@@ -1,5 +1,6 @@
 package com.rest.runjson.executors;
 
+import com.google.inject.Inject;
 import com.rest.conf.IRestConfig;
 import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
@@ -19,6 +20,8 @@ abstract class AbstractShellExecutor implements IRunPlugin {
     private final String paramKey;
     private static File shellhome;
 
+    @Inject private IRestConfig conf;
+
     AbstractShellExecutor(String paramKey) {
         this.paramKey = paramKey;
     }
@@ -26,7 +29,7 @@ abstract class AbstractShellExecutor implements IRunPlugin {
     abstract String createCmd(IRestActionJSON j);
 
     @Override
-    public void verifyProperties(IRestConfig conf) throws RestError {
+    public void verifyProperties() throws RestError {
         shellhome = new File(Helper.getValue(conf.prop(),paramKey,true).get());
     }
 
@@ -42,7 +45,9 @@ abstract class AbstractShellExecutor implements IRunPlugin {
     }
 
     @Override
-    public void executeJSON(IRestActionJSON j, IRestConfig conf, IRunPlugin.RunResult rres, Map<String, ParamValue> values) throws RestError {
+    public void executeJSON(IRestActionJSON j, IRunPlugin.RunResult rres, Map<String, ParamValue> values) throws RestError {
+
+        beforeExecute(j,rres,values);
 
         String cmd = createCmd(j);
         Runtime run = Runtime.getRuntime();

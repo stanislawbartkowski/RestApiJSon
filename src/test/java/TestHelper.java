@@ -1,3 +1,7 @@
+import com.rest.guice.rest.ModuleBuild;
+import com.rest.guice.RestConfigFactory;
+import com.rest.readjson.RestError;
+import com.rest.runjson.RestRunJson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -42,6 +46,11 @@ abstract class TestHelper {
         return o.optJSONArray("res");
     }
 
+    void constructIC(Path p) throws RestError {
+        RestConfigFactory.setInstance(p);
+    }
 
-
+    protected RestRunJson R() {
+        return ModuleBuild.getI().getInstance(RestRunJson.class);
+    }
 }

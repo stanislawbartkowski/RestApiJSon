@@ -10,7 +10,6 @@ public class ShellExecutor extends AbstractShellExecutor {
         super(SHELLHOME);
     }
 
-
     @Override
     String createCmd(IRestActionJSON j) {
         return j.action();

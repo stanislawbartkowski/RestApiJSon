@@ -1,6 +1,6 @@
 package com.rest.conf;
 
-import com.rest.main.RestMainHelper;
+import com.rest.conf.IRestConfig;
 import com.rest.readjson.Helper;
 import com.rest.readjson.RestError;
 
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Properties;
 
-public class ConstructRestConfig {
+public class ConstructRestConfig  {
 
     private static final String JDIR = "jdir";
 
@@ -42,7 +42,7 @@ public class ConstructRestConfig {
     }
 
 
-    public static IRestConfig create(Path p) throws RestError {
+    public IRestConfig create(Path p) throws RestError {
 
         FileInputStream f = null;
         Properties pro = new Properties();

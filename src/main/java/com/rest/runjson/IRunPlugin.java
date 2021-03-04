@@ -19,11 +19,11 @@ public interface IRunPlugin  {
         public JSONObject json;
     }
 
-    default void verifyProperties(IRestConfig conf) throws RestError {
+    default void verifyProperties() throws RestError {
     }
 
-    default void beforeExecute(IRestActionJSON j, IRestConfig conf, RunResult res, Map<String,ParamValue> values) throws RestError {
+    default void beforeExecute(IRestActionJSON j, RunResult res, Map<String,ParamValue> values) throws RestError {
     }
 
-    void executeJSON(IRestActionJSON j, IRestConfig conf, RunResult res, Map<String,ParamValue> values) throws RestError;
+    void executeJSON(IRestActionJSON j, RunResult res, Map<String,ParamValue> values) throws RestError;
 }

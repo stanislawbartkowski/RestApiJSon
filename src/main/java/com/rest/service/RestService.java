@@ -1,6 +1,8 @@
 package com.rest.service;
 
+import com.google.inject.Inject;
 import com.rest.conf.IRestConfig;
+import com.rest.guice.rest.ModuleBuild;
 import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestActionJSON;
@@ -9,7 +11,6 @@ import com.rest.restservice.*;
 import com.rest.runjson.RestRunJson;
 import com.sun.net.httpserver.HttpExchange;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -30,12 +31,15 @@ public class RestService extends RestHelper.RestServiceHelper {
     private IRestActionJSON irest = null;
 
     private final IEnhancer in;
+    private final RestRunJson run;
 
 
-    public RestService(IRestConfig iconfig, IEnhancer in) {
+    @Inject
+    public RestService(IRestConfig iconfig,IEnhancer in) {
         super("", false);
-        this.iconfig = iconfig;
         this.in = in;
+        this.iconfig = iconfig;
+        run = ModuleBuild.getI().getInstance(RestRunJson.class);
     }
 
     @Override
@@ -78,7 +82,7 @@ public class RestService extends RestHelper.RestServiceHelper {
             if (in != null) {
                 in.modifValues(irest, v.getValues());
             }
-            String res = RestRunJson.executeJson(irest, v.getValues());
+            String res = run.executeJson(irest, v.getValues());
             if (res.equals("")) produceNODATAResponse(v);
             else produceOKResponse(v, res);
         } catch (RestError restError) {

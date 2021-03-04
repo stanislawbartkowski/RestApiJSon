@@ -1,5 +1,6 @@
 package com.rest.runjson;
 
+import com.google.inject.Inject;
 import com.rest.conf.IRestConfig;
 import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
@@ -19,20 +20,21 @@ import java.util.Optional;
 
 public class RestRunJson {
 
-    static private final Map<Integer, IRunPlugin> imap = new HashMap<Integer, IRunPlugin>();
+    private final Map<String, IRunPlugin> imap = new HashMap<String, IRunPlugin>();
 
-    static private IRestConfig rConfig;
+    final private IRestConfig rConfig;
 
-    public static void setRestConfig(IRestConfig r) {
-        rConfig = r;
+    @Inject
+    RestRunJson(IRestConfig rConfig) {
+        this.rConfig = rConfig;
     }
 
-    public static void registerExecutor(int action, IRunPlugin i) throws RestError {
-        i.verifyProperties(rConfig);
-        imap.put(action, i);
+    public void registerExecutor(String method, IRunPlugin i) throws RestError {
+        i.verifyProperties();
+        imap.put(method, i);
     }
 
-    public static String executeJson(IRestActionJSON j, Map<String, ParamValue> values) throws RestError {
+    public String executeJson(IRestActionJSON j, Map<String, ParamValue> values) throws RestError {
 
         IRunPlugin irun = imap.get(j.getProc());
         if (irun == null) {
@@ -49,7 +51,7 @@ public class RestRunJson {
             res.tempfile = Helper.createTempFile(json);
             values.put(IRunPlugin.TMPFILE, new ParamValue(res.tempfile.toString()));
         }
-        irun.executeJSON(j, rConfig, res, values);
+        irun.executeJSON(j, res, values);
         if (tempfile) {
             res.res = Helper.readTextFile(res.tempfile.toPath());
             if (res.res.equals("")) {

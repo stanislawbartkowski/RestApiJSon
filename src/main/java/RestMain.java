@@ -1,10 +1,9 @@
-import com.rest.conf.ConstructRestConfig;
-import com.rest.conf.IRestConfig;
+import com.rest.guice.rest.ModuleBuild;
+import com.rest.guice.rest.RegisterExecutors;
+import com.rest.guice.RestConfigFactory;
 import com.rest.main.RestMainHelper;
 import com.rest.readjson.IRestActionJSON;
-import com.rest.readjson.RestError;
 import com.rest.restservice.RestHelper;
-import com.rest.runjson.RestRunJson;
 import com.rest.service.RestService;
 import com.rest.restservice.RestStart;
 
@@ -21,14 +20,15 @@ public class RestMain extends RestStart {
         Optional<RestMainHelper.RestParams> cmd = RestMainHelper.buildCmd(args);
         if (!cmd.isPresent()) System.exit(4);
 
-        IRestConfig iconfig = ConstructRestConfig.create(cmd.get().getConfigfile());
+        RestConfigFactory.setInstance(cmd.get().getConfigfile());
 
-        RestRunJson.setRestConfig(iconfig);
-        RestMainHelper.registerExecutors(IRestActionJSON.SQL);
-        RestMainHelper.registerExecutors(IRestActionJSON.PYTHON3);
+        RegisterExecutors.registerExecutors(IRestActionJSON.SQL);
+        RegisterExecutors.registerExecutors(IRestActionJSON.PYTHON3);
+
+        RestService res = ModuleBuild.getI().getInstance(RestService.class);
 
         RestStart(cmd.get().getPORT(), (server) -> {
-            RestHelper.registerService(server, new RestService(iconfig, null));
+            RestHelper.registerService(server, res);
         }, new String[]{});
 
     }

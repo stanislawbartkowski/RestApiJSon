@@ -1,5 +1,6 @@
 package com.rest.runjson.executors;
 
+import com.google.inject.Inject;
 import com.rest.conf.IRestConfig;
 import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
@@ -22,8 +23,11 @@ public class SQLExecutor implements IRunPlugin {
     private final static String USER = "user";
     private final static String PASSWORD = "password";
 
+    @Inject private IRestConfig conf;
+
+
     @Override
-    public void verifyProperties(IRestConfig conf) throws RestError {
+    public void verifyProperties() throws RestError {
 
         String url = Helper.getValue(conf.prop(), URL, true).get();
         String user = Helper.getValue(conf.prop(), USER, true).get();
@@ -38,8 +42,8 @@ public class SQLExecutor implements IRunPlugin {
 
 
     @Override
-    public void executeJSON(IRestActionJSON j, IRestConfig conf, RunResult res, Map<String, ParamValue> values) throws RestError {
-        beforeExecute(j,conf,res,values);
+    public void executeJSON(IRestActionJSON j, RunResult res, Map<String, ParamValue> values) throws RestError {
+        beforeExecute(j,res,values);
         int i = 1;
         List<SQLParam> sqlp = new ArrayList<SQLParam>();
         for (IRestActionJSON.IRestParam re : j.getParams()) sqlp.add(new SQLParam(i++, re));

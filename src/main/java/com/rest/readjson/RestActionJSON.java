@@ -47,7 +47,7 @@ public class RestActionJSON {
     private static FreplaceVariable replaceVariable = null;
 
     private static Map<String, PARAMTYPE> tmap = new HashMap<String, PARAMTYPE>();
-    private static Map<String, Integer> procmap = new HashMap<String, Integer>();
+    private static Set<String> procmap = new HashSet<String>();
 
     private static class RestAction implements IRestActionJSON {
 
@@ -75,7 +75,7 @@ public class RestActionJSON {
         private final String name;
         private final Optional<String> desc;
         private final Method method;
-        private final int proc;
+        private final String proc;
         private final String action;
         private final List<IRestParam> plist;
         private final Path jsonPath;
@@ -99,7 +99,7 @@ public class RestActionJSON {
         }
 
         @Override
-        public int getProc() {
+        public String getProc() {
             return proc;
         }
 
@@ -115,7 +115,7 @@ public class RestActionJSON {
 
         @Override
         public OUTPUT output() {
-            if (proc == IRestActionJSON.SQL) return OUTPUT.STRING;
+            if (proc.equals(IRestActionJSON.SQL)) return OUTPUT.STRING;
             return this.output;
         }
 
@@ -136,7 +136,7 @@ public class RestActionJSON {
         }
 
 
-        RestAction(String name, Optional<String> desc, Method method, int proc, String action, List<IRestParam> plist, FORMAT format, OUTPUT output, Path jsonPath, Map<String, String> addPars) {
+        RestAction(String name, Optional<String> desc, Method method, String proc, String action, List<IRestParam> plist, FORMAT format, OUTPUT output, Path jsonPath, Map<String, String> addPars) {
             this.name = name;
             this.desc = desc;
             this.method = method;
@@ -157,9 +157,9 @@ public class RestActionJSON {
         tmap.put("log", PARAMTYPE.BOOLEAN);
         tmap.put("int", PARAMTYPE.INT);
 
-        procmap.put(PYTHON3PROC, IRestActionJSON.PYTHON3);
-        procmap.put(SQLPROC, IRestActionJSON.SQL);
-        procmap.put(SHELLPROC, IRestActionJSON.SHELL);
+        procmap.add(IRestActionJSON.PYTHON3);
+        procmap.add(IRestActionJSON.SQL);
+        procmap.add(IRestActionJSON.SHELL);
 
         allowedKeys.add(PARAMPARS);
         allowedKeys.add(PARAMFORMAT);
@@ -173,11 +173,11 @@ public class RestActionJSON {
         allowedParKeys.add(PARAMPARTYPE);
     }
 
-    public static void setAdditionalParams(Set<String> keys, FverifyAddParam pverifyParam, FreplaceVariable preplaceVariable, Map<String, Integer> addmap, String defaultproc) {
+    public static void setAdditionalParams(Set<String> keys, FverifyAddParam pverifyParam, FreplaceVariable preplaceVariable, Set<String> addmap, String defaultproc) {
         additionalKeys.addAll(keys);
         verifyParam = pverifyParam;
         replaceVariable = preplaceVariable;
-        procmap.putAll(addmap);
+        procmap.addAll(addmap);
         defaultProc = defaultproc;
     }
 
@@ -280,9 +280,8 @@ public class RestActionJSON {
         Optional<String> descr = getJSon(json, PARAMDESCRITPION);
         // metoda
         IRestActionJSON.Method m = getJSONAttr(IRestActionJSON.Method.class, json, IRestActionJSON.Method.GET, PARAMMETHOD);
-        String sproc = getPar(json, PARAMPROC, Optional.of(defaultProc));
-        Integer proc = procmap.get(sproc);
-        if (proc == null) throwmaperror(sproc, procmap.keySet());
+        String proc = getPar(json, PARAMPROC, Optional.of(defaultProc));
+        if (!procmap.contains(proc)) throwmaperror(proc, procmap);
 
         String action = getPar(json, PARAMACTION, Optional.empty());
 

@@ -43,9 +43,9 @@ public interface IRestActionJSON {
         }
     }
 
-    int PYTHON3 = 0;
-    int SQL = 1;
-    int SHELL = 2;
+    String PYTHON3 = "PYTHON3";
+    String SQL = "SQL";
+    String SHELL = "SHELL";
 
     interface IRestParam {
         String getName();
@@ -59,7 +59,7 @@ public interface IRestActionJSON {
 
     Method getMethod();
 
-    int getProc();
+    String getProc();
 
     String action();
 

@@ -1,11 +1,5 @@
 package com.rest.main;
 
-import com.rest.readjson.IRestActionJSON;
-import com.rest.readjson.RestError;
-import com.rest.runjson.RestRunJson;
-import com.rest.runjson.executors.Python3Executor;
-import com.rest.runjson.executors.SQLExecutor;
-import com.rest.runjson.executors.ShellExecutor;
 import org.apache.commons.cli.*;
 
 import java.nio.file.Path;
@@ -64,18 +58,6 @@ public class RestMainHelper {
         }
     }
 
-    public static void registerExecutors(int proc) throws RestError {
-        switch (proc) {
-            case IRestActionJSON.SQL:
-                RestRunJson.registerExecutor(IRestActionJSON.SQL, new SQLExecutor());
-                break;
-            case IRestActionJSON.PYTHON3:
-                RestRunJson.registerExecutor(IRestActionJSON.PYTHON3, new Python3Executor());
-                break;
-            case IRestActionJSON.SHELL:
-                RestRunJson.registerExecutor(IRestActionJSON.SHELL, new ShellExecutor());
-                break;
-        }
-    }
-
 }
+
+

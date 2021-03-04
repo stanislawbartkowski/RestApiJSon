@@ -1,11 +1,9 @@
-import com.rest.conf.ConstructRestConfig;
-import com.rest.conf.IRestConfig;
+
+import com.rest.guice.rest.RegisterExecutors;
+
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
-import com.rest.runjson.RestRunJson;
-import com.rest.runjson.executors.Python3Executor;
-import com.rest.runjson.executors.ShellExecutor;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
@@ -28,13 +26,12 @@ public class Test3 extends TestHelper {
     String runJSON(String f, Map<String, ParamValue> values) throws RestError {
         Path p = getPathPar("testpar3.properties");
         P(p.toString());
-        IRestConfig ic = ConstructRestConfig.create(p);
-        RestRunJson.setRestConfig(ic);
-        RestRunJson.registerExecutor(IRestActionJSON.PYTHON3, new Python3Executor());
+        constructIC(p);
+        RegisterExecutors.registerExecutors(IRestActionJSON.PYTHON3);
         Path pp = getPath3(f);
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);
-        return RestRunJson.executeJson(j, values);
+        return R().executeJson(j, values);
     }
 
     @Test

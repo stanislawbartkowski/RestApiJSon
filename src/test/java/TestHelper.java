@@ -1,14 +1,22 @@
+import com.rest.conf.IRestConfig;
 import com.rest.guice.rest.ModuleBuild;
 import com.rest.guice.RestConfigFactory;
+import com.rest.readjson.Helper;
+import com.rest.readjson.IRestActionJSON;
+import com.rest.readjson.RestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.runjson.RestRunJson;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.After;
+import org.junit.Before;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Properties;
 
-abstract class TestHelper {
+abstract public class TestHelper {
 
     private static final String jdir1 = "src/test/resources/jdir1";
     private static final String jdir2 = "src/test/resources/jdir2";
@@ -16,6 +24,23 @@ abstract class TestHelper {
     private static final String jdir4 = "src/test/resources/jdir4";
 
     private static final String testpar1="src/test/resources/testpar";
+
+    private RestActionJSON rest;
+    protected RestRunJson run;
+
+    protected void init(String p) throws RestError {
+        RestConfigFactory.setInstance(getPathPar(p));
+        rest = ModuleBuild.getI().getInstance(RestActionJSON.class);
+        run = ModuleBuild.getI().getInstance(RestRunJson.class);
+    }
+
+    protected void initno() throws RestError {
+        RestConfigFactory.setInstance(getPathPar("testinit.properties"));
+        rest = ModuleBuild.getI().getInstance(RestActionJSON.class);
+        run = ModuleBuild.getI().getInstance(RestRunJson.class);
+    }
+
+
 
     void P(String s) {
         System.out.println(s);
@@ -46,11 +71,11 @@ abstract class TestHelper {
         return o.optJSONArray("res");
     }
 
-    void constructIC(Path p) throws RestError {
-        RestConfigFactory.setInstance(p);
-    }
+//    void constructIC(Path p) throws RestError {
+//        RestConfigFactory.setInstance(p);
+//    }
 
-    protected RestRunJson R() {
-        return ModuleBuild.getI().getInstance(RestRunJson.class);
+    protected IRestActionJSON readJSONAction(Path path) throws RestError {
+        return rest.readJSONAction(path);
     }
 }

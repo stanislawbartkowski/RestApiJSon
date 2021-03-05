@@ -13,25 +13,18 @@ import static com.rest.readjson.Helper.readTextFile;
 
 public class RestActionJSON {
 
-//    @FunctionalInterface
-//    public static interface FreplaceVariable {
-//        String replace(String param) throws RestError;
-//    }
-
-//    @FunctionalInterface
-//    public static interface FverifyAddParam {
-//        void verify(IRestActionJSON i) throws RestError;
-//    }
-
     public interface IRestActionEnhancer {
 
         Set<String> addKeys();
-        void verify(IRestActionJSON i) throws RestError;
-        String replace(String param) throws RestError;
-        Set<String> addMap();
-        String defaultProc();
-    }
 
+        void verify(IRestActionJSON i) throws RestError;
+
+        String replace(String param) throws RestError;
+
+        Set<String> addMap();
+
+        Optional<String> defaultProc();
+    }
 
 
     private static final String PARAMPARNAME = "name";
@@ -189,12 +182,12 @@ public class RestActionJSON {
     }
 
     @Inject
-     public RestActionJSON(IRestActionEnhancer iEnhancer) {
+    public RestActionJSON(IRestActionEnhancer iEnhancer) {
         this.iEnhancer = iEnhancer;
         additionalKeys.addAll(iEnhancer.addKeys());
         procmap.addAll(iEnhancer.addMap());
-        defaultProc = iEnhancer.defaultProc();
-     }
+        if (iEnhancer.defaultProc().isPresent()) defaultProc = iEnhancer.defaultProc().get();
+    }
 
     public static IRestActionJSON.IRestParam constructIP(String name, PARAMTYPE type) {
         return new RestAction.RestParam(name, type);
@@ -253,8 +246,6 @@ public class RestActionJSON {
     }
 
     private String preplaceVariable(String s) throws RestError {
-//        if (replaceVariable == null) return s;
-//        return replaceVariable.replace(s);
         return iEnhancer.replace(s);
     }
 
@@ -266,7 +257,7 @@ public class RestActionJSON {
                 Helper.throwSevere("Parameter " + key + " is not defined and no default value provided");
             return defa.get();
         }
-        if (o instanceof String ) return preplaceVariable(json.getString(key));
+        if (o instanceof String) return preplaceVariable(json.getString(key));
         return o.toString();
     }
 
@@ -319,7 +310,7 @@ public class RestActionJSON {
                 Object o = json.get(key);
                 if (o != null && (o instanceof String || o instanceof Boolean)) {
                     try {
-                        addPars.put(key, getPar(json,key,Optional.empty()));
+                        addPars.put(key, getPar(json, key, Optional.empty()));
                     } catch (RestError restError) {
                         // do nothing here
                         restError.printStackTrace();
@@ -331,8 +322,6 @@ public class RestActionJSON {
         IRestActionJSON ires = new RestAction(name, descr, m, proc, action, plist, format, output, p, addPars);
 
         iEnhancer.verify(ires);
-//        if (verifyParam != null)
-//            verifyParam.verify(ires);
         return ires;
     }
 

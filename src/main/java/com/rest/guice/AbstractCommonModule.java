@@ -12,7 +12,6 @@ import com.rest.runjson.RestRunJson;
 import com.rest.runjson.executors.Python3Executor;
 import com.rest.runjson.executors.SQLExecutor;
 import com.rest.runjson.executors.ShellExecutor;
-import com.rest.service.RestService;
 
 public abstract class AbstractCommonModule extends AbstractModule {
     @Override

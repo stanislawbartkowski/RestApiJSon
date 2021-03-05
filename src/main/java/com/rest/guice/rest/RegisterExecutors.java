@@ -2,7 +2,6 @@ package com.rest.guice.rest;
 
 import com.google.inject.Key;
 import com.google.inject.name.Names;
-import com.rest.guice.rest.ModuleBuild;
 import com.rest.readjson.RestError;
 import com.rest.runjson.IRunPlugin;
 import com.rest.runjson.RestRunJson;

@@ -10,8 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-import static org.junit.Assert.assertEquals;
-
 abstract public class TestRestHelper {
 
     //    private final String HOST = "localhost";

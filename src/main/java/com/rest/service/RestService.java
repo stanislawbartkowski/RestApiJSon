@@ -2,7 +2,6 @@ package com.rest.service;
 
 import com.google.inject.Inject;
 import com.rest.conf.IRestConfig;
-import com.rest.guice.rest.ModuleBuild;
 import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestActionJSON;

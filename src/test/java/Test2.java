@@ -2,48 +2,27 @@ import com.rest.guice.rest.RegisterExecutors;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.rest.readjson.RestActionJSON.readJSONAction;
 import static org.junit.Assert.*;
 
 public class Test2 extends TestHelper {
 
-    @Test
-    public void test1() throws RestError {
-        Path p = getPath2("testshell.json");
-        P(p.toString());
-        IRestActionJSON j = readJSONAction(p);
-        assertEquals(IRestActionJSON.SHELL, j.getProc());
-    }
-
-    @Test
-    public void test2() throws RestError {
-        Path p = getPathPar("testpar1.properties");
-        P(p.toString());
-        RestError thrown = assertThrows(
-                RestError.class,
-                () -> constructIC(p));
-        P(thrown.getMessage());
-    }
-
     String runJSON(String f, Map<String, ParamValue> values) throws RestError {
-        Path p = getPathPar("testpar2.properties");
-        P(p.toString());
-        constructIC(p);
+        init("testpar2.properties");
         RegisterExecutors.registerExecutors(IRestActionJSON.SHELL);
         Path pp = getPath2(f);
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);
-        return R().executeJson(j, values);
+        return run.executeJson(j, values);
     }
 
     @Test
-    public void test3() throws RestError {
+    public void test1() throws RestError {
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         String res = runJSON("testshell1.json", values);
         P(res);
@@ -51,7 +30,7 @@ public class Test2 extends TestHelper {
     }
 
     @Test
-    public void test4() throws RestError {
+    public void test2() throws RestError {
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         RestError thrown = assertThrows(
                 RestError.class,
@@ -60,7 +39,7 @@ public class Test2 extends TestHelper {
     }
 
     @Test
-    public void test5() throws RestError {
+    public void test3() throws RestError {
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         String res = runJSON("testshell3.json", values);
         P(res);
@@ -68,7 +47,7 @@ public class Test2 extends TestHelper {
     }
 
     @Test
-    public void test6() throws RestError {
+    public void test4() throws RestError {
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         String res = runJSON("testshell4.json", values);
         P(res);
@@ -76,7 +55,7 @@ public class Test2 extends TestHelper {
     }
 
     @Test
-    public void test7() throws RestError {
+    public void test5() throws RestError {
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         String res = runJSON("testshell5.json", values);
         P(res);
@@ -84,7 +63,7 @@ public class Test2 extends TestHelper {
     }
 
     @Test
-    public void test8() throws RestError {
+    public void test6() throws RestError {
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         String res = runJSON("testshell6.json", values);
         P(res);
@@ -92,14 +71,12 @@ public class Test2 extends TestHelper {
     }
 
     @Test
-    public void test9() throws RestError {
+    public void test7() throws RestError {
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         values.put("PARAMS",new ParamValue("hello"));
         String res = runJSON("testshell7.json", values);
         P(res);
         assertEquals("{\"params\":\"hello\"}\n",res);
     }
-
-
 
 }

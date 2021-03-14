@@ -1,3 +1,4 @@
+import com.rest.conf.IRestConfig;
 import com.rest.guice.rest.ModuleBuild;
 import com.rest.guice.rest.RegisterExecutors;
 import com.rest.guice.RestConfigFactory;
@@ -21,9 +22,8 @@ public class RestMain extends RestStart {
         if (!cmd.isPresent()) System.exit(4);
 
         RestConfigFactory.setInstance(cmd.get().getConfigfile());
-
-        RegisterExecutors.registerExecutors(IRestActionJSON.SQL);
-        RegisterExecutors.registerExecutors(IRestActionJSON.PYTHON3);
+        IRestConfig iRest = ModuleBuild.getI().getInstance(IRestConfig.class);
+        for (String p : iRest.listOfPlugins()) RegisterExecutors.registerExecutors(p);
 
         RestService res = ModuleBuild.getI().getInstance(RestService.class);
 

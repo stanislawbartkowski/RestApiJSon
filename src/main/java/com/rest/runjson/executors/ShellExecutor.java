@@ -2,6 +2,8 @@ package com.rest.runjson.executors;
 
 import com.rest.readjson.IRestActionJSON;
 
+import java.util.List;
+
 public class ShellExecutor extends AbstractShellExecutor {
 
     private final static String SHELLHOME="shellhome";
@@ -11,7 +13,7 @@ public class ShellExecutor extends AbstractShellExecutor {
     }
 
     @Override
-    String createCmd(IRestActionJSON j) {
-        return j.action();
+    List<String> createCmd(IRestActionJSON j) {
+        return j.actionL();
     }
 }

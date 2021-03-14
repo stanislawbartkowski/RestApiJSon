@@ -71,11 +71,7 @@ abstract public class TestHelper {
         return o.optJSONArray("res");
     }
 
-//    void constructIC(Path p) throws RestError {
-//        RestConfigFactory.setInstance(p);
-//    }
-
     protected IRestActionJSON readJSONAction(Path path) throws RestError {
-        return rest.readJSONAction(path);
+        return rest.readJSONAction(path, "GET");
     }
 }

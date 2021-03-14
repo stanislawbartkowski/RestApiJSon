@@ -1,0 +1,10 @@
+{
+  "proc": "SHELL",
+  "output" : "TMPFILE",
+  "format" : "JSON",
+  "action" : ["x","y"],
+  "pars" : [
+    { "name" :  "PARAMS"}
+  ]
+
+}

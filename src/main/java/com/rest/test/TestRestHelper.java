@@ -4,8 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
@@ -36,11 +35,30 @@ abstract public class TestRestHelper {
         return con.getResponseCode();
     }
 
+    protected int makegetcallupload(String path, String query, String input) throws IOException {
+        URL url = new URL("http://" + HOST + ":" + PORT + path + (query != null ? "?" + query : ""));
+        con = (HttpURLConnection) url.openConnection();
+        con.setDoOutput(true);
+        con.setRequestMethod("GET");
+        BufferedOutputStream bos = new BufferedOutputStream(con.getOutputStream());
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(input));
+        int i;
+   	    while ((i = bis.read()) > 0) {
+            bos.write(i);
+        }
+   	    bis.close();
+   	    bos.close();
+
+        return con.getResponseCode();
+    }
+
+
     private String getString(InputStream i) {
         StringBuilder b = new StringBuilder();
         try (Scanner scanner = new Scanner(i)) {
             while (scanner.hasNextLine()) {
-                b.append(scanner.nextLine() + "\n");
+                if (b.length() != 0) b.append('\n');
+                b.append(scanner.nextLine());
             }
         }
         return b.toString();

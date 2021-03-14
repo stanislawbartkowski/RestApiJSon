@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 import static org.junit.Assert.assertEquals;
@@ -21,7 +22,7 @@ public class Test3 extends TestHelper {
         Path pp = getPath3(f);
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);
-        return run.executeJson(j, values);
+        return run.executeJson(j, Optional.empty(),values);
     }
 
     @Test

@@ -9,8 +9,10 @@ import com.rest.restservice.ParamValue;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class RestRunJson {
 
@@ -29,7 +31,7 @@ public class RestRunJson {
         imap.put(method, i);
     }
 
-    public String executeJson(IRestActionJSON j, Map<String, ParamValue> values) throws RestError {
+    public String executeJson(IRestActionJSON j, Optional<File> uploaded, Map<String, ParamValue> values) throws RestError {
 
         IRunPlugin irun = imap.get(j.getProc());
         if (irun == null) {
@@ -45,6 +47,9 @@ public class RestRunJson {
         if (tempfile) {
             res.tempfile = Helper.createTempFile(json);
             values.put(IRunPlugin.TMPFILE, new ParamValue(res.tempfile.toString()));
+        }
+        if (uploaded.isPresent()) {
+            values.put(IRunPlugin.UPLOADEDFILE, new ParamValue(uploaded.get().toString()));
         }
         irun.executeJSON(j, res, values);
         if (tempfile) {

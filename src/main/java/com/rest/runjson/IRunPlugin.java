@@ -12,6 +12,7 @@ import java.util.Map;
 public interface IRunPlugin  {
 
     String TMPFILE = "TMPFILE";
+    String UPLOADEDFILE = "UPLOADEDFILE";
 
     class RunResult {
         public File tempfile;

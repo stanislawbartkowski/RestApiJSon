@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -89,7 +90,23 @@ public class Test1 extends TestHelper {
         assertEquals(IRestActionJSON.SQL, j.getProc());
     }
 
+    @Test
+    public void test9() throws RestError {
+        Path p = getPath1("testshell.json");
+        IRestActionJSON j = readJSONAction(p);
+        List<String> res = j.actionL();
+        assertEquals(2,res.size());
+        assertEquals("x",res.get(0));
+        assertEquals("y",res.get(1));
+    }
 
+    @Test
+    public void test10() throws RestError {
+        Path p = getPath1("testshellzip.json");
+        IRestActionJSON j = readJSONAction(p);
+        assertTrue(j.isUpload());
+        assertEquals(IRestActionJSON.FORMAT.ZIP, j.format());
+    }
 
 
 }

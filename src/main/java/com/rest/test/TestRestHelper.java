@@ -39,15 +39,14 @@ abstract public class TestRestHelper {
         URL url = new URL("http://" + HOST + ":" + PORT + path + (query != null ? "?" + query : ""));
         con = (HttpURLConnection) url.openConnection();
         con.setDoOutput(true);
-        con.setRequestMethod("GET");
-        BufferedOutputStream bos = new BufferedOutputStream(con.getOutputStream());
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(input));
-        int i;
-   	    while ((i = bis.read()) > 0) {
-            bos.write(i);
+        con.setRequestMethod("POST");
+        try (BufferedOutputStream bos = new BufferedOutputStream(con.getOutputStream());
+             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(input))) {
+            int i;
+            while ((i = bis.read()) > 0) {
+                bos.write(i);
+            }
         }
-   	    bis.close();
-   	    bos.close();
 
         return con.getResponseCode();
     }
@@ -93,7 +92,7 @@ abstract public class TestRestHelper {
     }
 
     protected void test400(String meth) throws IOException {
-        test400(meth,null);
+        test400(meth, null);
     }
 
     protected void testok(String meth, String query, String validdata) throws IOException {
@@ -113,7 +112,6 @@ abstract public class TestRestHelper {
         P(da);
         return getA(da);
     }
-
 
 
 }

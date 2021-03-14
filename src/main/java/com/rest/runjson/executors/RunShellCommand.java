@@ -3,7 +3,6 @@ package com.rest.runjson.executors;
 import com.rest.restservice.RestLogger;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -54,7 +53,6 @@ class RunShellCommand {
 
         builder.redirectErrorStream(true);
         // collect the result
-//        List<String> output = new ArrayList<>();
         Process process = builder.start();
         StreamGobbler streamGobbler =
                 new StreamGobbler(process.getInputStream(), s -> {

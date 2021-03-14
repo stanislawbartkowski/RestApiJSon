@@ -14,12 +14,12 @@ public class Test6 extends PTestRestHelper {
     public void test1() throws IOException {
         P("Upload file");
         String i = "src/test/resources/jdir5/input.txt";
-        int res = makegetcallupload("/testshell1",null,i);
+        int res = makegetcallupload("/testshell1", null, i);
         P("Result: " + res);
         Assert.assertEquals(200, res);
         String s = getData();
         P(s);
-        assertEquals("Hello, I'm uploaded",s);
+        assertEquals("Hello, I'm uploaded", s);
 
     }
 

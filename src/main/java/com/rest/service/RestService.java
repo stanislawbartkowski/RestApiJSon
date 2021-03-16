@@ -90,7 +90,7 @@ public class RestService extends RestHelper.RestServiceHelper {
             }
             Optional<File> tempupload = Optional.empty();
             if (irest.isUpload()) {
-                File temp = File.createTempFile("ttt", null);
+                File temp = File.createTempFile("upload", null);
                 tempupload = Optional.of(temp);
                 try (FileOutputStream fos = new FileOutputStream(temp)) {
                     fos.write(v.getRequestData().array());

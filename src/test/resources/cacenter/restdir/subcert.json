@@ -2,7 +2,7 @@
   "proc": "SHELL",
   "output": "TMPFILE",
   "format": "ZIP",
-  "method": "GET",
+  "method": "POST",
   "action": "./subcert.sh",
   "pars": [
     {

@@ -2,6 +2,7 @@ import com.rest.guice.rest.RegisterExecutors;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
+import com.rest.runjson.RestRunJson;
 import org.json.JSONArray;
 import org.junit.Test;
 
@@ -21,7 +22,8 @@ public class Test4 extends TestHelper {
         Path pp = getPath4(f);
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);
-        return run.executeJson(j, Optional.empty(),values);
+        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(),values);
+        return ires.StringValue();
     }
 
     @Test

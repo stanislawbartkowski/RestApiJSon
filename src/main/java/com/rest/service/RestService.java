@@ -1,12 +1,14 @@
 package com.rest.service;
 
 import com.google.inject.Inject;
+import com.rest.conf.Executors;
 import com.rest.conf.IRestConfig;
 import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.*;
+import com.rest.runjson.IRunPlugin;
 import com.rest.runjson.RestRunJson;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -32,14 +34,16 @@ public class RestService extends RestHelper.RestServiceHelper {
     private final IEnhancer in;
     private final RestRunJson run;
     private final RestActionJSON restJSON;
+    final private Executors exec;
 
     @Inject
-    public RestService(IRestConfig iconfig, IEnhancer in, RestActionJSON restJSON, RestRunJson run) {
+    public RestService(IRestConfig iconfig, IEnhancer in, RestActionJSON restJSON, RestRunJson run, Executors exec) {
         super("", false);
         this.in = in;
         this.iconfig = iconfig;
         this.restJSON = restJSON;
         this.run = run;
+        this.exec = exec;
     }
 
     @Override
@@ -67,6 +71,8 @@ public class RestService extends RestHelper.RestServiceHelper {
             irest.getParams().stream().forEach(s -> {
                 par.addParam(s.getName(), s.getType());
             });
+            IRunPlugin irun = exec.getExecutor(irest);
+            irun.modifPars(irest, path, par);
             if (in != null) {
                 in.modifPars(irest, path, par);
             }

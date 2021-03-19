@@ -46,6 +46,7 @@ public interface IRestActionJSON {
     String PYTHON3 = "PYTHON3";
     String SQL = "SQL";
     String SHELL = "SHELL";
+    String RESOURCE = "RESOURCE";
 
     interface IRestParam {
         String getName();

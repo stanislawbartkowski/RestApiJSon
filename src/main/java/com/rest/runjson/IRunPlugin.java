@@ -3,6 +3,8 @@ package com.rest.runjson;
 import com.rest.conf.IRestConfig;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
+import com.rest.restservice.RestParams;
+import com.rest.service.RestService;
 import org.json.JSONObject;
 import com.rest.restservice.ParamValue;
 
@@ -19,8 +21,11 @@ public interface IRunPlugin  {
         public JSONObject json;
     }
 
+    default void modifPars(IRestActionJSON irest, String[] path, RestParams par) throws RestError {
+    }
+
     default void verifyProperties() throws RestError {
     }
 
-    void executeJSON(IRestActionJSON j, RunResult res, Map<String,ParamValue> values) throws RestError;
+    void executeJSON(IRestActionJSON j, RunResult res, Map<String, ParamValue> values) throws RestError;
 }

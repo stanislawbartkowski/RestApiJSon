@@ -88,13 +88,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
@@ -139,7 +132,16 @@
         </dependency>
 
 
-    </dependencies>
+  </dependencies>
+
+   <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub stanislawnartkowski Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/stanislawbartkowski/RestService</url>
+        </repository>
+    </distributionManagement>
+
 
 
 </project>

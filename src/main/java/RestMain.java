@@ -24,8 +24,6 @@ public class RestMain extends RestStart {
 
         RegisterExecutors.registerExecutors(IRestActionJSON.SQL);
         RegisterExecutors.registerExecutors(IRestActionJSON.PYTHON3);
-        RegisterExecutors.registerExecutors(IRestActionJSON.RESOURCE);
-        RegisterExecutors.registerExecutors(IRestActionJSON.SHELL);
 
         RestService res = ModuleBuild.getI().getInstance(RestService.class);
 

@@ -1,0 +1,5 @@
+echo $UPLOADEDFILE
+echo $TMPFILE
+cat $UPLOADEDFILE
+echo "!!!"
+cp $UPLOADEDFILE $TMPFILE

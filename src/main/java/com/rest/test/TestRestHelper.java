@@ -4,11 +4,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
+import java.util.zip.ZipInputStream;
 
 abstract public class TestRestHelper {
 
@@ -29,26 +29,73 @@ abstract public class TestRestHelper {
         System.out.println(s);
     }
 
-    protected int makegetcall(String path, String query) throws IOException {
+    protected int makecall(String path, String query, String method) throws IOException {
         URL url = new URL("http://" + HOST + ":" + PORT + path + (query != null ? "?" + query : ""));
         con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
+        con.setRequestMethod(method);
         return con.getResponseCode();
     }
+
+    protected int makegetcall(String path, String query) throws IOException {
+        return makecall(path,query,"GET");
+    }
+
+    protected int makegetcallupload(String path, String query, String input) throws IOException {
+        URL url = new URL("http://" + HOST + ":" + PORT + path + (query != null ? "?" + query : ""));
+        con = (HttpURLConnection) url.openConnection();
+        con.setDoOutput(true);
+        con.setRequestMethod("POST");
+        try (BufferedOutputStream bos = new BufferedOutputStream(con.getOutputStream());
+             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(input))) {
+            int i;
+            while ((i = bis.read()) > 0) {
+                bos.write(i);
+            }
+        }
+
+        return con.getResponseCode();
+    }
+
 
     private String getString(InputStream i) {
         StringBuilder b = new StringBuilder();
         try (Scanner scanner = new Scanner(i)) {
             while (scanner.hasNextLine()) {
-                b.append(scanner.nextLine() + "\n");
+                if (b.length() != 0) b.append('\n');
+                b.append(scanner.nextLine());
             }
         }
         return b.toString();
     }
 
+    private byte[] getBytes(InputStream i) throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+        byte[] buffer = new byte[1024];
+        int len;
+
+        // read bytes from the input stream and store them in buffer
+        while ((len = i.read(buffer)) != -1) {
+            // write bytes from the buffer into output stream
+            os.write(buffer, 0, len);
+        }
+
+        return os.toByteArray();
+    }
+
+
     protected String getData() throws IOException {
         return getString(con.getInputStream());
     }
+
+    protected byte[] getByteData() throws IOException {
+        return getBytes(con.getInputStream());
+    }
+
+    protected ZipInputStream getZipResult() throws IOException {
+        return new ZipInputStream(con.getInputStream());
+    }
+
 
     protected String getErrData() throws IOException {
         return getString(con.getErrorStream());
@@ -75,7 +122,7 @@ abstract public class TestRestHelper {
     }
 
     protected void test400(String meth) throws IOException {
-        test400(meth,null);
+        test400(meth, null);
     }
 
     protected void testok(String meth, String query, String validdata) throws IOException {
@@ -95,7 +142,6 @@ abstract public class TestRestHelper {
         P(da);
         return getA(da);
     }
-
 
 
 }

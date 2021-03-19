@@ -1,0 +1,11 @@
+{
+  "proc": "SHELL",
+  "output" : "TMPFILE",
+  "format" : "ZIP",
+  "action" : ["x","y"],
+  "upload" : true,
+  "pars" : [
+    { "name" :  "PARAMS"}
+  ]
+
+}

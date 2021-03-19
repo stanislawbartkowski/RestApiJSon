@@ -12,7 +12,9 @@ public interface IRestActionJSON {
 
     enum Method {
         PUT("PUT"),
-        GET("GET");
+        GET("GET"),
+        POST("POST"),
+        DELETE("DELETE");
         private final String m;
 
         Method(String m) {
@@ -22,7 +24,8 @@ public interface IRestActionJSON {
 
     enum FORMAT {
         JSON("JSON"),
-        TEXT("TEXT");
+        TEXT("TEXT"),
+        ZIP("ZIP");
 
         private final String m;
 
@@ -64,6 +67,8 @@ public interface IRestActionJSON {
 
     String action();
 
+    List<String> actionL();
+
     FORMAT format();
 
     OUTPUT output();
@@ -71,6 +76,8 @@ public interface IRestActionJSON {
     List<IRestParam> getParams();
 
     Path getJsonPath();
+
+    boolean isUpload();
 
     Map<String,String> getAddPars();
 

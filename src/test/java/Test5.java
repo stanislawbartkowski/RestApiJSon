@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
+// -c src/test/resources/testpar/restparam.properties -p 7999
+
 public class Test5 extends PTestRestHelper {
 
     @Test

@@ -4,7 +4,6 @@ import java.nio.file.Path;
 import java.util.*;
 
 import com.google.inject.Inject;
-import com.rest.conf.Executors;
 import com.rest.restservice.PARAMTYPE;
 import com.rest.restservice.RestLogger;
 import org.json.JSONArray;
@@ -52,9 +51,8 @@ public class RestActionJSON {
     @Inject
     private final IRestActionEnhancer iEnhancer;
 
-    @Inject
-    private final Executors executors;
-
+//    private static FverifyAddParam verifyParam = null;
+//    private static FreplaceVariable replaceVariable = null;
 
     private static Map<String, PARAMTYPE> tmap = new HashMap<String, PARAMTYPE>();
     private static Set<String> procmap = new HashSet<String>();
@@ -184,9 +182,8 @@ public class RestActionJSON {
     }
 
     @Inject
-    public RestActionJSON(IRestActionEnhancer iEnhancer, Executors executors) {
+    public RestActionJSON(IRestActionEnhancer iEnhancer) {
         this.iEnhancer = iEnhancer;
-        this.executors = executors;
         additionalKeys.addAll(iEnhancer.addKeys());
         procmap.addAll(iEnhancer.addMap());
         if (iEnhancer.defaultProc().isPresent()) defaultProc = iEnhancer.defaultProc().get();

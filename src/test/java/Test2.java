@@ -17,6 +17,7 @@ public class Test2 extends TestHelper {
     String runJSON(String f, Map<String, ParamValue> values) throws RestError {
         init("testpar2.properties");
         RegisterExecutors.registerExecutors(IRestActionJSON.SHELL);
+        getrest();
         Path pp = getPath2(f);
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);

@@ -19,6 +19,7 @@ public class Test4 extends TestHelper {
 
         init("testpar4.properties");
         RegisterExecutors.registerExecutors(IRestActionJSON.SQL);
+        getrest();
         Path pp = getPath4(f);
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);

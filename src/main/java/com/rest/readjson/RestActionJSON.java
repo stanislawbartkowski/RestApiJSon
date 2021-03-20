@@ -1,11 +1,15 @@
 package com.rest.readjson;
 
+import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import com.google.inject.Inject;
+import com.rest.conf.Executors;
 import com.rest.restservice.PARAMTYPE;
 import com.rest.restservice.RestLogger;
+import com.rest.runjson.IRunPlugin;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -35,11 +39,9 @@ public class RestActionJSON {
     private static final String PARAMPARS = "pars";
     private static final String PARAMFORMAT = "format";
     private static final String PARAMOUTPUT = "output";
-    private static final String PARAMACTION = "action";
+    private static final String PARAMUPLOAD = "upload";
 
-    private static final String SQLPROC = "SQL";
     private static final String PYTHON3PROC = "PYTHON3";
-    private static final String SHELLPROC = "SHELL";
 
     private static String defaultProc = PYTHON3PROC;
 
@@ -48,11 +50,14 @@ public class RestActionJSON {
 
     private static final Set<String> additionalKeys = new HashSet<String>();
 
+    private static final Set<String> alwaysString = new HashSet<String>();
+
     @Inject
     private final IRestActionEnhancer iEnhancer;
 
-//    private static FverifyAddParam verifyParam = null;
-//    private static FreplaceVariable replaceVariable = null;
+    @Inject
+    private final Executors exec;
+
 
     private static Map<String, PARAMTYPE> tmap = new HashMap<String, PARAMTYPE>();
     private static Set<String> procmap = new HashSet<String>();
@@ -84,12 +89,14 @@ public class RestActionJSON {
         private final Optional<String> desc;
         private final Method method;
         private final String proc;
+        private final List<String> actionL;
         private final String action;
         private final List<IRestParam> plist;
         private final Path jsonPath;
         private final FORMAT format;
         private final OUTPUT output;
         private final Map<String, String> addPars;
+        private final boolean upload;
 
         @Override
         public String getName() {
@@ -117,16 +124,20 @@ public class RestActionJSON {
         }
 
         @Override
+        public List<String> actionL() {
+            return actionL;
+        }
+
+        @Override
         public FORMAT format() {
             return this.format;
         }
 
         @Override
         public OUTPUT output() {
-            if (proc.equals(IRestActionJSON.SQL)) return OUTPUT.STRING;
+            if (alwaysString.contains(proc)) return OUTPUT.STRING;
             return this.output;
         }
-
 
         @Override
         public List<IRestParam> getParams() {
@@ -139,12 +150,17 @@ public class RestActionJSON {
         }
 
         @Override
+        public boolean isUpload() {
+            return upload;
+        }
+
+        @Override
         public Map<String, String> getAddPars() {
             return addPars;
         }
 
 
-        RestAction(String name, Optional<String> desc, Method method, String proc, String action, List<IRestParam> plist, FORMAT format, OUTPUT output, Path jsonPath, Map<String, String> addPars) {
+        RestAction(String name, Optional<String> desc, Method method, String proc, String action, List<IRestParam> plist, FORMAT format, OUTPUT output, Path jsonPath, Map<String, String> addPars, List<String> actionL, boolean upload) {
             this.name = name;
             this.desc = desc;
             this.method = method;
@@ -155,6 +171,8 @@ public class RestActionJSON {
             this.output = output;
             this.jsonPath = jsonPath;
             this.addPars = addPars;
+            this.actionL = actionL;
+            this.upload = upload;
         }
     }
 
@@ -165,9 +183,10 @@ public class RestActionJSON {
         tmap.put("log", PARAMTYPE.BOOLEAN);
         tmap.put("int", PARAMTYPE.INT);
 
-        procmap.add(IRestActionJSON.PYTHON3);
-        procmap.add(IRestActionJSON.SQL);
-        procmap.add(IRestActionJSON.SHELL);
+//        procmap.add(IRestActionJSON.PYTHON3);
+//        procmap.add(IRestActionJSON.SQL);
+//        procmap.add(IRestActionJSON.SHELL);
+//        procmap.add(IRestActionJSON.RESOURCE);
 
         allowedKeys.add(PARAMPARS);
         allowedKeys.add(PARAMFORMAT);
@@ -175,18 +194,23 @@ public class RestActionJSON {
         allowedKeys.add(PARAMMETHOD);
         allowedKeys.add(PARAMPROC);
         allowedKeys.add(PARAMDESCRITPION);
-        allowedKeys.add(PARAMACTION);
+        allowedKeys.add(PARAMUPLOAD);
+        allowedKeys.add(IRunPlugin.PARAMACTION);
 
         allowedParKeys.add(PARAMPARNAME);
         allowedParKeys.add(PARAMPARTYPE);
     }
 
     @Inject
-    public RestActionJSON(IRestActionEnhancer iEnhancer) {
+    public RestActionJSON(IRestActionEnhancer iEnhancer,Executors exec) {
         this.iEnhancer = iEnhancer;
+        this.exec = exec;
         additionalKeys.addAll(iEnhancer.addKeys());
         procmap.addAll(iEnhancer.addMap());
         if (iEnhancer.defaultProc().isPresent()) defaultProc = iEnhancer.defaultProc().get();
+        allowedKeys.addAll(exec.listActions());
+        procmap.addAll(exec.listProcs());
+        alwaysString.addAll(exec.listofAlwaysString());
     }
 
     public static IRestActionJSON.IRestParam constructIP(String name, PARAMTYPE type) {
@@ -249,7 +273,12 @@ public class RestActionJSON {
         return iEnhancer.replace(s);
     }
 
-    private String getPar(JSONObject json, String key, Optional<String> defa) throws RestError {
+    private class StringList {
+        String res;
+        List<String> resl = new ArrayList<String>();
+    }
+
+    private Object getParO(JSONObject json, String key, Optional<? extends Object> defa) throws RestError {
         Object o = json.opt(key);
         if (o == null) {
             if (defa == null) Helper.throwSevere("Parameter " + key + " is not defined");
@@ -257,8 +286,38 @@ public class RestActionJSON {
                 Helper.throwSevere("Parameter " + key + " is not defined and no default value provided");
             return defa.get();
         }
-        if (o instanceof String) return preplaceVariable(json.getString(key));
+        return o;
+    }
+
+    private String getPar(JSONObject json, String key, Optional<String> defa) throws RestError {
+        Object o = getParO(json, key, defa);
+        if (o instanceof String) return preplaceVariable(o.toString());
         return o.toString();
+    }
+
+    private StringList getParL(JSONObject json, String key, Optional<String> defa) throws RestError {
+        Object o = getParO(json, key, defa);
+        StringList res = new StringList();
+        if (o instanceof String) {
+            res.res = preplaceVariable(json.getString(key));
+            res.resl.add(res.res);
+
+        } else {
+            res.res = o.toString();
+            if (o instanceof JSONArray) {
+                JSONArray a = (JSONArray) o;
+                a.forEach(ele -> res.resl.add(ele.toString()));
+            }
+        }
+        return res;
+    }
+
+
+    private boolean getParB(JSONObject json, String key, Optional<Boolean> defa) throws RestError {
+        Object o = getParO(json, key, defa);
+        if (!(o instanceof Boolean)) Helper.throwSevere(key + " boolean expected, found " + o.toString());
+        Boolean b = (Boolean)o;
+        return b.booleanValue();
     }
 
     private static void throwmaperror(String stype, Set<String> se) throws RestError {
@@ -277,8 +336,16 @@ public class RestActionJSON {
         return constructIP(name, typ);
     }
 
-    public IRestActionJSON readJSONAction(Path p) throws RestError {
+    private Path getFile(Path p, String method) {
+        String filename = p.toString() + "-" + method;
+        File f = new File(filename);
+        if (f.exists()) return Paths.get(filename);
+        else return p;
+    }
+
+    public IRestActionJSON readJSONAction(Path pin, String method) throws RestError {
         String jsonstring = null;
+        Path p = getFile(pin,method);
         jsonstring = readTextFile(p);
         JSONObject json = new JSONObject(jsonstring);
         verifyAttributes(json, allowedKeys, additionalKeys, p);
@@ -289,8 +356,10 @@ public class RestActionJSON {
         IRestActionJSON.Method m = getJSONAttr(IRestActionJSON.Method.class, json, IRestActionJSON.Method.GET, PARAMMETHOD);
         String proc = getPar(json, PARAMPROC, Optional.of(defaultProc));
         if (!procmap.contains(proc)) throwmaperror(proc, procmap);
+        IRunPlugin iplug = exec.getExecutorProc(proc,p.toString());
 
-        String action = getPar(json, PARAMACTION, Optional.empty());
+        StringList action = getParL(json, iplug.getActionParam(), Optional.empty());
+        boolean upload = getParB(json, PARAMUPLOAD, Optional.of(false));
 
         List<IRestActionJSON.IRestParam> plist = new ArrayList<IRestActionJSON.IRestParam>();
         JSONArray a = json.optJSONArray(PARAMPARS);
@@ -319,7 +388,7 @@ public class RestActionJSON {
             }
         });
 
-        IRestActionJSON ires = new RestAction(name, descr, m, proc, action, plist, format, output, p, addPars);
+        IRestActionJSON ires = new RestAction(name, descr, m, proc, action.res, plist, format, output, p, addPars, action.resl, upload);
 
         iEnhancer.verify(ires);
         return ires;

@@ -24,12 +24,18 @@ public class SQLExecutor implements IRunPlugin {
     private final static String USER = "user";
     private final static String PASSWORD = "password";
 
-    @Inject private IRestConfig conf;
+    @Inject
+    private IRestConfig conf;
     private final IBeforeExecutor iBefore;
 
     @Inject
     public SQLExecutor(@Named(IRestActionJSON.SQL) IBeforeExecutor iBefore) {
         this.iBefore = iBefore;
+    }
+
+    @Override
+    public boolean alwaysString() {
+        return true;
     }
 
     @Override
@@ -49,7 +55,7 @@ public class SQLExecutor implements IRunPlugin {
 
     @Override
     public void executeJSON(IRestActionJSON j, RunResult res, Map<String, ParamValue> values) throws RestError {
-        iBefore.runBefore(j,res,values);
+        iBefore.runBefore(j, res, values);
         int i = 1;
         List<SQLParam> sqlp = new ArrayList<SQLParam>();
         for (IRestActionJSON.IRestParam re : j.getParams()) sqlp.add(new SQLParam(i++, re));

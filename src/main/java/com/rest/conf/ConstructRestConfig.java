@@ -21,6 +21,7 @@ public class ConstructRestConfig {
         allowedPlugins.add(IRestActionJSON.SHELL);
         allowedPlugins.add(IRestActionJSON.PYTHON3);
         allowedPlugins.add(IRestActionJSON.SQL);
+        allowedPlugins.add(IRestActionJSON.RESOURCE);
     }
 
     static class RestConfig implements IRestConfig {
@@ -64,6 +65,7 @@ public class ConstructRestConfig {
         if (!val.isPresent()) {
             listofPlugins.add(IRestActionJSON.PYTHON3);
             listofPlugins.add(IRestActionJSON.SHELL);
+            listofPlugins.add(IRestActionJSON.RESOURCE);
         } else {
             String[] vals = val.get().split(",");
             for (String s : vals) {
@@ -79,7 +81,6 @@ public class ConstructRestConfig {
         return listofPlugins;
 
     }
-
 
     public IRestConfig create(Path p) throws RestError {
 

@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -27,11 +28,20 @@ public class Helper {
                 files[i] = new File(ss[i]);
         }
 
-        public Optional<Path> getPath(String s) {
+        public Optional<Path> getPath(String s, boolean force) throws RestError {
 
             for (File f : files) {
                 File ff = new File(f, s);
                 if (ff.exists() && ff.isFile()) return Optional.of(Paths.get(ff.toURI()));
+            }
+            if (force) {
+                final StringBuffer bu = new StringBuffer();
+                Arrays.stream(files).forEach(f -> {
+                    bu.append(f.getAbsolutePath());
+                    bu.append(' ');
+                });
+                String errmess = "File does not exist: " + bu.toString() + " " + s;
+                Helper.throwSevere(errmess);
             }
             return Optional.empty();
         }

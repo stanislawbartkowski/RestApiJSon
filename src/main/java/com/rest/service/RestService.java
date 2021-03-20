@@ -56,11 +56,7 @@ public class RestService extends RestHelper.RestServiceHelper {
         try {
             // .json
             String fname = name + ".json";
-            Optional<Path> p = iconfig.getJSonDirPaths().getPath(fname);
-            if (!p.isPresent()) {
-                String errmess = "File does not exist: " + iconfig.getJSonDirPaths().getErrPath(fname);
-                Helper.throwSevere(errmess);
-            }
+            Optional<Path> p = iconfig.getJSonDirPaths().getPath(fname,true);
 
             String meth = httpExchange.getRequestMethod();
             irest = restJSON.readJSONAction(p.get(), meth);

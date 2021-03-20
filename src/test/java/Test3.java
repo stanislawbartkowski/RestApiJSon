@@ -20,6 +20,7 @@ public class Test3 extends TestHelper {
     String runJSON(String f, Map<String, ParamValue> values) throws RestError {
         init("testpar3.properties");
         RegisterExecutors.registerExecutors(IRestActionJSON.PYTHON3);
+        getrest();
         Path pp = getPath3(f);
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);

@@ -1,5 +1,8 @@
 package com.rest.main;
 
+import com.rest.conf.IRestConfig;
+import com.rest.guice.rest.RegisterExecutors;
+import com.rest.readjson.RestError;
 import org.apache.commons.cli.*;
 
 import java.nio.file.Path;
@@ -57,6 +60,11 @@ public class RestMainHelper {
             return Optional.empty();
         }
     }
+
+    public static void registerExecutors(IRestConfig ires) throws RestError {
+        for (String s : ires.listOfPlugins()) RegisterExecutors.registerExecutors(s);
+    }
+
 
 }
 

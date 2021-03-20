@@ -1,14 +1,12 @@
+import com.rest.conf.IRestConfig;
 import com.rest.guice.rest.ModuleBuild;
-import com.rest.guice.rest.RegisterExecutors;
 import com.rest.guice.RestConfigFactory;
 import com.rest.main.RestMainHelper;
-import com.rest.readjson.IRestActionJSON;
 import com.rest.restservice.RestHelper;
 import com.rest.service.RestService;
 import com.rest.restservice.RestStart;
 
 // -c src/test/resources/testpar/restparam.properties -p 7999
-
 
 import java.util.Optional;
 
@@ -22,8 +20,8 @@ public class RestMain extends RestStart {
 
         RestConfigFactory.setInstance(cmd.get().getConfigfile());
 
-        RegisterExecutors.registerExecutors(IRestActionJSON.SQL);
-        RegisterExecutors.registerExecutors(IRestActionJSON.PYTHON3);
+        IRestConfig ires = ModuleBuild.getI().getInstance(IRestConfig.class);
+        RestMainHelper.registerExecutors(ires);
 
         RestService res = ModuleBuild.getI().getInstance(RestService.class);
 

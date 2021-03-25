@@ -10,6 +10,7 @@ import com.rest.restservice.ParamValue;
 import com.rest.restservice.RestParams;
 import com.rest.runjson.IRunPlugin;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
@@ -19,6 +20,9 @@ public class GetResourceExecutor implements IRunPlugin {
     private final static String resurceP = "resource";
     private final static String actionDir = "dir";
     private final IRestConfig iconfig;
+    private final static String resdir = "resdir";
+
+    private Helper.ListPaths rootdirlist;
 
     @Inject
     public GetResourceExecutor(IRestConfig iconfig) {
@@ -29,6 +33,13 @@ public class GetResourceExecutor implements IRunPlugin {
     public void modifPars(IRestActionJSON irest, String[] path, RestParams par) throws RestError {
         par.addParam(resurceP, PARAMTYPE.STRING);
     }
+
+    @Override
+    public  void verifyProperties() throws RestError {
+        String resourcerootdir = Helper.getValue(iconfig.prop(), resdir, true).get();
+        rootdirlist = new Helper.ListPaths(resourcerootdir);
+    }
+
 
     @Override
     public String getActionParam() {
@@ -43,14 +54,14 @@ public class GetResourceExecutor implements IRunPlugin {
     @Override
     public void executeJSON(IRestActionJSON j, RunResult res, Map<String, ParamValue> values) throws RestError {
         String dir = j.action();
-        String path = Helper.getValue(iconfig.prop(), dir, true).get();
+//        String path = Helper.getValue(iconfig.prop(), dir, true).get();
         ParamValue resourceP = values.get(resurceP);
         if (resourceP == null) Helper.throwSevere(resurceP + " not specified in the list of values");
         String resource = resourceP.getStringvalue();
-        Helper.ListPaths list = new Helper.ListPaths(path);
         boolean json = j.format() == IRestActionJSON.FORMAT.JSON;
         String ext = json ? "json" : "txt";
-        Optional<Path> resourceF = list.getPath(resource + '.' + ext, true);
+        String resourcepath = new File(dir,resource + '.' + ext).getPath();
+        Optional<Path> resourceF = rootdirlist.getPath(resourcepath, true);
         res.res = Helper.readTextFile(resourceF.get());
     }
 }

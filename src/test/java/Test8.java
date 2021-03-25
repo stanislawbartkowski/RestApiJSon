@@ -38,7 +38,7 @@ public class Test8 extends TestHelper {
         P("Hello");
         Path p = getPath6("test2.json");
         IRestActionJSON j = readJSONAction(p);
-        assertEquals("resdir",j.action());
+        assertEquals("resoudir",j.action());
         IRunPlugin irun = exec.getExecutor(j);
         IRunPlugin.RunResult ires = new IRunPlugin.RunResult();
         Map<String,ParamValue> values = new HashMap<String, ParamValue>();

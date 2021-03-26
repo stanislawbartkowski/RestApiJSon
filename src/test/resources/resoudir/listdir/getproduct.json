@@ -1,0 +1,29 @@
+{
+  "columns": [
+    {
+      "field": "pid",
+      "coltitle": "id"
+    },
+    {
+      "field": "name",
+      "coltitle": "name"
+    },
+    {
+      "field": "price",
+      "coltitle": "price",
+      "type": "number"
+    },
+    {
+      "field": "promoprice",
+      "type": "number"
+    },
+    {
+      "field": "promostart",
+      "type": "date"
+    },
+    {
+      "field": "promoend",
+      "type": "date"
+    }
+  ]
+}

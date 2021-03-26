@@ -18,7 +18,9 @@ public class PostgresJDBC {
     private static Connection conn;
 
     public static void connect(String url, String user, String password) throws SQLException {
+        RestLogger.L.info("Connecting to " + url + " user " + user);
         conn = DriverManager.getConnection(url, user, password);
+        RestLogger.L.info("Connected");
     }
 
     public static Connection getConnection() {
@@ -30,7 +32,7 @@ public class PostgresJDBC {
         ResultSetMetaData meta = res.getMetaData();
         for (int i = 1; i <= meta.getColumnCount(); i++) {
             JDBCType type = JDBCType.valueOf(meta.getColumnType(i));
-            String colname = meta.getColumnName(i);
+            String colname = meta.getColumnName(i).toLowerCase();
             switch (type) {
                 case INTEGER:
                     int in = res.getInt(i);

@@ -2,6 +2,7 @@ import com.rest.conf.Executors;
 import com.rest.conf.IRestConfig;
 import com.rest.guice.rest.ModuleBuild;
 import com.rest.guice.RestConfigFactory;
+import com.rest.guice.rest.RegisterExecutors;
 import com.rest.main.RestMainHelper;
 import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 abstract public class TestHelper {
@@ -29,6 +31,7 @@ abstract public class TestHelper {
     private static final String jdir4 = "src/test/resources/jdir4";
     private static final String jdir5 = "src/test/resources/jdir5";
     private static final String jdir6 = "src/test/resources/jdir6";
+    private static final String jdirresou = "src/test/resources/jresoudir";
 
     private static final String testpar1="src/test/resources/testpar";
 
@@ -105,6 +108,8 @@ abstract public class TestHelper {
         return Paths.get(testpar1, j);
     }
 
+    Path getPathResource(String j) { return Paths.get(jdirresou,j); }
+
     JSONArray getA(String s) {
         JSONObject o = new JSONObject(s);
         return o.optJSONArray("res");
@@ -113,4 +118,16 @@ abstract public class TestHelper {
     protected IRestActionJSON readJSONAction(Path path) throws RestError {
         return rest.readJSONAction(path, "GET");
     }
+
+    String runJSON(String testpar,Path pp, Map<String, ParamValue> values) throws RestError {
+
+        init(testpar);
+        RegisterExecutors.registerExecutors(IRestActionJSON.SQL);
+        getrest();
+        P(pp.toString());
+        IRestActionJSON j = readJSONAction(pp);
+        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(),values);
+        return ires.StringValue();
+    }
+
 }

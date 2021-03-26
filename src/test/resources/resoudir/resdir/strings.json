@@ -1,0 +1,19 @@
+{
+  "en": {
+    "button_dept" : "Departments",
+    "deptno_col" : "Department no",
+    "deptname_col" : "Department name",
+    "mgrno_col" : "Manager name",
+    "admrdept_col" : "Administrative dept",
+    "location_col" : "Location",
+
+    "button_product" : "Products",
+    "id" : "Id",
+    "name" : "Name",
+    "price" : "Price",
+    "promoprice_col" : "Promotion price",
+    "promostart_col" : "Promotion start",
+    "promoend_col" : "Promotion end"
+
+  }
+}

@@ -1,6 +1,6 @@
 
 // -c src/test/resources/testpar/testparresource.properties -p 7999
-
+// -c src/test/resources/testpar/testparresourcerest.properties -p 7999
 
 import org.json.JSONArray;
 import org.junit.Test;

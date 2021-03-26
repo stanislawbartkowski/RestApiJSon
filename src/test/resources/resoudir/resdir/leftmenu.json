@@ -1,0 +1,13 @@
+{
+  "menu" : [
+    {
+      "id": "dept",
+      "restid" : "getdept"
+    },
+    {
+      "id": "product",
+      "restid" : "getproduct"
+    }
+
+  ]
+}

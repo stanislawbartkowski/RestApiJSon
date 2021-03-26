@@ -15,16 +15,20 @@ import static org.junit.Assert.assertEquals;
 
 public class Test4 extends TestHelper {
 
-    String runJSON(String f, Map<String, ParamValue> values) throws RestError {
+//    String runJSON(String f, Map<String, ParamValue> values) throws RestError {
 
-        init("testpar4.properties");
-        RegisterExecutors.registerExecutors(IRestActionJSON.SQL);
-        getrest();
-        Path pp = getPath4(f);
-        P(pp.toString());
-        IRestActionJSON j = readJSONAction(pp);
-        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(),values);
-        return ires.StringValue();
+//        init("testpar4.properties");
+//        RegisterExecutors.registerExecutors(IRestActionJSON.SQL);
+//        getrest();
+//        Path pp = getPath4(f);
+//        P(pp.toString());
+//        IRestActionJSON j = readJSONAction(pp);
+//        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(),values);
+//        return ires.StringValue();
+//    }
+
+    private String runJSON(String f, Map<String, ParamValue> values) throws RestError {
+        return super.runJSON("testpar4.properties",getPath4(f),values);
     }
 
     @Test

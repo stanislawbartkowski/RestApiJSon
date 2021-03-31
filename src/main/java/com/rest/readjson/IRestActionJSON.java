@@ -25,7 +25,9 @@ public interface IRestActionJSON {
     enum FORMAT {
         JSON("JSON"),
         TEXT("TEXT"),
-        ZIP("ZIP");
+        ZIP("ZIP"),
+        JS("JS"),
+        XML("XML");
 
         private final String m;
 

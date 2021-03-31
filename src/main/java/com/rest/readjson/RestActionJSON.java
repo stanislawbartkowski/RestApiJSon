@@ -183,11 +183,6 @@ public class RestActionJSON {
         tmap.put("log", PARAMTYPE.BOOLEAN);
         tmap.put("int", PARAMTYPE.INT);
 
-//        procmap.add(IRestActionJSON.PYTHON3);
-//        procmap.add(IRestActionJSON.SQL);
-//        procmap.add(IRestActionJSON.SHELL);
-//        procmap.add(IRestActionJSON.RESOURCE);
-
         allowedKeys.add(PARAMPARS);
         allowedKeys.add(PARAMFORMAT);
         allowedKeys.add(PARAMOUTPUT);

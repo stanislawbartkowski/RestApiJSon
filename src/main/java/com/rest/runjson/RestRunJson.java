@@ -7,13 +7,10 @@ import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,7 +27,7 @@ public class RestRunJson {
     final private Executors executors;
 
     @Inject
-    RestRunJson(IRestConfig rConfig,Executors executors) {
+    RestRunJson(IRestConfig rConfig, Executors executors) {
 
         this.rConfig = rConfig;
         this.executors = executors;
@@ -87,27 +84,23 @@ public class RestRunJson {
                 Helper.throwSevere(errmess);
             }
         }
-        if (res.json == null && json) {
-            if (res.res == null) {
-                String errmess = j.getJsonPath().toString() + " expected JSON result";
-                Helper.throwSevere(errmess);
-            }
-            // verify JSON
-            try {
-                JSONTokener tokener = new JSONTokener(res.res);
-                res.json = new JSONObject(tokener);
-            } catch (org.json.JSONException e) {
-                Helper.throwException(res.res, e);
-            }
+
+        if (json) {
+            if (res.json == null) {
+                if (res.res == null) {
+                    String errmess = j.getJsonPath().toString() + " expected JSON result";
+                    Helper.throwSevere(errmess);
+                }
+            } else res.res = res.json.toString();
         }
-        if (!json && res.res == null) {
-            String errmess = j.getJsonPath().toString() + " expected TEXT result";
+        if (res.res == null) {
+            String errmess = j.getJsonPath().toString() + " expected " + j.format().toString() + " result";
             Helper.throwSevere(errmess);
         }
+        VerifyResult.verifyResult(res.res, j.format());
         // clear the result
         if (tempfile) res.tempfile.delete();
         // convert all to string
-        if (res.res == null) res.res = res.json.toString();
         return new IReturnValue() {
             @Override
             public byte[] ByteValue() {

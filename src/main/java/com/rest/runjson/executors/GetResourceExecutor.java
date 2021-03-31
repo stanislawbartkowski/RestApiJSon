@@ -12,6 +12,7 @@ import com.rest.runjson.IRunPlugin;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,6 +24,15 @@ public class GetResourceExecutor implements IRunPlugin {
     private final static String resdir = "resdir";
 
     private Helper.ListPaths rootdirlist;
+
+    private static Map<IRestActionJSON.FORMAT, String> extMap = new HashMap<IRestActionJSON.FORMAT, String>();
+    static {
+        extMap.put(IRestActionJSON.FORMAT.JSON,"json");
+        extMap.put(IRestActionJSON.FORMAT.TEXT,"txt");
+        extMap.put(IRestActionJSON.FORMAT.JS,"js");
+        extMap.put(IRestActionJSON.FORMAT.XML,"xml");
+        extMap.put(IRestActionJSON.FORMAT.ZIP,"zip");
+    }
 
     @Inject
     public GetResourceExecutor(IRestConfig iconfig) {
@@ -59,7 +69,10 @@ public class GetResourceExecutor implements IRunPlugin {
         if (resourceP == null) Helper.throwSevere(resurceP + " not specified in the list of values");
         String resource = resourceP.getStringvalue();
         boolean json = j.format() == IRestActionJSON.FORMAT.JSON;
-        String ext = json ? "json" : "txt";
+        String ext = extMap.get(j.format());
+        if (ext == null) {
+            Helper.throwSevere(j.format() + " is not expected as resource");
+        }
         String resourcepath = new File(dir,resource + '.' + ext).getPath();
         Optional<Path> resourceF = rootdirlist.getPath(resourcepath, true);
         res.res = Helper.readTextFile(resourceF.get());

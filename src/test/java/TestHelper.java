@@ -66,15 +66,8 @@ abstract public class TestHelper {
     protected void initno() throws RestError {
         init("testinit.properties");
         getrest();
-//        RestConfigFactory.setInstance(getPathPar("testinit.properties"));
-//        rest = ModuleBuild.getI().getInstance(RestActionJSON.class);
-//        run = ModuleBuild.getI().getInstance(RestRunJson.class);
-//        iconfig = ModuleBuild.getI().getInstance(IRestConfig.class);
-//        exec = ModuleBuild.getI().getInstance(Executors.class);
         registerEmpty();
     }
-
-
 
     void P(String s) {
         System.out.println(s);

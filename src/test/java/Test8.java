@@ -6,6 +6,7 @@ import com.rest.readjson.RestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
 import com.rest.runjson.IRunPlugin;
+import com.rest.runjson.RestRunJson;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,8 +14,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 public class Test8 extends TestHelper {
 
@@ -30,21 +33,50 @@ public class Test8 extends TestHelper {
         P("Hello");
         Path p = getPath6("test1.json");
         IRestActionJSON j = readJSONAction(p);
-        assertEquals("super",j.action());
+        assertEquals("super", j.action());
+    }
+
+    private RestRunJson.IReturnValue runResource(String json, String res) throws RestError {
+        Path p = getPath6(json);
+        IRestActionJSON j = readJSONAction(p);
+        assertEquals("resoudir", j.action());
+        IRunPlugin irun = exec.getExecutor(j);
+        Map<String, ParamValue> values = new HashMap<String, ParamValue>();
+        values.put("resource", new ParamValue(res));
+        return run.executeJson(j, Optional.empty(), values);
     }
 
     @Test
     public void test2() throws RestError {
-        P("Hello");
-        Path p = getPath6("test2.json");
-        IRestActionJSON j = readJSONAction(p);
-        assertEquals("resoudir",j.action());
-        IRunPlugin irun = exec.getExecutor(j);
-        IRunPlugin.RunResult ires = new IRunPlugin.RunResult();
-        Map<String,ParamValue> values = new HashMap<String, ParamValue>();
-        values.put("resource",new ParamValue("list"));
-        irun.executeJSON(j,ires, values);
-        assertEquals("{}",ires.res);
+        RestRunJson.IReturnValue ires = runResource("test2.json", "list");
+        assertEquals("{}", ires.StringValue());
+    }
+
+    @Test
+    public void test3() throws RestError {
+        RestError thrown = assertThrows(
+                RestError.class,
+                () -> runResource("test4.json", "codeerr"));
+        P(thrown.getMessage());
+    }
+
+    @Test
+    public void test4() throws RestError {
+        RestRunJson.IReturnValue ires = runResource("test4.json", "code");
+        P(ires.StringValue());
+        assertEquals("var j = \"hello\";", ires.StringValue());
+    }
+
+    @Test
+    public void test5() throws RestError {
+        RestRunJson.IReturnValue ires = runResource("test4.json", "codeo");
+        P(ires.StringValue());
+    }
+
+    @Test
+    public void test6() throws RestError {
+        RestRunJson.IReturnValue ires = runResource("test5.json", "cust");
+        P(ires.StringValue());
     }
 
 }

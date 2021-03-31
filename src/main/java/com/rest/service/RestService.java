@@ -16,10 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class RestService extends RestHelper.RestServiceHelper {
 
@@ -37,6 +34,16 @@ public class RestService extends RestHelper.RestServiceHelper {
     private final RestRunJson run;
     private final RestActionJSON restJSON;
     final private Executors exec;
+
+    final private static Map<IRestActionJSON.FORMAT, RestParams.CONTENT> mapf = new HashMap<IRestActionJSON.FORMAT, RestParams.CONTENT>();
+
+    static {
+        mapf.put(IRestActionJSON.FORMAT.JS, RestParams.CONTENT.JS);
+        mapf.put(IRestActionJSON.FORMAT.JSON, RestParams.CONTENT.JSON);
+        mapf.put(IRestActionJSON.FORMAT.TEXT, RestParams.CONTENT.TEXT);
+        mapf.put(IRestActionJSON.FORMAT.ZIP, RestParams.CONTENT.ZIP);
+        mapf.put(IRestActionJSON.FORMAT.XML, RestParams.CONTENT.XML);
+    }
 
     @Inject
     public RestService(IRestConfig iconfig, IEnhancer in, RestActionJSON restJSON, RestRunJson run, Executors exec) {
@@ -56,25 +63,16 @@ public class RestService extends RestHelper.RestServiceHelper {
         try {
             // .json
             String fname = name + ".json";
-            Optional<Path> p = iconfig.getJSonDirPaths().getPath(fname,true);
+            Optional<Path> p = iconfig.getJSonDirPaths().getPath(fname, true);
 
             String meth = httpExchange.getRequestMethod();
             irest = restJSON.readJSONAction(p.get(), meth);
 
             List<String> aMethods = new ArrayList<>();
             aMethods.add(irest.getMethod().toString());
-            Optional<RestParams.CONTENT> out = Optional.empty();
-            switch (irest.format()) {
-                case JSON:
-                    out = Optional.of(RestParams.CONTENT.JSON);
-                    break;
-                case TEXT:
-                    out = Optional.of(RestParams.CONTENT.TEXT);
-                    break;
-                case ZIP:
-                    out = Optional.of(RestParams.CONTENT.ZIP);
-                    break;
-            }
+            RestParams.CONTENT fo = mapf.get(irest.format());
+            Optional<RestParams.CONTENT> out = fo == null ? Optional.empty() : Optional.of(fo);
+
             RestParams par = new RestParams(irest.getMethod().toString(), out, corsallowed, aMethods, Optional.empty(), irest.isUpload());
             irest.getParams().stream().forEach(s -> {
                 par.addParam(s.getName(), s.getType());

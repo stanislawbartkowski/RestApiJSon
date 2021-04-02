@@ -3,6 +3,8 @@ package com.rest.runjson;
 import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
+import com.rest.restservice.RestLogger;
+import com.rest.service.RestService;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.w3c.dom.Document;
@@ -35,6 +37,10 @@ class VerifyResult {
             }
             case JS: {
                 ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+                if (engine == null) {
+                    RestLogger.info("nashorn engine not available, JS code not verified");
+                    break;
+                }
                 try {
                     engine.eval(s);
                 } catch (ScriptException e) {

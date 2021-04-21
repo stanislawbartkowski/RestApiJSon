@@ -25,7 +25,7 @@ public class RestActionJSON {
 
         String replace(String param) throws RestError;
 
-        Set<String> addMap();
+//        Set<String> addMap();
 
         Optional<String> defaultProc();
     }
@@ -60,7 +60,7 @@ public class RestActionJSON {
 
 
     private static Map<String, PARAMTYPE> tmap = new HashMap<String, PARAMTYPE>();
-    private static Set<String> procmap = new HashSet<String>();
+//    private static Set<String> procmap = new HashSet<String>();
 
     private static class RestAction implements IRestActionJSON {
 
@@ -201,10 +201,10 @@ public class RestActionJSON {
         this.iEnhancer = iEnhancer;
         this.exec = exec;
         additionalKeys.addAll(iEnhancer.addKeys());
-        procmap.addAll(iEnhancer.addMap());
+//        procmap.addAll(iEnhancer.addMap());
         if (iEnhancer.defaultProc().isPresent()) defaultProc = iEnhancer.defaultProc().get();
         allowedKeys.addAll(exec.listActions());
-        procmap.addAll(exec.listProcs());
+//        procmap.addAll(exec.listProcs());
         alwaysString.addAll(exec.listofAlwaysString());
     }
 
@@ -350,6 +350,7 @@ public class RestActionJSON {
         // metoda
         IRestActionJSON.Method m = getJSONAttr(IRestActionJSON.Method.class, json, IRestActionJSON.Method.GET, PARAMMETHOD);
         String proc = getPar(json, PARAMPROC, Optional.of(defaultProc));
+        Set<String> procmap = exec.listProcs();
         if (!procmap.contains(proc)) throwmaperror(proc, procmap);
         IRunPlugin iplug = exec.getExecutorProc(proc,p.toString());
 

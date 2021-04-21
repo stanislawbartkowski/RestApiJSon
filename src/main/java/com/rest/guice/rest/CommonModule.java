@@ -75,10 +75,10 @@ public class CommonModule extends AbstractCommonModule {
                 return param;
             }
 
-            @Override
-            public Set<String> addMap() {
-                return new HashSet<String>();
-            }
+//            @Override
+//            public Set<String> addMap() {
+  //              return new HashSet<String>();
+  //          }
 
             @Override
             public Optional<String> defaultProc() {

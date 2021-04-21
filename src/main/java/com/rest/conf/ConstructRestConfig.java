@@ -82,8 +82,9 @@ public class ConstructRestConfig {
 
     }
 
-    public IRestConfig create(Path p) throws RestError {
+    public IRestConfig create(Path p,Optional<List<String>> customplugins) throws RestError {
 
+        if (customplugins.isPresent()) allowedPlugins.addAll(customplugins.get());
         FileInputStream f = null;
         Properties pro = new Properties();
         try {

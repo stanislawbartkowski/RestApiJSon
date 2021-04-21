@@ -1,10 +1,9 @@
 import com.rest.conf.Executors;
 import com.rest.conf.IRestConfig;
-import com.rest.guice.rest.ModuleBuild;
+import com.rest.guice.ModuleBuild;
 import com.rest.guice.RestConfigFactory;
 import com.rest.guice.rest.RegisterExecutors;
-import com.rest.main.RestMainHelper;
-import com.rest.readjson.Helper;
+import com.rest.guice.rest.SetInjector;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestActionJSON;
 import com.rest.readjson.RestError;
@@ -13,15 +12,11 @@ import com.rest.runjson.IRunPlugin;
 import com.rest.runjson.RestRunJson;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.After;
-import org.junit.Before;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Properties;
 
 abstract public class TestHelper {
 
@@ -41,7 +36,8 @@ abstract public class TestHelper {
     protected Executors exec;
 
     protected void init(String p) throws RestError {
-        RestConfigFactory.setInstance(getPathPar(p));
+        SetInjector.setInjector();
+        RestConfigFactory.setInstance(getPathPar(p),Optional.empty());
         run = ModuleBuild.getI().getInstance(RestRunJson.class);
         iconfig = ModuleBuild.getI().getInstance(IRestConfig.class);
         exec = ModuleBuild.getI().getInstance(Executors.class);

@@ -16,6 +16,7 @@ import com.rest.runjson.executors.SQLExecutor;
 import com.rest.runjson.executors.ShellExecutor;
 
 public abstract class AbstractCommonModule extends AbstractModule {
+
     @Override
     protected void configure() {
         bind(ConstructRestConfig.class).in(Singleton.class);
@@ -35,7 +36,6 @@ public abstract class AbstractCommonModule extends AbstractModule {
 
 //        bind(RestService.class).in(Singleton.class);
         bind(RestMainHelper.class).in(Singleton.class);
-//        requestStaticInjection(RegisterExecutors.class);
     }
 
 

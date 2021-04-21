@@ -1,6 +1,7 @@
 import com.rest.conf.IRestConfig;
-import com.rest.guice.rest.ModuleBuild;
+import com.rest.guice.ModuleBuild;
 import com.rest.guice.RestConfigFactory;
+import com.rest.guice.rest.SetInjector;
 import com.rest.main.RestMainHelper;
 import com.rest.restservice.RestHelper;
 import com.rest.service.RestService;
@@ -17,8 +18,9 @@ public class RestMain extends RestStart {
 
         Optional<RestMainHelper.RestParams> cmd = RestMainHelper.buildCmd(args);
         if (!cmd.isPresent()) System.exit(4);
+        SetInjector.setInjector();
 
-        RestConfigFactory.setInstance(cmd.get().getConfigfile());
+        RestConfigFactory.setInstance(cmd.get().getConfigfile(),Optional.empty());
 
         IRestConfig ires = ModuleBuild.getI().getInstance(IRestConfig.class);
         RestMainHelper.registerExecutors(ires);

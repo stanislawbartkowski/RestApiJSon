@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Executors {
+
     private final Map<String, IRunPlugin> imap = new HashMap<String, IRunPlugin>();
 
     final private IRestConfig rConfig;
@@ -57,6 +58,5 @@ public class Executors {
         });
         return a;
     }
-
 
 }

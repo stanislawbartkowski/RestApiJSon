@@ -1,5 +1,7 @@
 package com.rest.guice.rest;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
@@ -32,12 +34,9 @@ public class CommonModule extends AbstractCommonModule {
         return new IBeforeExecutor() {
             @Override
             public void runBefore(IRestActionJSON j, IRunPlugin.RunResult res, Map<String, ParamValue> values) throws RestError {
-
             }
         };
-    }
-
-    ;
+    };
 
     @Provides
     @Singleton
@@ -75,19 +74,11 @@ public class CommonModule extends AbstractCommonModule {
                 return param;
             }
 
-//            @Override
-//            public Set<String> addMap() {
-  //              return new HashSet<String>();
-  //          }
-
             @Override
             public Optional<String> defaultProc() {
                 return Optional.empty();
             }
         };
     }
-
-
-    //RestActionJSON$IRestActionEnhancer
 
 }

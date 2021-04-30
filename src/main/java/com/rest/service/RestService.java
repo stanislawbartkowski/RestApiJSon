@@ -62,8 +62,7 @@ public class RestService extends RestHelper.RestServiceHelper {
         RestLogger.info("Rest method " + name);
         try {
             // .json
-            String fname = name + ".json";
-            Optional<Path> p = iconfig.getJSonDirPaths().getPath(fname, true);
+            Optional<Path> p = iconfig.getJSonDirPaths().getPath(name, true);
 
             String meth = httpExchange.getRequestMethod();
             irest = restJSON.readJSONAction(p.get(), meth);

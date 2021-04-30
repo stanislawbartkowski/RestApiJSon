@@ -30,4 +30,12 @@ public class Test5 extends PTestRestHelper {
         assertEquals(1,a.length());
     }
 
+    @Test
+    public void test4() throws IOException {
+        P("Test na wywołanie sql z parametrem");
+        JSONArray a = testoka("/testsql2y", "id=1");
+        assertEquals(1,a.length());
+    }
+
+
 }

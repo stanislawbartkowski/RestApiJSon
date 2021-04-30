@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.rest.restservice.PARAMTYPE;
 import com.rest.restservice.RestLogger;
 import com.rest.restservice.ParamValue;
@@ -28,11 +30,21 @@ public class Helper {
                 files[i] = new File(ss[i]);
         }
 
+        private Optional<Path> getIsFile(File f, String s, Optional<String> ext) {
+            File ff = ext.isPresent() ? new File(f, s + "." + ext.get()) : new File(f,s);
+            if (ff.exists() && ff.isFile()) return Optional.of(Paths.get(ff.toURI()));
+            return Optional.empty();
+        }
+
         public Optional<Path> getPath(String s, boolean force) throws RestError {
 
             for (File f : files) {
-                File ff = new File(f, s);
-                if (ff.exists() && ff.isFile()) return Optional.of(Paths.get(ff.toURI()));
+                Optional<Path> p = getIsFile(f, s, Optional.empty());
+                if (p.isPresent()) return p;
+                p = getIsFile(f, s, Optional.of(IRestActionJSON.JSONEXT));
+                if (p.isPresent()) return p;
+                p = getIsFile(f, s, Optional.of(IRestActionJSON.YAMLEXT));
+                if (p.isPresent()) return p;
             }
             if (force) {
                 final StringBuffer bu = new StringBuffer();
@@ -40,7 +52,7 @@ public class Helper {
                     bu.append(f.getAbsolutePath());
                     bu.append(' ');
                 });
-                String errmess = "File does not exist: " + bu.toString() + " " + s;
+                String errmess = "File does not exist: " + bu.toString() + " " + s + " Expected extension " + IRestActionJSON.JSONEXT + " or " + IRestActionJSON.YAMLEXT;
                 Helper.throwSevere(errmess);
             }
             return Optional.empty();
@@ -118,9 +130,20 @@ public class Helper {
         } catch (IOException e) {
             String errmess = "Error while creating temporary file";
             Helper.throwException(errmess, e);
+            return null;
         }
-        return null;
     }
 
-
+    public static String convertYamlToJson(String yaml) throws RestError {
+        try {
+            ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
+            Object obj = yamlReader.readValue(yaml, Object.class);
+            ObjectMapper jsonWriter = new ObjectMapper();
+            return jsonWriter.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
+        } catch (IOException ex) {
+            String errmess = "Error while converting YAML to JSON";
+            Helper.throwException(errmess, ex);
+            return null;
+        }
+    }
 }

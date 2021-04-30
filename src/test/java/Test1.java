@@ -108,5 +108,16 @@ public class Test1 extends TestHelper {
         assertEquals(IRestActionJSON.FORMAT.ZIP, j.format());
     }
 
+    @Test
+    public void test11() throws RestError {
+        Path p = getPath1("testshelly.yaml");
+        IRestActionJSON j = readJSONAction(p);
+        List<String> res = j.actionL();
+        assertEquals(2,res.size());
+        assertEquals("x",res.get(0));
+        assertEquals("y",res.get(1));
+    }
+
+
 
 }

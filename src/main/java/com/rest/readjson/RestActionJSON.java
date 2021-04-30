@@ -25,8 +25,6 @@ public class RestActionJSON {
 
         String replace(String param) throws RestError;
 
-//        Set<String> addMap();
-
         Optional<String> defaultProc();
     }
 
@@ -197,7 +195,7 @@ public class RestActionJSON {
     }
 
     @Inject
-    public RestActionJSON(IRestActionEnhancer iEnhancer,Executors exec) {
+    public RestActionJSON(IRestActionEnhancer iEnhancer, Executors exec) {
         this.iEnhancer = iEnhancer;
         this.exec = exec;
         additionalKeys.addAll(iEnhancer.addKeys());
@@ -311,7 +309,7 @@ public class RestActionJSON {
     private boolean getParB(JSONObject json, String key, Optional<Boolean> defa) throws RestError {
         Object o = getParO(json, key, defa);
         if (!(o instanceof Boolean)) Helper.throwSevere(key + " boolean expected, found " + o.toString());
-        Boolean b = (Boolean)o;
+        Boolean b = (Boolean) o;
         return b.booleanValue();
     }
 
@@ -340,8 +338,11 @@ public class RestActionJSON {
 
     public IRestActionJSON readJSONAction(Path pin, String method) throws RestError {
         String jsonstring = null;
-        Path p = getFile(pin,method);
-        jsonstring = readTextFile(p);
+        Path p = getFile(pin, method);
+        if (pin.toString().endsWith(IRestActionJSON.YAMLEXT)) {
+            String yaml = readTextFile(p);
+            jsonstring = Helper.convertYamlToJson(yaml);
+        } else jsonstring = readTextFile(p);
         JSONObject json = new JSONObject(jsonstring);
         verifyAttributes(json, allowedKeys, additionalKeys, p);
         RestLogger.info(json.toString());
@@ -352,7 +353,7 @@ public class RestActionJSON {
         String proc = getPar(json, PARAMPROC, Optional.of(defaultProc));
         Set<String> procmap = exec.listProcs();
         if (!procmap.contains(proc)) throwmaperror(proc, procmap);
-        IRunPlugin iplug = exec.getExecutorProc(proc,p.toString());
+        IRunPlugin iplug = exec.getExecutorProc(proc, p.toString());
 
         StringList action = getParL(json, iplug.getActionParam(), Optional.empty());
         boolean upload = getParB(json, PARAMUPLOAD, Optional.of(false));

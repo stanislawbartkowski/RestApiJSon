@@ -53,6 +53,9 @@ public interface IRestActionJSON {
     String SHELL = "SHELL";
     String RESOURCE = "RESOURCE";
 
+    String YAMLEXT = "yaml";
+    String JSONEXT = "json";
+
     interface IRestParam {
         String getName();
 

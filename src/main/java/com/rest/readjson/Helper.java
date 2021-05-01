@@ -31,7 +31,7 @@ public class Helper {
         }
 
         private Optional<Path> getIsFile(File f, String s, Optional<String> ext) {
-            File ff = ext.isPresent() ? new File(f, s + "." + ext.get()) : new File(f,s);
+            File ff = ext.isPresent() ? new File(f, s + "." + ext.get()) : new File(f, s);
             if (ff.exists() && ff.isFile()) return Optional.of(Paths.get(ff.toURI()));
             return Optional.empty();
         }
@@ -83,7 +83,8 @@ public class Helper {
     public static String readTextFile(Path path) throws RestError {
         try {
             String s = new String(Files.readAllBytes(path));
-            return s;
+            if (path.toString().endsWith(IRestActionJSON.YAMLEXT)) return Helper.convertYamlToJson(s);
+            else return s;
         } catch (IOException e) {
             throwException("Error while reading " + path.toString(), e);
         }
@@ -134,7 +135,7 @@ public class Helper {
         }
     }
 
-    public static String convertYamlToJson(String yaml) throws RestError {
+    private static String convertYamlToJson(String yaml) throws RestError {
         try {
             ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
             Object obj = yamlReader.readValue(yaml, Object.class);

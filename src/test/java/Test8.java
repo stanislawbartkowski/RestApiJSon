@@ -4,6 +4,8 @@ import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
 import com.rest.runjson.IRunPlugin;
 import com.rest.runjson.RestRunJson;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -75,5 +77,27 @@ public class Test8 extends TestHelper {
         RestRunJson.IReturnValue ires = runResource("test5.json", "cust");
         P(ires.StringValue());
     }
+
+    private void runJson(String res) throws RestError {
+        RestRunJson.IReturnValue ires = runResource("test6.json", res);
+        P(ires.StringValue());
+        JSONObject o = new JSONObject(ires.StringValue());
+        String s = o.getString("hello");
+        assertEquals("Hello", s);
+        JSONArray a = o.optJSONArray("pars");
+        assertEquals(2, a.length());
+    }
+
+
+    @Test
+    public void test7() throws RestError {
+        runJson("listdef");
+    }
+
+    @Test
+    public void test8() throws RestError {
+        runJson("listdefyaml");
+    }
+
 
 }

@@ -339,10 +339,7 @@ public class RestActionJSON {
     public IRestActionJSON readJSONAction(Path pin, String method) throws RestError {
         String jsonstring = null;
         Path p = getFile(pin, method);
-        if (pin.toString().endsWith(IRestActionJSON.YAMLEXT)) {
-            String yaml = readTextFile(p);
-            jsonstring = Helper.convertYamlToJson(yaml);
-        } else jsonstring = readTextFile(p);
+        jsonstring = readTextFile(p);
         JSONObject json = new JSONObject(jsonstring);
         verifyAttributes(json, allowedKeys, additionalKeys, p);
         RestLogger.info(json.toString());

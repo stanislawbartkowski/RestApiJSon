@@ -27,7 +27,7 @@ public class GetResourceExecutor implements IRunPlugin {
 
     private static Map<IRestActionJSON.FORMAT, String> extMap = new HashMap<IRestActionJSON.FORMAT, String>();
     static {
-        extMap.put(IRestActionJSON.FORMAT.JSON,"json");
+        extMap.put(IRestActionJSON.FORMAT.JSON,IRestActionJSON.JSONEXT);
         extMap.put(IRestActionJSON.FORMAT.TEXT,"txt");
         extMap.put(IRestActionJSON.FORMAT.JS,"js");
         extMap.put(IRestActionJSON.FORMAT.XML,"xml");
@@ -64,16 +64,17 @@ public class GetResourceExecutor implements IRunPlugin {
     @Override
     public void executeJSON(IRestActionJSON j, RunResult res, Map<String, ParamValue> values) throws RestError {
         String dir = j.action();
-//        String path = Helper.getValue(iconfig.prop(), dir, true).get();
         ParamValue resourceP = values.get(resurceP);
         if (resourceP == null) Helper.throwSevere(resurceP + " not specified in the list of values");
         String resource = resourceP.getStringvalue();
-        boolean json = j.format() == IRestActionJSON.FORMAT.JSON;
         String ext = extMap.get(j.format());
         if (ext == null) {
             Helper.throwSevere(j.format() + " is not expected as resource");
         }
-        String resourcepath = new File(dir,resource + '.' + ext).getPath();
+        boolean isjson = j.format() == IRestActionJSON.FORMAT.JSON;
+        String fileName = isjson ? resource : resource + '.' + ext;
+        String resourcepath = new File(dir,fileName).getPath();
+        // do not force for json
         Optional<Path> resourceF = rootdirlist.getPath(resourcepath, true);
         res.res = Helper.readTextFile(resourceF.get());
     }

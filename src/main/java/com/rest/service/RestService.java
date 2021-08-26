@@ -59,13 +59,14 @@ public class RestService extends RestHelper.RestServiceHelper {
     public RestParams getParams(HttpExchange httpExchange) throws IOException {
         String[] path = getPath(httpExchange);
         String name = path[0];
-        RestLogger.info("Rest method " + name);
+        String meth = httpExchange.getRequestMethod();
+        RestLogger.info("Rest method " + name + " HTTP method " + meth);
         try {
-            // .json
-            Optional<Path> p = iconfig.getJSonDirPaths().getPath(name, true);
+            // .json or yaml
+            // firstly looks for _method then default
+            Optional<Path> p = iconfig.getJSonDirPaths().getPath(name + "-" + meth.toLowerCase(), Optional.of(name));
 
-            String meth = httpExchange.getRequestMethod();
-            irest = restJSON.readJSONAction(p.get(), meth);
+            irest = restJSON.readJSONAction(p.get());
 
             List<String> aMethods = new ArrayList<>();
             aMethods.add(irest.getMethod().toString());

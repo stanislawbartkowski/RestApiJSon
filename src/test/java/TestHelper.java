@@ -105,7 +105,7 @@ abstract public class TestHelper {
     }
 
     protected IRestActionJSON readJSONAction(Path path) throws RestError {
-        return rest.readJSONAction(path, "GET");
+        return rest.readJSONAction(path);
     }
 
     String runJSON(String testpar,Path pp, Map<String, ParamValue> values) throws RestError {

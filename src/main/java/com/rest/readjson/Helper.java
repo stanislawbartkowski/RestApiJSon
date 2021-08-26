@@ -36,8 +36,7 @@ public class Helper {
             return Optional.empty();
         }
 
-        public Optional<Path> getPath(String s, boolean force) throws RestError {
-
+        private Optional<Path> getFile(String s) {
             for (File f : files) {
                 Optional<Path> p = getIsFile(f, s, Optional.empty());
                 if (p.isPresent()) return p;
@@ -46,15 +45,25 @@ public class Helper {
                 p = getIsFile(f, s, Optional.of(IRestActionJSON.YAMLEXT));
                 if (p.isPresent()) return p;
             }
-            if (force) {
-                final StringBuffer bu = new StringBuffer();
-                Arrays.stream(files).forEach(f -> {
-                    bu.append(f.getAbsolutePath());
-                    bu.append(' ');
-                });
-                String errmess = "File does not exist: " + bu.toString() + " " + s + " Expected extension " + IRestActionJSON.JSONEXT + " or " + IRestActionJSON.YAMLEXT;
-                Helper.throwSevere(errmess);
-            }
+            return Optional.empty();
+        }
+
+        public Optional<Path> getPath(String s, Optional<String> alternatives) throws RestError {
+
+            Optional<Path> p = getFile(s);
+            if (p.isPresent()) return p;
+            if (alternatives.isPresent())
+                p = getFile(alternatives.get());
+            if (p.isPresent()) return p;
+
+            // prepare error message
+            final StringBuffer bu = new StringBuffer();
+            Arrays.stream(files).forEach(f -> {
+                bu.append(f.getAbsolutePath());
+                bu.append(' ');
+            });
+            String errmess = "Directory: " + bu.toString() + " File does not exist:" + s + (alternatives.isPresent() ? " or " + alternatives.get() : "") + " Expected extension " + IRestActionJSON.JSONEXT + " or " + IRestActionJSON.YAMLEXT;
+            Helper.throwSevere(errmess);
             return Optional.empty();
         }
 
@@ -91,7 +100,7 @@ public class Helper {
         return null;
     }
 
-    public static Optional<String> getValue(Properties p, String key, boolean force) throws RestError {
+    private static Optional<String> getValueS(Properties p, String key, boolean force, Optional<String> mask) throws RestError {
         String pkey = key;
         String val = p.getProperty(pkey);
         if (val == null) {
@@ -103,8 +112,16 @@ public class Helper {
             RestLogger.info(pkey + "no value found but not mandatory");
             return Optional.empty();
         }
-        RestLogger.info(pkey + " value read:" + val);
+        RestLogger.info(pkey + " value read:" + (mask.isPresent() ? mask.get() : val));
         return Optional.of(val);
+    }
+
+    public static Optional<String> getValue(Properties p, String key, boolean force) throws RestError {
+        return getValueS(p, key, force, Optional.empty());
+    }
+
+    public static Optional<String> getValuePassword(Properties p, String key, boolean force) throws RestError {
+        return getValueS(p, key, force, Optional.of("XXXXXXXX"));
     }
 
     public static String ParamValueToS(PARAMTYPE t, ParamValue v) {

@@ -46,6 +46,8 @@ abstract class AbstractShellExecutor implements IRunPlugin {
             String vals = pa.isPresent() ? Helper.ParamValueToS(pa.get().getType(), s.getValue()) : s.getValue().getStringvalue();
             env.put(s.getKey(),vals);
         }
+        if (j.setEnvir())
+            conf.prop().forEach( (key,val) -> { env.put("ENV_" + key,val.toString()); });
         try {
             int exitcode = RunShellCommand.run(shellhome, env,output,cmd);
             if (exitcode != 0) {

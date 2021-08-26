@@ -64,7 +64,7 @@ class RunShellCommand {
         try {
             exe.submit(streamGobbler).get();
         } catch (ExecutionException e) {
-            String message = "Error while getting input result";
+            String message = "Error while getting output result";
             RestLogger.L.log(Level.SEVERE, message, e);
             throw new IOException(e);
         }

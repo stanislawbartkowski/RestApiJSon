@@ -1,5 +1,5 @@
-create database testrest;
-CREATE USER testres WITH PASSWORD 'secret';
+CREATE USER testrest WITH PASSWORD 'secret';
+create database testrest with owner testrest;
 
  create table test (x int);
  insert into test values(1);

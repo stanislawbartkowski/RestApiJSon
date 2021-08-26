@@ -40,11 +40,11 @@ abstract public class TestRestHelper {
         return makecall(path,query,"GET");
     }
 
-    protected int makegetcallupload(String path, String query, String input) throws IOException {
+    protected int makegetcalluploadmeth(String path, String meth, String query, String input) throws IOException {
         URL url = new URL("http://" + HOST + ":" + PORT + path + (query != null ? "?" + query : ""));
         con = (HttpURLConnection) url.openConnection();
         con.setDoOutput(true);
-        con.setRequestMethod("POST");
+        con.setRequestMethod(meth);
         try (BufferedOutputStream bos = new BufferedOutputStream(con.getOutputStream());
              BufferedInputStream bis = new BufferedInputStream(new FileInputStream(input))) {
             int i;
@@ -54,6 +54,10 @@ abstract public class TestRestHelper {
         }
 
         return con.getResponseCode();
+    }
+
+    protected int makegetcallupload(String path, String query, String input) throws IOException {
+        return makegetcalluploadmeth(path, "POST", query, input);
     }
 
 

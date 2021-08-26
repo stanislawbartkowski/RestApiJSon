@@ -8,7 +8,7 @@ import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
 import com.rest.runjson.IRunPlugin;
-import com.rest.runjson.executors.sql.PostgresJDBC;
+import com.rest.runjson.executors.sql.JDBC;
 import com.rest.runjson.executors.sql.SQLParam;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,9 +43,9 @@ public class SQLExecutor implements IRunPlugin {
 
         String url = Helper.getValue(conf.prop(), URL, true).get();
         String user = Helper.getValue(conf.prop(), USER, true).get();
-        String password = Helper.getValue(conf.prop(), PASSWORD, true).get();
+        String password = Helper.getValuePassword(conf.prop(), PASSWORD, true).get();
         try {
-            PostgresJDBC.connect(url, user, password);
+            JDBC.connect(url, user, password);
         } catch (SQLException throwables) {
             String errmess = "Cannot connect " + url;
             Helper.throwException(errmess, throwables);
@@ -61,7 +61,7 @@ public class SQLExecutor implements IRunPlugin {
         for (IRestActionJSON.IRestParam re : j.getParams()) sqlp.add(new SQLParam(i++, re));
         JSONArray a = null;
         try {
-            a = PostgresJDBC.runquery(j.action(), sqlp, values);
+            a = JDBC.runquery(j.action(), sqlp, values,j.updateQuery());
         } catch (SQLException throwables) {
             String errmess = "Cannot execute " + j.action();
             Helper.throwException(errmess, throwables);

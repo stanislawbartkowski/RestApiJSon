@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 import java.sql.JDBCType;
 
-public class PostgresJDBC {
+public class JDBC {
 
     private static Connection conn;
 
@@ -59,7 +59,7 @@ public class PostgresJDBC {
         return j;
     }
 
-    public static JSONArray runquery(String q, List<SQLParam> plist, Map<String, ParamValue> values) throws SQLException {
+    public static JSONArray runquery(String q, List<SQLParam> plist, Map<String, ParamValue> values, boolean updatequery) throws SQLException {
 
         RestLogger.L.info(q);
         PreparedStatement prep = conn.prepareStatement(q);
@@ -83,12 +83,15 @@ public class PostgresJDBC {
                     break;
             }
         }
-        ResultSet res = prep.executeQuery();
-
         JSONArray ja = new JSONArray();
-        while (res.next()) {
-            JSONObject row = createRow(res);
-            ja.put(row);
+        if (updatequery) prep.executeUpdate();
+        else {
+            ResultSet res = prep.executeQuery();
+
+            while (res.next()) {
+                JSONObject row = createRow(res);
+                ja.put(row);
+            }
         }
 
         return ja;

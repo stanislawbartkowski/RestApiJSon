@@ -75,7 +75,7 @@ public class GetResourceExecutor implements IRunPlugin {
         String fileName = isjson ? resource : resource + '.' + ext;
         String resourcepath = new File(dir,fileName).getPath();
         // do not force for json
-        Optional<Path> resourceF = rootdirlist.getPath(resourcepath, true);
+        Optional<Path> resourceF = rootdirlist.getPath(resourcepath, Optional.empty());
         res.res = Helper.readTextFile(resourceF.get());
     }
 }

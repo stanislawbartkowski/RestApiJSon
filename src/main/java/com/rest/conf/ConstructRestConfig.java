@@ -69,6 +69,7 @@ public class ConstructRestConfig {
         } else {
             String[] vals = val.get().split(",");
             for (String s : vals) {
+                s = s.trim(); // trail spaces
                 if (!allowedPlugins.contains(s)) {
                     final StringBuffer mess = new StringBuffer();
                     mess.append(s + " unrecognized plugin name. Expected values: ");

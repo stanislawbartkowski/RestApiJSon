@@ -38,6 +38,8 @@ public class RestActionJSON {
     private static final String PARAMFORMAT = "format";
     private static final String PARAMOUTPUT = "output";
     private static final String PARAMUPLOAD = "upload";
+    private static final String PARAMSETENVIR = "setenvir";
+    private static final String PARAMUPDATEQUERY = "updatequery";
 
     private static final String PYTHON3PROC = "PYTHON3";
 
@@ -95,6 +97,8 @@ public class RestActionJSON {
         private final OUTPUT output;
         private final Map<String, String> addPars;
         private final boolean upload;
+        private final boolean setEnvir;
+        private final boolean updatequery;
 
         @Override
         public String getName() {
@@ -157,8 +161,18 @@ public class RestActionJSON {
             return addPars;
         }
 
+        @Override
+        public boolean setEnvir() {
+            return setEnvir;
+        }
 
-        RestAction(String name, Optional<String> desc, Method method, String proc, String action, List<IRestParam> plist, FORMAT format, OUTPUT output, Path jsonPath, Map<String, String> addPars, List<String> actionL, boolean upload) {
+        @Override
+        public boolean updateQuery() {
+            return updatequery;
+        }
+
+
+        RestAction(String name, Optional<String> desc, Method method, String proc, String action, List<IRestParam> plist, FORMAT format, OUTPUT output, Path jsonPath, Map<String, String> addPars, List<String> actionL, boolean upload, boolean setenvir, boolean updatequery) {
             this.name = name;
             this.desc = desc;
             this.method = method;
@@ -171,6 +185,8 @@ public class RestActionJSON {
             this.addPars = addPars;
             this.actionL = actionL;
             this.upload = upload;
+            this.setEnvir = setenvir;
+            this.updatequery = updatequery;
         }
     }
 
@@ -188,6 +204,8 @@ public class RestActionJSON {
         allowedKeys.add(PARAMPROC);
         allowedKeys.add(PARAMDESCRITPION);
         allowedKeys.add(PARAMUPLOAD);
+        allowedKeys.add(PARAMSETENVIR);
+        allowedKeys.add(PARAMUPDATEQUERY);
         allowedKeys.add(IRunPlugin.PARAMACTION);
 
         allowedParKeys.add(PARAMPARNAME);
@@ -329,16 +347,13 @@ public class RestActionJSON {
         return constructIP(name, typ);
     }
 
-    private Path getFile(Path p, String method) {
-        String filename = p.toString() + "-" + method;
-        File f = new File(filename);
-        if (f.exists()) return Paths.get(filename);
-        else return p;
+    private Path getFile(Path p) {
+        return p;
     }
 
-    public IRestActionJSON readJSONAction(Path pin, String method) throws RestError {
+    public IRestActionJSON readJSONAction(Path pin) throws RestError {
         String jsonstring = null;
-        Path p = getFile(pin, method);
+        Path p = getFile(pin);
         jsonstring = readTextFile(p);
         JSONObject json = new JSONObject(jsonstring);
         verifyAttributes(json, allowedKeys, additionalKeys, p);
@@ -354,6 +369,8 @@ public class RestActionJSON {
 
         StringList action = getParL(json, iplug.getActionParam(), Optional.empty());
         boolean upload = getParB(json, PARAMUPLOAD, Optional.of(false));
+        boolean setenvir = getParB(json, PARAMSETENVIR, Optional.of(false));
+        boolean updatequery = getParB(json, PARAMUPDATEQUERY, Optional.of(false));
 
         List<IRestActionJSON.IRestParam> plist = new ArrayList<IRestActionJSON.IRestParam>();
         JSONArray a = json.optJSONArray(PARAMPARS);
@@ -382,7 +399,7 @@ public class RestActionJSON {
             }
         });
 
-        IRestActionJSON ires = new RestAction(name, descr, m, proc, action.res, plist, format, output, p, addPars, action.resl, upload);
+        IRestActionJSON ires = new RestAction(name, descr, m, proc, action.res, plist, format, output, p, addPars, action.resl, upload, setenvir,updatequery);
 
         iEnhancer.verify(ires);
         return ires;

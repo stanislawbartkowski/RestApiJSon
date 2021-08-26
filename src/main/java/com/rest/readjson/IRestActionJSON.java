@@ -86,4 +86,8 @@ public interface IRestActionJSON {
 
     Map<String,String> getAddPars();
 
+    boolean setEnvir();
+
+    boolean updateQuery();
+
 }

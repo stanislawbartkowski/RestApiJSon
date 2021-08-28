@@ -131,14 +131,6 @@
             <version>5.0.1</version>
         </dependency>
 
-        <!-- https://maven.pkg.github.com/stanislawbartkowski/RestService/ -->
-        <dependency>
-            <groupId>com.restservice</groupId>
-            <artifactId>restservice</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -146,16 +138,20 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.restservice</groupId>
+            <artifactId>restservice</artifactId>
+            <version>1.0</version>
+        </dependency>
+
     </dependencies>
 
    <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub stanislawnartkowski Apache Maven Packages</name>
+            <name>GitHub stanislawbartkowski Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/stanislawbartkowski/RestService</url>
         </repository>
     </distributionManagement>
-
-
 
 </project>

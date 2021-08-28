@@ -63,6 +63,9 @@ public class RestService extends RestHelper.RestServiceHelper {
         String name = path[0];
         String meth = httpExchange.getRequestMethod();
         RestLogger.info("Rest method " + name + " HTTP method " + meth);
+        // OPTIONS - info only
+        if (RestHelper.OPTIONS.equals(meth))
+            return  new RestParams(meth, Optional.empty(), corsallowed, httpMethods, Optional.empty(), false);
         try {
             // .json or yaml
             // firstly looks for _method then default

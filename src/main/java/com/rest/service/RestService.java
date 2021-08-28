@@ -30,6 +30,8 @@ public class RestService extends RestHelper.RestServiceHelper {
     private final boolean corsallowed = true;
     private IRestActionJSON irest = null;
 
+    private final List<String> httpMethods = Arrays.asList(RestHelper.GET, RestHelper.PUT, RestHelper.POST, RestHelper.DELETE);
+
     private final IEnhancer in;
     private final RestRunJson run;
     private final RestActionJSON restJSON;
@@ -68,12 +70,10 @@ public class RestService extends RestHelper.RestServiceHelper {
 
             irest = restJSON.readJSONAction(p.get());
 
-            List<String> aMethods = new ArrayList<>();
-            aMethods.add(irest.getMethod().toString());
             RestParams.CONTENT fo = mapf.get(irest.format());
             Optional<RestParams.CONTENT> out = fo == null ? Optional.empty() : Optional.of(fo);
 
-            RestParams par = new RestParams(irest.getMethod().toString(), out, corsallowed, aMethods, Optional.empty(), irest.isUpload());
+            RestParams par = new RestParams(irest.getMethod().toString(), out, corsallowed, httpMethods, Optional.empty(), irest.isUpload());
             irest.getParams().stream().forEach(s -> {
                 par.addParam(s.getName(), s.getType());
             });

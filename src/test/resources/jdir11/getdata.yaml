@@ -1,0 +1,4 @@
+proc: PYTHON3
+output: TMPFILE
+format: JSON
+action: test11.py

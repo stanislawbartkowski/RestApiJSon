@@ -1,0 +1,9 @@
+proc: PYTHON3
+output: TMPFILE
+format: JSON
+method: PUT
+upload: true
+setenvir: true
+action:
+  - jdbccommand.py
+  - change

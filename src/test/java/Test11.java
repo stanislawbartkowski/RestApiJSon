@@ -61,6 +61,8 @@ public class Test11 extends PTestRestHelper {
         assertEquals(200,res);
         String s = getData();
         P(s);
+        // make sure that json is empty, does not contain 'res' property
+        assertEquals("{}",s);
         checktable(true);
     }
 }

@@ -67,6 +67,7 @@ public class SQLExecutor implements IRunPlugin {
             Helper.throwException(errmess, throwables);
         }
         res.json = new JSONObject();
-        res.json.put("res", a);
+        // add res only for query statements
+        if (!j.updateQuery()) res.json.put("res", a);
     }
 }

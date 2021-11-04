@@ -32,11 +32,11 @@ case $DB in
 esac
 
 
-log "Looking for JDBC jar file accoring to $JFILE"
+log "Looking for JDBC jar file according to $JFILE"
 JDBCFILE=$(ls *$JFILE*)
 [ $? -ne 0 ] && logfail "Cannot find JDBC jar file"
-JAR=$(ls *restmysql*)
-[ $? -ne 0 ] && logfail "Cannot restmysqlmodel jar file"
+JAR=$(ls *restapijdbc*)
+[ $? -ne 0 ] && logfail "Cannot find restapijdbc jar file"
 
 cat << EOF > $PROP
 jdir=$RESOURCE/restdir
@@ -53,7 +53,7 @@ EOF
 }
 
 run() {
-    exec java -cp $JAR:$JDBCFILE RestMain -c $PROP -p $PORT
+    execute_withlog "exec java -cp $JDBCFILE:$JAR RestMain -c $PROP -p $PORT"
 }
 
 
@@ -61,4 +61,4 @@ checkvars
 createprop
 run
 
-# exec sleep infinity
+#exec sleep infinity

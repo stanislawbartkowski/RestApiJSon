@@ -1,4 +1,5 @@
-FROM openjdk:11
+#FROM openjdk:11
+FROM openjdk:11-jre-slim-buster
 
 ARG PORT=80
 ARG WDIR=/usr/resthome
@@ -23,5 +24,5 @@ COPY *sh ${WDIR}
 WORKDIR ${WDIR}
 
 
-#CMD ["bash","-c","./run.sh"]
-CMD ["bash","-c","sleep infinity"]
+CMD ["bash","-c","./run.sh"]
+#CMD ["bash","-c","sleep infinity"]

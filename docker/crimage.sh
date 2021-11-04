@@ -1,5 +1,5 @@
 DOCKERDIR=docker
-IMAGENAME=myjava
+IMAGENAME=restapijdbc
 
 rm -rf $DOCKERDIR
 mkdir $DOCKERDIR
@@ -18,6 +18,7 @@ prepareresources() {
     cp commonproc.sh $DOCKERDIR
     cp Dockerfile $DOCKERDIR
     cp target/*dependencies* $DOCKERDIR
+    [ -d jdbc ] && cp jdbc/*.jar $DOCKERDIR
 }
 
 buildimage() {

@@ -46,6 +46,7 @@ Successfully tagged localhost/restapijdbc:latest
 | -e USER | Database user | -e USER=queryuser
 | -e PASSWORD | User password | -e PASSWORD=secret
 | -e URL | JDBC connnection string |  -e URL=jdbc:mysql://kist:3306/querydb
+| -v Volume | /var/resource volume should be mounted to customer resources. The custom resource directory could contain subdirectorie: *python*, *resoudir*, *restdir* | -v  /home/sbartkowski/work/restmysqlmodel/resources/:/var/resources:Z
 
 ## PostgreSQL
 

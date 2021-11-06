@@ -149,8 +149,6 @@ Assign persistent volume<br>
 > oc set volume deployment/restapijdbc --add --name=restapijdbc-volume-1  -t pvc --claim-name=restapijdbc --overwrite<br>
 
 > oc get pods<br>
-
-> oc get pods<br>
 ```
 NAME                          READY   STATUS    RESTARTS   AGE
 restapijdbc-b54d54cff-lzj8m   1/1     Running   0          67s
@@ -177,4 +175,71 @@ INFO: Start HTTP Server, listening on port 8080
 Nov 06, 2021 11:16:45 AM com.rest.restservice.RestLogger info
 INFO: Register service: {root}
 ```
+
+## External access
+
+Create NodePort<br>
+```
+cat <<EOF |oc apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: restapijdbcn
+spec:
+  selector:           
+   deployment: restapijdbc
+  type: NodePort
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 30819
+EOF
+```
+
+Configure port redirection on HAProcy host. External port is defined as 7999.<br>
+> vi /etc/haproxy/haproxy.cfg<br>
+```
+frontend ingress-rest
+        bind *:7999
+        default_backend ingress-rest
+        mode tcp
+        option tcplog
+
+backend ingress-rest
+        balance source
+        mode tcp
+        server master0 10.17.43.9:30819 check
+        server master1 10.17.46.40:30819 check
+        server master2 10.17.48.179:30819 check
+        server worker0 10.17.57.166:30819 check
+        server worker1 10.17.59.104:30819 check
+        server worker2 10.17.61.175:30819 check
+```
+> systemctl restart haproxy
+
+## Copy resource data to persistent volume using the container<br>
+
+> oc get pods<br>
+```
+NAME                          READY   STATUS    RESTARTS   AGE
+restapijdbc-b54d54cff-lzj8m    1/1     Running   0          67s
+```
+
+Local directory is */home/sbartkowski/work/restmysqlmodel/resources/*. 
+
+> oc cp  /home/sbartkowski/work/restmysqlmodel/resources/ restapijdbc-b54d54cff-lzj8m:/var<br>
+
+The command creates the following directory structure in the container.<br>
+<br>
+> oc rsh restapijdbc-b54d54cff-lzj8m
+```
+$ ls /var/resources/ -ltr
+total 4
+drwxr-xr-x. 2 1000700000 root   32 Nov  6 11:25 python
+drwxr-xr-x. 5 1000700000 root   49 Nov  6 11:25 resoudir
+drwxr-xr-x. 2 1000700000 root 4096 Nov  6 11:25 restdir
+```
+
+
 

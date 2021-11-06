@@ -1,7 +1,7 @@
 #FROM openjdk:11
 FROM openjdk:11-jre-slim-buster
 
-ARG PORT=80
+ARG PORT=8080
 ARG WDIR=/usr/resthome
 ARG RESOURCE=/var/resources
 
@@ -9,6 +9,7 @@ EXPOSE ${PORT}/tcp
 
 RUN  mkdir ${RESOURCE}; \ 
 mkdir ${WDIR}; \
+chmod 777 ${WDIR}; \
 apt-get -y update; \
 apt-get -y install python3-pip; \
 pip3 install JayDeBeApi; \

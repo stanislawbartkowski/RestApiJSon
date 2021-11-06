@@ -241,5 +241,18 @@ drwxr-xr-x. 5 1000700000 root   49 Nov  6 11:25 resoudir
 drwxr-xr-x. 2 1000700000 root 4096 Nov  6 11:25 restdir
 ```
 
+The resource data are stored in persistent volume. The container can be recreated without losing the configuration. Also, the resource data can be updated and rebuiding the container is not necessary.<br>
+
+> Test
+
+Assuming HAProxy node *kist* and port *7999*<br>
+
+> curl  http://kist:7999/resource?resource=appdata<br>
+```JSON
+{
+  "appname" : "Classic Model",
+  "logo" : "logo192.png"
+}
+```
 
 

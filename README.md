@@ -41,7 +41,7 @@ Successfully tagged localhost/restapijdbc:latest
 
 | Parameter | Description | Example
 | ------- | ------------ | ------- 
-| -p | 80: port exposed, can be redirected | -p 8080:80 
+| -p | 8080: port exposed, can be redirected, port is nonsecure | -p 8080:8080 
 | -e DB | Database used. The following values are accepted: mysql, postgres, db2 | -e DB=postgres
 | -e USER | Database user | -e USER=queryuser
 | -e PASSWORD | User password | -e PASSWORD=secret
@@ -50,14 +50,131 @@ Successfully tagged localhost/restapijdbc:latest
 
 ## PostgreSQL
 
->  podman run --name=mypostgres -v  /home/sbartkowski/work/restmysqlmodel/resources/:/var/resources:Z -p 8080:80 -e USER=queryuser -e PASSWORD=secret   -e DB=postgres -e URL=jdbc:postgresql://kist:5432/querydb -d restapijdbc
+>  podman run --name=mypostgres -v  /home/sbartkowski/work/restmysqlmodel/resources/:/var/resources:Z -p 8080:8080 -e USER=queryuser -e PASSWORD=secret   -e DB=postgres -e URL=jdbc:postgresql://kist:5432/querydb -d restapijdbc
 
 ## MySQL/MariaDB
 
->  podman run --name=mymysql  -v  /home/sbartkowski/work/restmysqlmodel/resources/:/var/resources:Z -p 8080:80 -e USER=queryuser -e PASSWORD=secret   -e DB=mysql  -e URL=jdbc:mysql://kist:3306/querydb  -d restapijdbc
+>  podman run --name=mymysql  -v  /home/sbartkowski/work/restmysqlmodel/resources/:/var/resources:Z -p 8080:8080 -e USER=queryuser -e PASSWORD=secret   -e DB=mysql  -e URL=jdbc:mysql://kist:3306/querydb  -d restapijdbc
 
 ## DB2
 
 To access DB2, the *restapijdbc* image is expected to contain DB2 JDBC driver jar. Before running *crimage.sh* command, the DB2 JDBC driver jar should be copied to *jdbc* directory.<br>
 
-> podman run --name=mydb2 -v  /home/sbartkowski/work/restmysqlmodel/resources/:/var/resources:Z -p 8080:80 -e USER=db2inst1  -e PASSWORD=secret123   -e DB=db2 -e URL=jdbc:db2://thinkde:50000/querydb  -d restapijdbc
+> podman run --name=mydb2 -v  /home/sbartkowski/work/restmysqlmodel/resources/:/var/resources:Z -p 8080:8080 -e USER=db2inst1  -e PASSWORD=secret123   -e DB=db2 -e URL=jdbc:db2://thinkde:50000/querydb  -d restapijdbc
+
+# OpenShift/Kubernetes
+
+## Push image to quay.io
+
+Image in local repository is created after running *./crimage.sh*
+
+Tag the local image, use valid *quay.io* repository name.<br>
+
+> podman login quay.io<br>
+> podman tag restapijdbc   quay.io/stanislawbartkowski/restapijdbc:latest<br>
+> podman push quay.io/stanislawbartkowski/restapijdbc:latest<br>
+```
+...........
+Copying blob 8276ab1df2fb done  
+Copying blob f73c57e2b056 done  
+Copying blob 1a86b0b1243f skipped: already exists  
+Copying blob 85d5baf8a9db skipped: already exists  
+Copying blob f1ab4986f47c skipped: already exists  
+Copying blob e81bff2725db skipped: already exists  
+Copying blob bf70f8970630 done  
+Copying config 8bc51ffeaa done  
+Writing manifest to image destination
+Copying config 8bc51ffeaa [--------------------------------------] 0.0b / 6.2KiB
+Writing manifest to image destination
+Storing signatures
+
+```
+## Create OpenShift project/namespace
+
+> oc new-project restapijdbc<br>
+
+## Create volume
+
+*restapijdbc* service requires customized resources with REST/API definitions. Keep container and resource definition separated to allow independent updates. Adjust StorageClass and storage capacity accordingly.<br>
+
+```
+oc create -f - <<EOF
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: restapijdbc
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi
+EOF
+```
+
+> oc get pvc<br>
+```
+NAME          STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS          AGE
+restapijdbc   Bound    pvc-57521d05-8ddd-4c7b-94f9-d30b5898583a   1Mi        RWX            managed-nfs-storage   7s
+```
+
+## Create secret with database user and password
+
+> oc create secret generic mysql  --from-literal USER=queryuser  --from-literal PASSWORD=secret<br>
+
+> oc get secret<br>
+```
+NAME                       TYPE                                  DATA   AGE
+...
+mysql                      Opaque                                2      7s
+```
+## Create deployment
+
+| Env variable | Description | Example
+| ---- | ---- | ----- |
+| DB | Database type: mysql, db2 or postgres | --env DB=mysql
+| URL | JDBC connection string | -env URL="jdbc:mysql://172.30.171.241:3306/querydb"
+
+
+> oc new-app --docker-image=quay.io/stanislawbartkowski/restapijdbc   --name restapijdbc  --env DB=mysql --env URL="jdbc:mysql://172.30.171.241:3306/querydb" <br>
+
+Assign secret<br>
+
+> oc set env deployment/restapijdbc --from secret/mysql<br>
+
+Assign persistent volume<br>
+
+> oc set volume deployment/restapijdbc --add --name=restapijdbc-volume-1  -t pvc --claim-name=restapijdbc --overwrite<br>
+
+> oc get pods<br>
+
+> oc get pods<br>
+```
+NAME                          READY   STATUS    RESTARTS   AGE
+restapijdbc-b54d54cff-lzj8m   1/1     Running   0          67s
+```
+
+Verify logs<br>
+
+> oc logs restapijdbc-b54d54cff-lzj8m<br>
+```
+Database type: mysql
+Looking for JDBC jar file according to mysql
+exec java -cp mysql-connector-java-8.0.27.jar:restapijdbc-1.0-SNAPSHOT-jar-with-dependencies.jar RestMain -c rest.properties -p 8080
+Nov 06, 2021 11:16:44 AM com.rest.restservice.RestLogger info
+.....
+INFO: user value read:queryuser
+Nov 06, 2021 11:16:45 AM com.rest.restservice.RestLogger info
+INFO: password value read:XXXXXXXX
+Nov 06, 2021 11:16:45 AM com.rest.runjson.executors.sql.JDBC connect
+INFO: Connecting to jdbc:mysql://172.30.171.241:3306/querydb user queryuser
+Nov 06, 2021 11:16:45 AM com.rest.runjson.executors.sql.JDBC connect
+INFO: Connected
+Nov 06, 2021 11:16:45 AM com.rest.restservice.RestLogger info
+INFO: Start HTTP Server, listening on port 8080
+Nov 06, 2021 11:16:45 AM com.rest.restservice.RestLogger info
+INFO: Register service: {root}
+```
+

@@ -225,8 +225,10 @@ backend ingress-rest
 All necessary object can be created through OpenShift template.<br>
 
 <br>
+
 > curl -s https://raw.githubusercontent.com/stanislawbartkowski/RestApiJSon/main/docker/restapijdbc.yaml | oc create -f -<br>
 <br>
+
 > oc process --parameters  restapijdbc
 ```
 NAME                DESCRIPTION                              GENERATOR           VALUE

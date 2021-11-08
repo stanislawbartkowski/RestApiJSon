@@ -308,6 +308,19 @@ drwxr-xr-x. 2 1000700000 root 4096 Nov  6 11:25 restdir
 
 The resource data are stored in persistent volume. The container can be recreated without losing the configuration. Also, the resource data can be updated and rebuiding the container is not necessary.<br>
 
+## Use external database
+
+Assume PosgreSQL instance is deployed outside OpenShift cluster on the host *broth1.fyre.ibm.com*. Service *externalname* allows access that database without hardcoding the external hostname.
+<br>
+Create service *querydb*<br>
+
+> oc create svc externalname querydb  --external-name  broth1.fyre.ibm.com
+
+Fix *restapijdbc* deployment and container.<br>
+
+>  oc set env deployment/restapijdbc -e URL="jdbc:postgresql://querydb:5432/querydb"
+
+
 ## Test
 
 Assuming HAProxy node *kist* and port *7999*<br>

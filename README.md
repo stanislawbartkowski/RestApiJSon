@@ -93,7 +93,9 @@ Storing signatures
 
 > oc new-project restapijdbc<br>
 
-## Create volume
+## Create OpenShift object manually
+
+### Create volume
 
 *restapijdbc* service requires customized resources with REST/API definitions. Keep container and resource definition separated to allow independent updates. Adjust StorageClass and storage capacity accordingly.<br>
 
@@ -120,7 +122,7 @@ NAME          STATUS   VOLUME                                     CAPACITY   ACC
 restapijdbc   Bound    pvc-57521d05-8ddd-4c7b-94f9-d30b5898583a   1Mi        RWX            managed-nfs-storage   7s
 ```
 
-## Create secret with database user and password
+### Create secret with database user and password
 
 > oc create secret generic mysql  --from-literal USER=queryuser  --from-literal PASSWORD=secret<br>
 
@@ -130,7 +132,7 @@ NAME                       TYPE                                  DATA   AGE
 ...
 mysql                      Opaque                                2      7s
 ```
-## Create deployment
+### Create deployment
 
 | Env variable | Description | Example
 | ---- | ---- | ----- |
@@ -176,7 +178,7 @@ Nov 06, 2021 11:16:45 AM com.rest.restservice.RestLogger info
 INFO: Register service: {root}
 ```
 
-## External access
+### External access
 
 Create NodePort<br>
 ```
@@ -217,6 +219,63 @@ backend ingress-rest
         server worker2 10.17.61.175:30819 check
 ```
 > systemctl restart haproxy
+
+## OpenShift template
+
+All necessary object can be created through OpenShift template.<br>
+
+<br>
+> curl -s https://raw.githubusercontent.com/stanislawbartkowski/RestApiJSon/main/docker/restapijdbc.yaml | oc create -f -<br>
+<br>
+> oc process --parameters  restapijdbc
+```
+NAME                DESCRIPTION                              GENERATOR           VALUE
+URL                 Database access URL string                                   
+DB                  Values allowed, db2, postgres or mysql                       
+USER                User to access the database                                  
+PASSWORD            Password to access the database      
+```
+
+The *USER* and *PASSWORD* parameter are expected as base64 string. <br>
+<br>
+> echo queryuser | openssl base64<br>
+```
+cXVlcnl1c2VyCg==
+```
+> echo secret | openssl base64<br>
+```
+c2VjcmV0Cg==
+```
+
+Build the service.<br>
+
+> oc new-app  restapijdbc  -p DB=mysql -p USER="cXVlcnl1c2VyCg=="  -p PASSWORD="c2VjcmV0Cg==" -p URL="jdbc:mysql://172.30.171.241:3306/querydb"<br>
+```
+--> Deploying template "restapijdbc/restapijdbc" to project restapijdbc
+
+     REST/API JDBC
+     ---------
+     My simple implementation of configurable REST/API service
+
+     * With parameters:
+        * URL string=jdbc:mysql://172.30.171.241:3306/querydb
+        * Database type=mysql
+        * Database user name=cXVlcnl1c2VyCg==
+        * Database Password=c2VjcmV0Cg==
+
+--> Creating resources ...
+    imagestream.image.openshift.io "restapijdbc" created
+    secret "mysql" created
+    persistentvolumeclaim "restapijdbc" created
+    deployment.apps "restapijdbc" created
+    service "restapijdbcn" created
+    service "restapijdbc" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/restapijdbcn' 
+     'oc expose service/restapijdbc' 
+    Run 'oc status' to view your app.
+```
 
 ## Copy resource data to persistent volume using the container<br>
 

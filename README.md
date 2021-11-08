@@ -251,7 +251,7 @@ c2VjcmV0Cg==
 
 Build the service.<br>
 
-> oc new-app  restapijdbc  -p DB=mysql -p USER="cXVlcnl1c2VyCg=="  -p PASSWORD="c2VjcmV0Cg==" -p URL="jdbc:mysql://172.30.171.241:3306/querydb"<br>
+> oc new-app  --template=restapijdbc  -p DB=mysql -p USER="cXVlcnl1c2VyCg=="  -p PASSWORD="c2VjcmV0Cg==" -p URL="jdbc:mysql://172.30.171.241:3306/querydb"<br>
 ```
 --> Deploying template "restapijdbc/restapijdbc" to project restapijdbc
 
@@ -278,6 +278,10 @@ Build the service.<br>
      'oc expose service/restapijdbc' 
     Run 'oc status' to view your app.
 ```
+
+PostgreSQL example<br>
+> oc new-app --template=restapijdbc -p DB=postgres -p USER="cXVlcnl1c2VyCg==" -p PASSWORD="c2VjcmV0Cg==" -p URL="jdbc:postgresql://172.30.181.178:5432/querydb"
+
 
 ## Copy resource data to persistent volume using the container<br>
 

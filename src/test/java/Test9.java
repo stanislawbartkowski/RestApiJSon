@@ -18,5 +18,9 @@ public class Test9 extends PTestRestHelper {
         testok("/test3", "resource=listt", "Hello");
     }
 
+    @Test
+    public void test3() throws IOException {
+        testok("/test7", "resource=testpol", "żółć");
+    }
 
 }

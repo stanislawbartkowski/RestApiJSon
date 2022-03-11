@@ -1,13 +1,17 @@
 package com.rest.conf;
 
-import com.rest.main.RestMainHelper;
 import com.rest.readjson.Helper;
+import org.javatuples.Pair;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
 public interface IRestConfig {
+
+    String VERSION = "RestAPIJSON version 1.0 (r:1) 2022/03/11";
+
+    Optional<Pair<String,String>> getRenameRes();
 
     Set<String> listOfPlugins();
 

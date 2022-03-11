@@ -112,10 +112,16 @@ abstract public class TestRestHelper {
         return getData();
     }
 
-    protected JSONArray getA(String s) {
+
+    protected JSONArray getA(String s,String attr) {
         JSONObject o = new JSONObject(s);
-        return o.optJSONArray("res");
+        return o.optJSONArray(attr);
     }
+
+    protected JSONArray getA(String s) {
+        return getA(s,"res");
+    }
+
 
     protected void test400(String meth, String query) throws IOException {
         int res = makegetcall(meth, query);
@@ -138,13 +144,18 @@ abstract public class TestRestHelper {
         Assert.assertEquals(validdata, da.trim());
     }
 
-    protected JSONArray testoka(String meth, String query) throws IOException {
+    protected JSONArray testoka(String meth, String query, String attr) throws IOException {
         int res = makegetcall(meth, query);
         P("Result: " + res);
         Assert.assertEquals(200, res);
         String da = getData();
         P(da);
-        return getA(da);
+        return getA(da,attr);
+    }
+
+
+    protected JSONArray testoka(String meth, String query) throws IOException {
+        return testoka(meth,query,"res");
     }
 
 

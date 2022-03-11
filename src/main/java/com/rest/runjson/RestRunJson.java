@@ -7,6 +7,7 @@ import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
+import org.javatuples.Pair;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,7 +92,11 @@ public class RestRunJson {
                     String errmess = j.getJsonPath().toString() + " expected JSON result";
                     Helper.throwSevere(errmess);
                 }
-            } else res.res = res.json.toString();
+            } else {
+                Optional<Pair<String,String>> orename = rConfig.getRenameRes();
+                if (orename.isPresent()) ConvertRes.rename(res.json,orename.get().getValue0(),orename.get().getValue1());
+                res.res = res.json.toString();
+            }
         }
         if (res.res == null) {
             String errmess = j.getJsonPath().toString() + " expected " + j.format().toString() + " result";

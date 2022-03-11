@@ -1,9 +1,10 @@
 package com.rest.conf;
 
-import com.rest.conf.IRestConfig;
 import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
+import com.rest.restservice.RestLogger;
+import org.javatuples.Pair;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,6 +15,7 @@ public class ConstructRestConfig {
 
     private static final String JDIR = "jdir";
     private static final String PLUGINS = "plugins";
+    private static final String RENAME = "rename";
 
     private static final Set<String> allowedPlugins = new HashSet<String>();
 
@@ -29,12 +31,19 @@ public class ConstructRestConfig {
         private final Properties prop;
         private final Helper.ListPaths fparam;
         private final Set<String> listofPlugins;
+        private final Optional<Pair<String, String>> rename;
 
-        RestConfig(Properties prop, Set<String> listofPlugins) {
+        RestConfig(Properties prop, Set<String> listofPlugins,Optional<Pair<String, String>> rename) {
             this.prop = prop;
             // bad practice, method used in constructor
             this.fparam = new Helper.ListPaths(getJSONDir());
             this.listofPlugins = listofPlugins;
+            this.rename = rename;
+        }
+
+        @Override
+        public Optional<Pair<String, String>> getRenameRes() {
+            return rename;
         }
 
         @Override
@@ -83,6 +92,17 @@ public class ConstructRestConfig {
 
     }
 
+    private Optional<Pair<String, String>> getRename(String val) throws RestError {
+        if (val == null) return Optional.empty();
+        RestLogger.info(String.format("Reading parameter %s value: %s", RENAME,val));
+        String a[] = val.split(":");
+        if (a.length != 2) {
+            String errmess = String.format("Parameter %s, value %s should contain exactly two values separated by :", RENAME,val);
+            Helper.throwSevere(errmess);
+        }
+        return Optional.of(new Pair<String,String>(a[0],a[1]));
+    }
+
     public IRestConfig create(Path p,Optional<List<String>> customplugins) throws RestError {
 
         if (customplugins.isPresent()) allowedPlugins.addAll(customplugins.get());
@@ -96,7 +116,6 @@ public class ConstructRestConfig {
         }
         Helper.getValue(pro, JDIR, true);
 
-        return new RestConfig(pro, readListOfPlugins(pro));
-
+        return new RestConfig(pro, readListOfPlugins(pro),getRename(pro.getProperty(RENAME)));
     }
 }

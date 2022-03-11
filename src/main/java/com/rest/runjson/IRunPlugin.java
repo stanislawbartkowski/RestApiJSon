@@ -1,11 +1,9 @@
 package com.rest.runjson;
 
-import com.rest.conf.IRestConfig;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.PARAMTYPE;
 import com.rest.restservice.RestParams;
-import com.rest.service.RestService;
 import org.json.JSONObject;
 import com.rest.restservice.ParamValue;
 

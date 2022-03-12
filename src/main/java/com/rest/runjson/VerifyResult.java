@@ -25,16 +25,8 @@ class VerifyResult {
 
     static void verifyResult(String s, IRestActionJSON.FORMAT format) throws RestError {
 
+        // do not verify JSON - already verified
         switch (format) {
-            case JSON: {
-                JSONTokener tokener = new JSONTokener(s);
-                try {
-                    JSONObject json = new JSONObject(tokener);
-                } catch (org.json.JSONException e) {
-                    Helper.throwException(s, e);
-                }
-                break;
-            }
             case JS: {
                 ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
                 if (engine == null) {

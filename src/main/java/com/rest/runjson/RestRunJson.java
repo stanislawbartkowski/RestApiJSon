@@ -8,6 +8,8 @@ import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
 import org.javatuples.Pair;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,11 +94,16 @@ public class RestRunJson {
                     String errmess = j.getJsonPath().toString() + " expected JSON result";
                     Helper.throwSevere(errmess);
                 }
-            } else {
-                Optional<Pair<String,String>> orename = rConfig.getRenameRes();
-                if (orename.isPresent()) ConvertRes.rename(res.json,orename.get().getValue0(),orename.get().getValue1());
-                res.res = res.json.toString();
+                JSONTokener tokener = new JSONTokener(res.res);
+                try {
+                    res.json = new JSONObject(tokener);
+                } catch (org.json.JSONException e) {
+                    Helper.throwException(res.res, e);
+                }
             }
+            Optional<Pair<String, String>> orename = rConfig.getRenameRes();
+            if (orename.isPresent()) ConvertRes.rename(res.json, orename.get().getValue0(), orename.get().getValue1());
+            res.res = res.json.toString();
         }
         if (res.res == null) {
             String errmess = j.getJsonPath().toString() + " expected " + j.format().toString() + " result";

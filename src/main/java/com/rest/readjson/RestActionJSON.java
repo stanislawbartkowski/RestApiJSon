@@ -1,8 +1,6 @@
 package com.rest.readjson;
 
-import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 import com.google.inject.Inject;

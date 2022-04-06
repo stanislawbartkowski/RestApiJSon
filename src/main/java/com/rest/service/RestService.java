@@ -94,15 +94,6 @@ public class RestService extends RestHelper.RestServiceHelper {
     @Override
     public void servicehandle(RestHelper.IQueryInterface v) throws IOException {
         try {
-            // ---------------------
-            System.out.println("I'm sleeping for 3o seconds");
-            try {
-                TimeUnit.SECONDS.sleep(30);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("I'm awaken");
-            // ------------------------------
             if (in != null) {
                 in.modifValues(irest, v.getValues());
             }

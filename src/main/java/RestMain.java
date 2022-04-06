@@ -28,7 +28,7 @@ public class RestMain extends RestStart {
 
         RestService res = ModuleBuild.getI().getInstance(RestService.class);
 
-        RestStart(cmd.get().getPORT(), (server) -> {
+        RestStart(cmd.get().getPORT(), ires.isSingle(), (server) -> {
             RestHelper.registerService(server,new RestVersion());
             RestHelper.registerService(server, res);
         }, new String[]{});

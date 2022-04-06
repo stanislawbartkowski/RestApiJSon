@@ -9,13 +9,15 @@ import java.util.Set;
 
 public interface IRestConfig {
 
-    String VERSION = "RestAPIJSON version 1.0 (r:1) 2022/03/12";
+    String VERSION = "RestAPIJSON version 1.1 (r:0) 2022/04/06";
 
     Optional<Pair<String,String>> getRenameRes();
 
     Set<String> listOfPlugins();
 
     String getJSONDir();
+
+    boolean isSingle();
 
     Properties prop();
 

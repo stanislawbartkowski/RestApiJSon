@@ -105,11 +105,11 @@ public class Helper {
         String val = p.getProperty(pkey);
         if (val == null) {
             if (force) {
-                String errmess = pkey + " not defined in property file";
+                String errmess = pkey + " not defined in property file but manadatory";
                 RestLogger.L.severe(errmess);
                 throw new RestError(errmess);
             }
-            RestLogger.info(pkey + "no value found but not mandatory");
+            RestLogger.info(pkey + " no value found but not mandatory");
             return Optional.empty();
         }
         RestLogger.info(pkey + " value read:" + (mask.isPresent() ? mask.get() : val));

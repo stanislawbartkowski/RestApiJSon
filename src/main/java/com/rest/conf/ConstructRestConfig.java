@@ -16,6 +16,8 @@ public class ConstructRestConfig {
     private static final String JDIR = "jdir";
     private static final String PLUGINS = "plugins";
     private static final String RENAME = "rename";
+    private static final String MULTI = "multithread";
+    private static final String MULTITRUE = "true";
 
     private static final Set<String> allowedPlugins = new HashSet<String>();
 
@@ -33,7 +35,7 @@ public class ConstructRestConfig {
         private final Set<String> listofPlugins;
         private final Optional<Pair<String, String>> rename;
 
-        RestConfig(Properties prop, Set<String> listofPlugins,Optional<Pair<String, String>> rename) {
+        RestConfig(Properties prop, Set<String> listofPlugins, Optional<Pair<String, String>> rename) {
             this.prop = prop;
             // bad practice, method used in constructor
             this.fparam = new Helper.ListPaths(getJSONDir());
@@ -55,6 +57,11 @@ public class ConstructRestConfig {
         public String getJSONDir() {
             // not null
             return prop.getProperty(JDIR);
+        }
+
+        @Override
+        public boolean isSingle() {
+            return !prop.getProperty(MULTI, "false").equals(MULTITRUE);
         }
 
         @Override
@@ -94,16 +101,16 @@ public class ConstructRestConfig {
 
     private Optional<Pair<String, String>> getRename(String val) throws RestError {
         if (val == null) return Optional.empty();
-        RestLogger.info(String.format("Reading parameter %s value: %s", RENAME,val));
+        RestLogger.info(String.format("Reading parameter %s value: %s", RENAME, val));
         String a[] = val.split(":");
         if (a.length != 2) {
-            String errmess = String.format("Parameter %s, value %s should contain exactly two values separated by :", RENAME,val);
+            String errmess = String.format("Parameter %s, value %s should contain exactly two values separated by :", RENAME, val);
             Helper.throwSevere(errmess);
         }
-        return Optional.of(new Pair<String,String>(a[0],a[1]));
+        return Optional.of(new Pair<String, String>(a[0], a[1]));
     }
 
-    public IRestConfig create(Path p,Optional<List<String>> customplugins) throws RestError {
+    public IRestConfig create(Path p, Optional<List<String>> customplugins) throws RestError {
 
         if (customplugins.isPresent()) allowedPlugins.addAll(customplugins.get());
         FileInputStream f = null;
@@ -115,7 +122,10 @@ public class ConstructRestConfig {
             Helper.throwException(p.toString(), e);
         }
         Helper.getValue(pro, JDIR, true);
+        Optional<String> multi = Helper.getValue(pro,MULTI,false);
+        if (multi.isPresent() && multi.get().equals("true")) RestLogger.info("Multi-thread enabled");
+        else RestLogger.info("Single thread");
 
-        return new RestConfig(pro, readListOfPlugins(pro),getRename(pro.getProperty(RENAME)));
+        return new RestConfig(pro, readListOfPlugins(pro), getRename(pro.getProperty(RENAME)));
     }
 }

@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class RestService extends RestHelper.RestServiceHelper {
 
@@ -91,8 +92,17 @@ public class RestService extends RestHelper.RestServiceHelper {
     }
 
     @Override
-    public synchronized void servicehandle(RestHelper.IQueryInterface v) throws IOException {
+    public void servicehandle(RestHelper.IQueryInterface v) throws IOException {
         try {
+            // ---------------------
+            System.out.println("I'm sleeping for 3o seconds");
+            try {
+                TimeUnit.SECONDS.sleep(30);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("I'm awaken");
+            // ------------------------------
             if (in != null) {
                 in.modifValues(irest, v.getValues());
             }

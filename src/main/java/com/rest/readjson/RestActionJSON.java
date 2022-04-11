@@ -397,7 +397,7 @@ public class RestActionJSON {
             }
         });
 
-        IRestActionJSON ires = new RestAction(name, descr, m, proc, action.res, plist, format, output, p, addPars, action.resl, upload, setenvir,updatequery);
+        IRestActionJSON ires = new RestAction(name, descr, m, proc, action.res, plist, format, output, p, addPars, action.resl, upload, setenvir, updatequery);
 
         iEnhancer.verify(ires);
         return ires;

@@ -84,7 +84,7 @@ public interface IRestActionJSON {
 
     boolean isUpload();
 
-    Map<String,String> getAddPars();
+    Map<String, String> getAddPars();
 
     boolean setEnvir();
 

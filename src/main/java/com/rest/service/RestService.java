@@ -60,9 +60,9 @@ public class RestService extends RestHelper.RestServiceHelper {
     @Override
     public RestParams getParams(HttpExchange httpExchange) throws IOException {
         String[] path = getPath(httpExchange);
-        String name = path[0];
+        String name = Arrays.stream(path).reduce(null,(s,e) -> s == null ? e : s + "/" + e);
         String meth = httpExchange.getRequestMethod();
-        RestLogger.info("Rest method " + name + " HTTP method " + meth);
+        RestLogger.info("Rest method " + path + " HTTP method " + meth);
         // OPTIONS - info only
         if (RestHelper.OPTIONS.equals(meth))
             return  new RestParams(meth, Optional.empty(), corsallowed, httpMethods, Optional.empty(), false);

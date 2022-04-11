@@ -65,7 +65,6 @@ public class RestMainHelper {
         for (String s : ires.listOfPlugins()) RegisterExecutors.registerExecutors(s);
     }
 
-
 }
 
 

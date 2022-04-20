@@ -1,0 +1,4 @@
+proc: SQL
+action: SELECT * FROM TESTM where name=?
+pars:
+  - name: name

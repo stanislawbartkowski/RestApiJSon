@@ -1,0 +1,5 @@
+proc: SQL
+updatequery: true
+action: INSERT INTO TESTM VALUES(?)
+pars:
+  - name: name

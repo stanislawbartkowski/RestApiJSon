@@ -67,18 +67,23 @@ public class JDBC {
             ParamValue v = values.get(p.getParam().getName());
             switch (p.getParam().getType()) {
                 case BOOLEAN:
+                    RestLogger.info(String.format("%d boolean %s",p.getPos(),v.isLogTrue()?"true" : "false"));
                     prep.setBoolean(p.getPos(), v.isLogTrue());
                     break;
                 case DATE:
+                    RestLogger.info(String.format("%d date %s",p.getPos(),v.getDatevalue().toString()));
                     prep.setDate(p.getPos(), v.getDatevalue());
                     break;
                 case DOUBLE:
+                    RestLogger.info(String.format("%d double %f",p.getPos(),v.getDoublevalue()));
                     prep.setDouble(p.getPos(), v.getDoublevalue());
                     break;
                 case INT:
+                    RestLogger.info(String.format("%d int %d",p.getPos(),v.getIntvalue()));
                     prep.setInt(p.getPos(), v.getIntvalue());
                     break;
                 default:
+                    RestLogger.info(String.format("%d string %s",p.getPos(),v.getStringvalue()));
                     prep.setString(p.getPos(), v.getStringvalue());
                     break;
             }

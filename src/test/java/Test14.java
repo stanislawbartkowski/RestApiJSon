@@ -33,5 +33,16 @@ public class Test14 extends PTestRestHelper {
         testok("/wsp/testpython1", null,"Hello");
     }
 
+    @Test
+    public void test5() throws IOException {
+        P("Test na wywołanie python");
+        testok("/wsp/testpython2", "PARAMS=aaaa","{'response' : 'aaaa'}");
+    }
+
+    @Test
+    public void test6() throws IOException {
+        P("Test na wywołanie python i parametr zawierajacy / ");
+        testok("/wsp/testpython2", "PARAMS=A/B","{'response' : 'A/B'}");
+    }
 
 }

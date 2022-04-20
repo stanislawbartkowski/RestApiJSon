@@ -1,0 +1,6 @@
+proc: PYTHON3
+format: TEXT
+action: test14.py
+pars:
+  - name: PARAMS
+

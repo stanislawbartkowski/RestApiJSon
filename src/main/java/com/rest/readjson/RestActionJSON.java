@@ -58,7 +58,6 @@ public class RestActionJSON {
 
 
     private static Map<String, PARAMTYPE> tmap = new HashMap<String, PARAMTYPE>();
-//    private static Set<String> procmap = new HashSet<String>();
 
     private static class RestAction implements IRestActionJSON {
 
@@ -215,10 +214,8 @@ public class RestActionJSON {
         this.iEnhancer = iEnhancer;
         this.exec = exec;
         additionalKeys.addAll(iEnhancer.addKeys());
-//        procmap.addAll(iEnhancer.addMap());
         if (iEnhancer.defaultProc().isPresent()) defaultProc = iEnhancer.defaultProc().get();
         allowedKeys.addAll(exec.listActions());
-//        procmap.addAll(exec.listProcs());
         alwaysString.addAll(exec.listofAlwaysString());
     }
 

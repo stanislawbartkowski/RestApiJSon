@@ -1,0 +1,3 @@
+proc: SQL
+updatequery: true
+action: DELETE FROM testm

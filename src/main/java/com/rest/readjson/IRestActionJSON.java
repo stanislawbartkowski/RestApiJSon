@@ -27,7 +27,8 @@ public interface IRestActionJSON {
         TEXT("TEXT"),
         ZIP("ZIP"),
         JS("JS"),
-        XML("XML");
+        XML("XML"),
+        MIXED("MIXED");
 
         private final String m;
 
@@ -52,6 +53,7 @@ public interface IRestActionJSON {
     String SQL = "SQL";
     String SHELL = "SHELL";
     String RESOURCE = "RESOURCE";
+    String RESOURCEDIR = "RESOURCEDIR";
 
     String YAMLEXT = "yaml";
     String JSONEXT = "json";

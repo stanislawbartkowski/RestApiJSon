@@ -26,6 +26,7 @@ public class ConstructRestConfig {
         allowedPlugins.add(IRestActionJSON.PYTHON3);
         allowedPlugins.add(IRestActionJSON.SQL);
         allowedPlugins.add(IRestActionJSON.RESOURCE);
+        allowedPlugins.add(IRestActionJSON.RESOURCEDIR);
     }
 
     static class RestConfig implements IRestConfig {
@@ -82,6 +83,7 @@ public class ConstructRestConfig {
             listofPlugins.add(IRestActionJSON.PYTHON3);
             listofPlugins.add(IRestActionJSON.SHELL);
             listofPlugins.add(IRestActionJSON.RESOURCE);
+            listofPlugins.add(IRestActionJSON.RESOURCEDIR);
         } else {
             String[] vals = val.get().split(",");
             for (String s : vals) {

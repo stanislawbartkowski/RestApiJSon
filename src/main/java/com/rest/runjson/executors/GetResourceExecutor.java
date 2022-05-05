@@ -1,14 +1,11 @@
 package com.rest.runjson.executors;
 
-import com.google.inject.Inject;
-import com.rest.conf.IRestConfig;
 import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.PARAMTYPE;
 import com.rest.restservice.ParamValue;
 import com.rest.restservice.RestParams;
-import com.rest.runjson.IRunPlugin;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -16,14 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class GetResourceExecutor implements IRunPlugin {
+public class GetResourceExecutor extends AbstractResourceDirExecutor {
 
-    private final static String resurceP = "resource";
-    private final static String actionDir = "dir";
-    private final IRestConfig iconfig;
-    private final static String resdir = "resdir";
-
-    private Helper.ListPaths rootdirlist;
+    private  final static String resurceP = "resource";
 
     private static Map<IRestActionJSON.FORMAT, String> extMap = new HashMap<IRestActionJSON.FORMAT, String>();
     static {
@@ -34,31 +26,9 @@ public class GetResourceExecutor implements IRunPlugin {
         extMap.put(IRestActionJSON.FORMAT.ZIP,"zip");
     }
 
-    @Inject
-    public GetResourceExecutor(IRestConfig iconfig) {
-        this.iconfig = iconfig;
-    }
-
     @Override
     public void modifPars(IRestActionJSON irest, String[] path, RestParams par) throws RestError {
         par.addParam(resurceP, PARAMTYPE.STRING);
-    }
-
-    @Override
-    public  void verifyProperties() throws RestError {
-        String resourcerootdir = Helper.getValue(iconfig.prop(), resdir, true).get();
-        rootdirlist = new Helper.ListPaths(resourcerootdir);
-    }
-
-
-    @Override
-    public String getActionParam() {
-        return actionDir;
-    }
-
-    @Override
-    public boolean alwaysString() {
-        return true;
     }
 
     @Override

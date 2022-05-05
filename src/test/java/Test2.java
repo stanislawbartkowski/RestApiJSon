@@ -71,7 +71,7 @@ public class Test2 extends TestHelper {
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         String res = runJSON("testshell6.json", values);
         P(res);
-        assertEquals("{}\n",res);
+        assertEquals("{}",res);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class Test2 extends TestHelper {
         values.put("PARAMS",new ParamValue("hello"));
         String res = runJSON("testshell7.json", values);
         P(res);
-        assertEquals("{\"params\":\"hello\"}\n",res);
+        assertEquals("{\"params\":\"hello\"}",res);
     }
 
 }

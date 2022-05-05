@@ -23,6 +23,10 @@ public class Helper {
 
         private final File[] files;
 
+        public File[] getFiles() {
+            return files;
+        }
+
         public ListPaths(String s) {
             String[] ss = s.split(",");
             files = new File[ss.length];
@@ -47,6 +51,7 @@ public class Helper {
             }
             return Optional.empty();
         }
+
 
         public Optional<Path> getPath(String s, Optional<String> alternatives) throws RestError {
 
@@ -79,6 +84,11 @@ public class Helper {
 
     }
 
+    public static boolean isExtension(Path p, String ext) {
+        String pext = p.toString().substring(p.toString().lastIndexOf(".") + 1);
+        return pext.equals(ext);
+    }
+
     public static void throwSevere(String mess) throws RestError {
         RestLogger.L.severe(mess);
         throw new RestError(mess);
@@ -92,7 +102,7 @@ public class Helper {
     public static String readTextFile(Path path) throws RestError {
         try {
             String s = new String(Files.readAllBytes(path));
-            if (path.toString().endsWith(IRestActionJSON.YAMLEXT)) return Helper.convertYamlToJson(s);
+            if (isExtension(path,IRestActionJSON.YAMLEXT)) return Helper.convertYamlToJson(s);
             else return s;
         } catch (IOException e) {
             throwException("Error while reading " + path.toString(), e);
@@ -105,7 +115,7 @@ public class Helper {
         String val = p.getProperty(pkey);
         if (val == null) {
             if (force) {
-                String errmess = pkey + " not defined in property file but manadatory";
+                String errmess = pkey + " not defined in property file but mandatory";
                 RestLogger.L.severe(errmess);
                 throw new RestError(errmess);
             }

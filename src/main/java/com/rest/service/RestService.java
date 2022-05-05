@@ -45,6 +45,7 @@ public class RestService extends RestHelper.RestServiceHelper {
         mapf.put(IRestActionJSON.FORMAT.TEXT, RestParams.CONTENT.TEXT);
         mapf.put(IRestActionJSON.FORMAT.ZIP, RestParams.CONTENT.ZIP);
         mapf.put(IRestActionJSON.FORMAT.XML, RestParams.CONTENT.XML);
+        mapf.put(IRestActionJSON.FORMAT.MIXED, RestParams.CONTENT.MIXED);
     }
 
     @Inject
@@ -60,12 +61,12 @@ public class RestService extends RestHelper.RestServiceHelper {
     @Override
     public RestParams getParams(HttpExchange httpExchange) throws IOException {
         String[] path = getPath(httpExchange);
-        String name = Arrays.stream(path).reduce(null,(s,e) -> s == null ? e : s + "/" + e);
+        String name = Arrays.stream(path).reduce(null, (s, e) -> s == null ? e : s + "/" + e);
         String meth = httpExchange.getRequestMethod();
         RestLogger.info("Rest method " + path + " HTTP method " + meth);
         // OPTIONS - info only
         if (RestHelper.OPTIONS.equals(meth))
-            return  new RestParams(meth, Optional.empty(), corsallowed, httpMethods, Optional.empty(), false);
+            return new RestParams(meth, Optional.empty(), corsallowed, httpMethods, Optional.empty(), false);
         try {
             // .json or yaml
             // firstly looks for _method then default
@@ -107,9 +108,15 @@ public class RestService extends RestHelper.RestServiceHelper {
             }
             RestRunJson.IReturnValue ires = run.executeJson(irest, tempupload, v.getValues());
             if (tempupload.isPresent()) tempupload.get().delete();
-            if (ires.ByteValue() != null)
+            if (ires.secondPart() != null) {
+                produce2PartResponse(v, Optional.of(ires.StringValue()), Optional.of(ires.secondPart()), RestHelper.HTTPOK, Optional.empty());
+                return;
+            }
+            if (ires.ByteValue() != null) {
                 produceByteResponse(v, Optional.of(ires.ByteValue()), RestHelper.HTTPOK, Optional.empty());
-            else if (ires.StringValue().equals("")) produceNODATAResponse(v);
+                return;
+            }
+            if (ires.StringValue().equals("")) produceNODATAResponse(v);
             else produceOKResponse(v, ires.StringValue());
         } catch (RestError restError) {
             throw new IOException(restError.getMessage());

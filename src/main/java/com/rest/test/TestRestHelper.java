@@ -136,13 +136,19 @@ abstract public class TestRestHelper {
     }
 
     protected void testok(String meth, String query, String validdata) throws IOException {
+        String da = getok(meth,query);
+        Assert.assertEquals(validdata, da.trim());
+    }
+
+    protected String getok(String meth, String query) throws IOException {
         int res = makegetcall(meth, query);
         P("Result: " + res);
         Assert.assertEquals(200, res);
         String da = getData();
         P(da);
-        Assert.assertEquals(validdata, da.trim());
+        return da;
     }
+
 
     protected JSONArray testoka(String meth, String query, String attr) throws IOException {
         int res = makegetcall(meth, query);

@@ -10,10 +10,7 @@ import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestActionJSON;
 import com.rest.runjson.IRunPlugin;
 import com.rest.runjson.RestRunJson;
-import com.rest.runjson.executors.GetResourceExecutor;
-import com.rest.runjson.executors.Python3Executor;
-import com.rest.runjson.executors.SQLExecutor;
-import com.rest.runjson.executors.ShellExecutor;
+import com.rest.runjson.executors.*;
 
 public abstract class AbstractCommonModule extends AbstractModule {
 
@@ -31,10 +28,10 @@ public abstract class AbstractCommonModule extends AbstractModule {
                 .to(ShellExecutor.class).in(Scopes.SINGLETON);
         bind(IRunPlugin.class).annotatedWith(Names.named(IRestActionJSON.RESOURCE))
                 .to(GetResourceExecutor.class).in(Scopes.SINGLETON);
-//        bind(RestActionJSON.class).in(Singleton.class);
+        bind(IRunPlugin.class).annotatedWith(Names.named(IRestActionJSON.RESOURCEDIR))
+                .to(GetResourceDirExecutor.class).in(Scopes.SINGLETON);
         bind(RestRunJson.class).in(Scopes.SINGLETON);
 
-//        bind(RestService.class).in(Singleton.class);
         bind(RestMainHelper.class).in(Singleton.class);
     }
 

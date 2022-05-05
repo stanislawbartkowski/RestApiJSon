@@ -13,6 +13,7 @@ import java.util.Map;
 public interface IRunPlugin  {
 
     String TMPFILE = "TMPFILE";
+    String CONTENTTEMP= "CONTENTFILE";
     String UPLOADEDFILE = "UPLOADEDFILE";
     String PARAMACTION = "action";
 
@@ -20,6 +21,8 @@ public interface IRunPlugin  {
         public File tempfile;
         public String res;
         public JSONObject json;
+        public File contenfile;
+        public String content;
     }
 
     default void modifPars(IRestActionJSON irest, String[] path, RestParams par) throws RestError {

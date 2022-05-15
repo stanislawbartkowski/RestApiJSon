@@ -1,6 +1,7 @@
 package com.rest.runjson.executors;
 
 import com.rest.readjson.Helper;
+import com.rest.readjson.HelperJSon;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.PARAMTYPE;
@@ -45,7 +46,10 @@ public class GetResourceExecutor extends AbstractResourceDirExecutor {
         String fileName = isjson ? resource : resource + '.' + ext;
         String resourcepath = new File(dir,fileName).getPath();
         // do not force for json
-        Optional<Path> resourceF = rootdirlist.getPath(resourcepath, Optional.empty());
-        res.res = Helper.readTextFile(resourceF.get());
+        if (!isjson) {
+            Optional<Path> resourceF = rootdirlist.getPath(resourcepath, Optional.empty());
+            res.res = Helper.readTextFile(resourceF.get());
+        }
+        else res.res = HelperJSon.readJS(rootdirlist,resourcepath).toString();
     }
 }

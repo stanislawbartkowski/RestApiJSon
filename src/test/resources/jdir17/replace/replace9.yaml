@@ -1,0 +1,7 @@
+xroot:
+  - elem1: A
+  - elem2: B
+    x: C
+  - elem3: C
+    a: A
+    b: B

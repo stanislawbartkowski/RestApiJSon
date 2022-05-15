@@ -1,0 +1,5 @@
+A: helloA
+B:
+  - elemx: Hello X
+  - replace-# : replace/replace7
+  - elemxx: Hello XX

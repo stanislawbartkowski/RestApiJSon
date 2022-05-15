@@ -27,8 +27,9 @@ abstract public class TestHelper {
     private static final String jdir5 = "src/test/resources/jdir5";
     private static final String jdir6 = "src/test/resources/jdir6";
     private static final String jdirresou = "src/test/resources/jresoudir";
+    protected static final String jdir17 = "src/test/resources/jdir17";
 
-    private static final String testpar1="src/test/resources/testpar";
+    private static final String testpar1 = "src/test/resources/testpar";
 
     private RestActionJSON rest;
     protected RestRunJson run;
@@ -37,7 +38,7 @@ abstract public class TestHelper {
 
     protected void init(String p) throws RestError {
         SetInjector.setInjector();
-        RestConfigFactory.setInstance(getPathPar(p),Optional.empty());
+        RestConfigFactory.setInstance(getPathPar(p), Optional.empty());
         run = ModuleBuild.getI().getInstance(RestRunJson.class);
         iconfig = ModuleBuild.getI().getInstance(IRestConfig.class);
         exec = ModuleBuild.getI().getInstance(Executors.class);
@@ -54,15 +55,19 @@ abstract public class TestHelper {
 
             }
         };
-        for (String s : iconfig.listOfPlugins()) exec.registerExecutor(s,i);
-        exec.registerExecutor(IRestActionJSON.SQL,i);
+        for (String s : iconfig.listOfPlugins()) exec.registerExecutor(s, i);
+        exec.registerExecutor(IRestActionJSON.SQL, i);
         rest = ModuleBuild.getI().getInstance(RestActionJSON.class);
     }
 
-    protected void initno() throws RestError {
-        init("testinit.properties");
+    protected void initnomore(String prop) throws RestError {
+        init(prop);
         getrest();
         registerEmpty();
+    }
+
+    protected void initno() throws RestError {
+        initnomore("testinit.properties");
     }
 
     void P(String s) {
@@ -93,29 +98,39 @@ abstract public class TestHelper {
         return Paths.get(jdir6, j);
     }
 
+    Path getPath17(String j) {
+        return Paths.get(jdir17, j);
+    }
+
     Path getPathPar(String j) {
         return Paths.get(testpar1, j);
     }
 
-    Path getPathResource(String j) { return Paths.get(jdirresou,j); }
+    Path getPathResource(String j) {
+        return Paths.get(jdirresou, j);
+    }
 
     JSONArray getA(String s) {
         JSONObject o = new JSONObject(s);
         return o.optJSONArray("res");
     }
 
+    protected JSONObject getJ(String s) {
+        return new JSONObject(s);
+    }
+
     protected IRestActionJSON readJSONAction(Path path) throws RestError {
         return rest.readJSONAction(path);
     }
 
-    String runJSON(String testpar,Path pp, Map<String, ParamValue> values) throws RestError {
+    String runJSON(String testpar, Path pp, Map<String, ParamValue> values) throws RestError {
 
         init(testpar);
         RegisterExecutors.registerExecutors(IRestActionJSON.SQL);
         getrest();
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);
-        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(),values);
+        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(), values);
         return ires.StringValue();
     }
 

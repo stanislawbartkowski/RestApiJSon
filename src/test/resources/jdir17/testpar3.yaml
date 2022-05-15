@@ -1,0 +1,4 @@
+A: helloA
+B:
+  - elem1: A1
+  - replace#: replace/replacexxxx.yaml

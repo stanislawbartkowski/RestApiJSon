@@ -1,0 +1,9 @@
+A: helloA
+B:
+  - elem1: A
+  - a1:
+      - replace-#xroot : replace/replace9
+      - aa1: AA1
+      - aa2: AA2
+
+

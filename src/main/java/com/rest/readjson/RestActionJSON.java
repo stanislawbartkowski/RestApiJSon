@@ -8,6 +8,7 @@ import com.rest.conf.Executors;
 import com.rest.restservice.PARAMTYPE;
 import com.rest.restservice.RestLogger;
 import com.rest.runjson.IRunPlugin;
+import org.javatuples.Pair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -342,15 +343,17 @@ public class RestActionJSON {
         return constructIP(name, typ);
     }
 
-    private Path getFile(Path p) {
-        return p;
-    }
+//    private Path getFile(Path p) {
+//        return p;
+//    }
 
-    public IRestActionJSON readJSONAction(Path pin) throws RestError {
-        String jsonstring = null;
-        Path p = getFile(pin);
-        jsonstring = readTextFile(p);
-        JSONObject json = new JSONObject(jsonstring);
+    public IRestActionJSON readJSONAction(Helper.ListPaths rootp, String pname, Optional<String> oname) throws RestError {
+//        String jsonstring = null;
+//        Path p = getFile(pin);
+        //jsonstring = readTextFile(p);
+        Pair<JSONObject, Path> pa = HelperJSon.readJSP(rootp, pname, oname);
+        JSONObject json = pa.getValue0();
+        Path p = pa.getValue1();
         verifyAttributes(json, allowedKeys, additionalKeys, p);
         RestLogger.info(json.toString());
         String name = getName(p);

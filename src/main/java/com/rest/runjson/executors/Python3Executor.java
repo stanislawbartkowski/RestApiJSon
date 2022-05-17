@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Python3Executor extends AbstractShellExecutor {
 
-    private final static String PYTHONHOME="pythonhome";
+    private final static String PYTHONHOME = "pythonhome";
 
     public Python3Executor() {
         super(PYTHONHOME);

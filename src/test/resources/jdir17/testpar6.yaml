@@ -1,5 +1,5 @@
 A: helloA
 B:
   - elem1: Hello 1
-  - replace-# : B
+  - replace-#: B
     elem2: Hello 2

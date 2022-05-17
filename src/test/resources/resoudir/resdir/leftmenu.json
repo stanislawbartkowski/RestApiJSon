@@ -1,13 +1,12 @@
 {
-  "menu" : [
+  "menu": [
     {
       "id": "dept",
-      "restid" : "getdept"
+      "restid": "getdept"
     },
     {
       "id": "product",
-      "restid" : "getproduct"
+      "restid": "getproduct"
     }
-
   ]
 }

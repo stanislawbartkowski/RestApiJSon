@@ -11,7 +11,7 @@ public class RegisterExecutors {
 
     public static void registerExecutors(String proc) throws RestError {
         Executors rest = ModuleBuild.getI().getInstance(Executors.class);
-        rest.registerExecutor(proc,ModuleBuild.getI().getInstance(Key.get(IRunPlugin.class, Names.named(proc))));
+        rest.registerExecutor(proc, ModuleBuild.getI().getInstance(Key.get(IRunPlugin.class, Names.named(proc))));
     }
 
 }

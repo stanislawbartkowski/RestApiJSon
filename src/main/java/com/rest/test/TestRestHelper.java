@@ -37,7 +37,7 @@ abstract public class TestRestHelper {
     }
 
     protected int makegetcall(String path, String query) throws IOException {
-        return makecall(path,query,"GET");
+        return makecall(path, query, "GET");
     }
 
     protected int makegetcalluploadmeth(String path, String meth, String query, String input) throws IOException {
@@ -113,13 +113,13 @@ abstract public class TestRestHelper {
     }
 
 
-    protected JSONArray getA(String s,String attr) {
+    protected JSONArray getA(String s, String attr) {
         JSONObject o = new JSONObject(s);
         return o.optJSONArray(attr);
     }
 
     protected JSONArray getA(String s) {
-        return getA(s,"res");
+        return getA(s, "res");
     }
 
 
@@ -136,7 +136,7 @@ abstract public class TestRestHelper {
     }
 
     protected void testok(String meth, String query, String validdata) throws IOException {
-        String da = getok(meth,query);
+        String da = getok(meth, query);
         Assert.assertEquals(validdata, da.trim());
     }
 
@@ -156,12 +156,12 @@ abstract public class TestRestHelper {
         Assert.assertEquals(200, res);
         String da = getData();
         P(da);
-        return getA(da,attr);
+        return getA(da, attr);
     }
 
 
     protected JSONArray testoka(String meth, String query) throws IOException {
-        return testoka(meth,query,"res");
+        return testoka(meth, query, "res");
     }
 
 

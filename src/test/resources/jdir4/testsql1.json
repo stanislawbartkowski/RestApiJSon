@@ -1,8 +1,10 @@
 {
   "proc": "SQL",
-  "action" : "SELECT * FROM TEST WHERE X = ?",
-  "pars" : [
-    { "name" :  "id", "type" : "number"}
+  "action": "SELECT * FROM TEST WHERE X = ?",
+  "pars": [
+    {
+      "name": "id",
+      "type": "number"
+    }
   ]
-
 }

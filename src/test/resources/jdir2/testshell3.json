@@ -1,5 +1,8 @@
 {
   "proc": "SHELL",
-  "output" : "STDOUT",
-  "action" : ["echo","{}"]
+  "output": "STDOUT",
+  "action": [
+    "echo",
+    "{}"
+  ]
 }

@@ -3,5 +3,5 @@ action: DELETE FROM RESTTEST WHERE ID=?
 method: DELETE
 updatequery: true
 pars:
-    - name:  id
-      type: int
+  - name: id
+    type: int

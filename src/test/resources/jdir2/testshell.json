@@ -1,4 +1,4 @@
 {
   "proc": "SHELL",
-  "action" : "echo \"hello\""
+  "action": "echo \"hello\""
 }

@@ -18,7 +18,7 @@ abstract class AbstractResourceDirExecutor implements IRunPlugin {
     protected Helper.ListPaths rootdirlist;
 
     @Override
-    public  void verifyProperties() throws RestError {
+    public void verifyProperties() throws RestError {
         String resourcerootdir = Helper.getValue(conf.prop(), resdir, true).get();
         rootdirlist = new Helper.ListPaths(resourcerootdir);
     }

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface IBeforeExecutor {
 
-    default void runBefore(IRestActionJSON j, IRunPlugin.RunResult res, Map<String, ParamValue> values) throws RestError  {
+    default void runBefore(IRestActionJSON j, IRunPlugin.RunResult res, Map<String, ParamValue> values) throws RestError {
 
     }
 }

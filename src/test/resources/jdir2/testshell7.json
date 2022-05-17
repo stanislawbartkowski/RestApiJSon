@@ -1,10 +1,11 @@
 {
   "proc": "SHELL",
-  "output" : "TMPFILE",
-  "format" : "JSON",
-  "action" : "./run7.sh",
-  "pars" : [
-    { "name" :  "PARAMS"}
+  "output": "TMPFILE",
+  "format": "JSON",
+  "action": "./run7.sh",
+  "pars": [
+    {
+      "name": "PARAMS"
+    }
   ]
-
 }

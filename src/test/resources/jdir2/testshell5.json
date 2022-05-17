@@ -1,6 +1,6 @@
 {
   "proc": "SHELL",
-  "output" : "TMPFILE",
-  "format" : "TEXT",
-  "action" : "./run5.sh"
+  "output": "TMPFILE",
+  "format": "TEXT",
+  "action": "./run5.sh"
 }

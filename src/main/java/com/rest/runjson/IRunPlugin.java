@@ -10,10 +10,10 @@ import com.rest.restservice.ParamValue;
 import java.io.File;
 import java.util.Map;
 
-public interface IRunPlugin  {
+public interface IRunPlugin {
 
     String TMPFILE = "TMPFILE";
-    String CONTENTTEMP= "CONTENTFILE";
+    String CONTENTTEMP = "CONTENTFILE";
     String UPLOADEDFILE = "UPLOADEDFILE";
     String PARAMACTION = "action";
 
@@ -32,9 +32,12 @@ public interface IRunPlugin  {
         return PARAMACTION;
     }
 
-    default void verifyProperties() throws RestError { }
+    default void verifyProperties() throws RestError {
+    }
 
-    default boolean alwaysString() { return false; }
+    default boolean alwaysString() {
+        return false;
+    }
 
     void executeJSON(IRestActionJSON j, RunResult res, Map<String, ParamValue> values) throws RestError;
 }

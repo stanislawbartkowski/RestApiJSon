@@ -15,7 +15,7 @@ public class Test15 extends PTestRestHelper {
         // check multi content
         String[] p = res.split("----------------");
         System.out.println(p.length);
-        assertEquals(3,p.length);
+        assertEquals(3, p.length);
     }
 
 }

@@ -95,9 +95,9 @@ public class Test1 extends TestHelper {
         Path p = getPath1("testshell.json");
         IRestActionJSON j = readJSONAction(p);
         List<String> res = j.actionL();
-        assertEquals(2,res.size());
-        assertEquals("x",res.get(0));
-        assertEquals("y",res.get(1));
+        assertEquals(2, res.size());
+        assertEquals("x", res.get(0));
+        assertEquals("y", res.get(1));
     }
 
     @Test
@@ -113,11 +113,10 @@ public class Test1 extends TestHelper {
         Path p = getPath1("testshelly.yaml");
         IRestActionJSON j = readJSONAction(p);
         List<String> res = j.actionL();
-        assertEquals(2,res.size());
-        assertEquals("x",res.get(0));
-        assertEquals("y",res.get(1));
+        assertEquals(2, res.size());
+        assertEquals("x", res.get(0));
+        assertEquals("y", res.get(1));
     }
-
 
 
 }

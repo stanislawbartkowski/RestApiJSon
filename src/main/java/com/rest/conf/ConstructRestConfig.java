@@ -124,7 +124,7 @@ public class ConstructRestConfig {
             Helper.throwException(p.toString(), e);
         }
         Helper.getValue(pro, JDIR, true);
-        Optional<String> multi = Helper.getValue(pro,MULTI,false);
+        Optional<String> multi = Helper.getValue(pro, MULTI, false);
         if (multi.isPresent() && multi.get().equals("true")) RestLogger.info("Multi-thread enabled");
         else RestLogger.info("Single thread");
 

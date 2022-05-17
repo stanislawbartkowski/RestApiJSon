@@ -5,6 +5,7 @@ import jaydebeapi
 def getfiles():
     return (os.environ["TMPFILE"], os.environ["UPLOADEDFILE"])
 
+
 def getconn():
     url = os.environ["ENV_url"]
     user = os.environ["ENV_user"]
@@ -12,8 +13,9 @@ def getconn():
     driverclass = os.environ["ENV_driverclass"]
     jdbcjar = os.environ["ENV_jdbcjar"]
 
-#    return jaydebeapi.connect("com.ibm.db2.jcc.DB2Driver","jdbc:db2://thinkde:50000/sample",["db2inst1","secret123"],"/opt/ibm/db2/V11.5/java/db2jcc4.jar")
-    return jaydebeapi.connect(driverclass,url,[user,password],jdbcjar)
+    #    return jaydebeapi.connect("com.ibm.db2.jcc.DB2Driver","jdbc:db2://thinkde:50000/sample",["db2inst1","secret123"],"/opt/ibm/db2/V11.5/java/db2jcc4.jar")
+    return jaydebeapi.connect(driverclass, url, [user, password], jdbcjar)
+
 
 def getjson():
     (t, u) = getfiles()
@@ -41,6 +43,7 @@ def add():
         with conn.cursor() as curs:
             curs.execute("insert into resttest values (?, ?)", (id, name))
 
+
 def change():
     print("Rest change method")
     data = getjson()
@@ -52,6 +55,7 @@ def change():
     with getconn() as conn:
         with conn.cursor() as curs:
             curs.execute("update resttest set name=? where id=?", (name, id))
+
 
 if __name__ == '__main__':
     what = sys.argv[1]

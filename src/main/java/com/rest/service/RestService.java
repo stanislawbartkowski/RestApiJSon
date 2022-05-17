@@ -14,9 +14,7 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class RestService extends RestHelper.RestServiceHelper {
 
@@ -70,9 +68,10 @@ public class RestService extends RestHelper.RestServiceHelper {
         try {
             // .json or yaml
             // firstly looks for _method then default
-            Optional<Path> p = iconfig.getJSonDirPaths().getPath(name + "-" + meth.toLowerCase(), Optional.of(name));
 
-            irest = restJSON.readJSONAction(p.get());
+//            Optional<Path> p = iconfig.getJSonDirPaths().getPath(name + "-" + meth.toLowerCase(), Optional.of(name));
+
+            irest = restJSON.readJSONAction(iconfig.getJSonDirPaths(), name + "-" + meth.toLowerCase(), Optional.of(name));
 
             RestParams.CONTENT fo = mapf.get(irest.format());
             Optional<RestParams.CONTENT> out = fo == null ? Optional.empty() : Optional.of(fo);

@@ -1,4 +1,4 @@
 {
   "proc": "SQL",
-  "action" : "SELECT * FROM TEST"
+  "action": "SELECT * FROM TEST"
 }

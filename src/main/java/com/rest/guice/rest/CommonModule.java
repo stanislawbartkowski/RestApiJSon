@@ -36,7 +36,9 @@ public class CommonModule extends AbstractCommonModule {
             public void runBefore(IRestActionJSON j, IRunPlugin.RunResult res, Map<String, ParamValue> values) throws RestError {
             }
         };
-    };
+    }
+
+    ;
 
     @Provides
     @Singleton

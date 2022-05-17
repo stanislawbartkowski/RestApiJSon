@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class Test4 extends TestHelper {
 
     private String runJSON(String f, Map<String, ParamValue> values) throws RestError {
-        return super.runJSON("testpar4.properties",getPath4(f),values);
+        return super.runJSON("testpar4.properties", getPath4(f), values);
     }
 
     @Test
@@ -21,7 +21,7 @@ public class Test4 extends TestHelper {
         P(res);
         JSONArray a = getA(res);
         P(a.toString());
-        assertEquals(4,a.length());
+        assertEquals(4, a.length());
     }
 
     @Test
@@ -32,7 +32,7 @@ public class Test4 extends TestHelper {
         P(res);
         JSONArray a = getA(res);
         P(a.toString());
-        assertEquals(1,a.length());
+        assertEquals(1, a.length());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class Test4 extends TestHelper {
         P(res);
         JSONArray a = getA(res);
         P(a.toString());
-        assertEquals(2,a.length());
+        assertEquals(2, a.length());
     }
 
 }

@@ -1,6 +1,9 @@
 {
   "proc": "SHELL",
-  "output" : "STDOUT",
-  "format" : "TEXT",
-  "action" : ["echo","hello"]
+  "output": "STDOUT",
+  "format": "TEXT",
+  "action": [
+    "echo",
+    "hello"
+  ]
 }

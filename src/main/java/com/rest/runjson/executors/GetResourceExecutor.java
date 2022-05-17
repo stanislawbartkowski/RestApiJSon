@@ -16,15 +16,16 @@ import java.util.Optional;
 
 public class GetResourceExecutor extends AbstractResourceDirExecutor {
 
-    private  final static String resurceP = "resource";
+    private final static String resurceP = "resource";
 
     private static Map<IRestActionJSON.FORMAT, String> extMap = new HashMap<IRestActionJSON.FORMAT, String>();
+
     static {
-        extMap.put(IRestActionJSON.FORMAT.JSON,IRestActionJSON.JSONEXT);
-        extMap.put(IRestActionJSON.FORMAT.TEXT,"txt");
-        extMap.put(IRestActionJSON.FORMAT.JS,"js");
-        extMap.put(IRestActionJSON.FORMAT.XML,"xml");
-        extMap.put(IRestActionJSON.FORMAT.ZIP,"zip");
+        extMap.put(IRestActionJSON.FORMAT.JSON, IRestActionJSON.JSONEXT);
+        extMap.put(IRestActionJSON.FORMAT.TEXT, "txt");
+        extMap.put(IRestActionJSON.FORMAT.JS, "js");
+        extMap.put(IRestActionJSON.FORMAT.XML, "xml");
+        extMap.put(IRestActionJSON.FORMAT.ZIP, "zip");
     }
 
     @Override
@@ -44,12 +45,11 @@ public class GetResourceExecutor extends AbstractResourceDirExecutor {
         }
         boolean isjson = j.format() == IRestActionJSON.FORMAT.JSON;
         String fileName = isjson ? resource : resource + '.' + ext;
-        String resourcepath = new File(dir,fileName).getPath();
+        String resourcepath = new File(dir, fileName).getPath();
         // do not force for json
         if (!isjson) {
             Optional<Path> resourceF = rootdirlist.getPath(resourcepath, Optional.empty());
             res.res = Helper.readTextFile(resourceF.get());
-        }
-        else res.res = HelperJSon.readJS(rootdirlist,resourcepath).toString();
+        } else res.res = HelperJSon.readJS(rootdirlist, resourcepath).toString();
     }
 }

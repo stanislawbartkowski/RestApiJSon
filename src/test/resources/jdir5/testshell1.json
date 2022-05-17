@@ -1,8 +1,8 @@
 {
   "proc": "SHELL",
-  "output" : "TMPFILE",
-  "format" : "TEXT",
-  "upload" : true,
-  "method" : "POST",
-  "action" : "./run1.sh"
+  "output": "TMPFILE",
+  "format": "TEXT",
+  "upload": true,
+  "method": "POST",
+  "action": "./run1.sh"
 }

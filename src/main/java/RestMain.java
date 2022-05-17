@@ -21,7 +21,7 @@ public class RestMain extends RestStart {
         if (!cmd.isPresent()) System.exit(4);
         SetInjector.setInjector();
 
-        RestConfigFactory.setInstance(cmd.get().getConfigfile(),Optional.empty());
+        RestConfigFactory.setInstance(cmd.get().getConfigfile(), Optional.empty());
 
         IRestConfig ires = ModuleBuild.getI().getInstance(IRestConfig.class);
         RestMainHelper.registerExecutors(ires);
@@ -29,7 +29,7 @@ public class RestMain extends RestStart {
         RestService res = ModuleBuild.getI().getInstance(RestService.class);
 
         RestStart(cmd.get().getPORT(), ires.isSingle(), (server) -> {
-            RestHelper.registerService(server,new RestVersion());
+            RestHelper.registerService(server, new RestVersion());
             RestHelper.registerService(server, res);
         }, new String[]{});
 

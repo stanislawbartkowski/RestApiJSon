@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ShellExecutor extends AbstractShellExecutor {
 
-    private final static String SHELLHOME="shellhome";
+    private final static String SHELLHOME = "shellhome";
 
     public ShellExecutor() {
         super(SHELLHOME);

@@ -61,7 +61,7 @@ public class SQLExecutor implements IRunPlugin {
         for (IRestActionJSON.IRestParam re : j.getParams()) sqlp.add(new SQLParam(i++, re));
         JSONArray a = null;
         try {
-            a = JDBC.runquery(j.action(), sqlp, values,j.updateQuery());
+            a = JDBC.runquery(j.action(), sqlp, values, j.updateQuery());
         } catch (SQLException throwables) {
             String errmess = "Cannot execute " + j.action();
             Helper.throwException(errmess, throwables);

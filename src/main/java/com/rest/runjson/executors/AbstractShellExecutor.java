@@ -40,22 +40,24 @@ abstract class AbstractShellExecutor implements IRunPlugin {
     public void executeJSON(IRestActionJSON j, IRunPlugin.RunResult rres, Map<String, ParamValue> values) throws RestError {
         List<String> cmd = createCmd(j);
         StringBuffer output = new StringBuffer();
-        Map<String,String> env = new HashMap<String,String>();
+        Map<String, String> env = new HashMap<String, String>();
         for (Map.Entry<String, ParamValue> s : values.entrySet()) {
             Optional<IRestActionJSON.IRestParam> pa = j.getParams().stream().filter(e -> e.getName().equals(s.getKey())).findFirst();
             String vals = pa.isPresent() ? Helper.ParamValueToS(pa.get().getType(), s.getValue()) : s.getValue().getStringvalue();
-            env.put(s.getKey(),vals);
+            env.put(s.getKey(), vals);
         }
         if (j.setEnvir())
-            conf.prop().forEach( (key,val) -> { env.put("ENV_" + key,val.toString()); });
+            conf.prop().forEach((key, val) -> {
+                env.put("ENV_" + key, val.toString());
+            });
         try {
-            int exitcode = RunShellCommand.run(shellhome, env,output,cmd);
+            int exitcode = RunShellCommand.run(shellhome, env, output, cmd);
             if (exitcode != 0) {
                 String errmess = cmd + " non zero exit value " + exitcode;
                 Helper.throwSevere(errmess);
             }
             rres.res = output.toString();
-        } catch (IOException|InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             Helper.throwException("Error during execution of " + cmd, e);
         }
     }

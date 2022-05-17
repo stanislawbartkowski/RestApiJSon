@@ -1,9 +1,19 @@
 {
   "columns": [
-    {"field" : "deptno" },
-    {"field" : "deptname" },
-    {"field" : "mgrno" },
-    {"field" : "admrdept" },
-    {"field" : "location" }
+    {
+      "field": "deptno"
+    },
+    {
+      "field": "deptname"
+    },
+    {
+      "field": "mgrno"
+    },
+    {
+      "field": "admrdept"
+    },
+    {
+      "field": "location"
+    }
   ]
 }

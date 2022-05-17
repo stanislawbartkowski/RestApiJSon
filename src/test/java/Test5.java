@@ -20,21 +20,21 @@ public class Test5 extends PTestRestHelper {
     public void test2() throws IOException {
         P("Test na wywołanie sql");
         JSONArray a = testoka("/testsql", null);
-        assertEquals(4,a.length());
+        assertEquals(4, a.length());
     }
 
     @Test
     public void test3() throws IOException {
         P("Test na wywołanie sql z parametrem");
         JSONArray a = testoka("/testsql2", "id=1");
-        assertEquals(1,a.length());
+        assertEquals(1, a.length());
     }
 
     @Test
     public void test4() throws IOException {
         P("Test na wywołanie sql z parametrem");
         JSONArray a = testoka("/testsql2y", "id=1");
-        assertEquals(1,a.length());
+        assertEquals(1, a.length());
     }
 
     private void testsqlvalue(String v) throws IOException {

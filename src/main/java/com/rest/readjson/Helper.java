@@ -102,7 +102,7 @@ public class Helper {
     public static String readTextFile(Path path) throws RestError {
         try {
             String s = new String(Files.readAllBytes(path));
-            if (isExtension(path,IRestActionJSON.YAMLEXT)) return Helper.convertYamlToJson(s);
+            if (isExtension(path, IRestActionJSON.YAMLEXT)) return Helper.convertYamlToJson(s);
             else return s;
         } catch (IOException e) {
             throwException("Error while reading " + path.toString(), e);

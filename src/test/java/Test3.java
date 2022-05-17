@@ -24,7 +24,7 @@ public class Test3 extends TestHelper {
         Path pp = getPath3(f);
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);
-        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(),values);
+        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(), values);
         return ires.StringValue();
     }
 
@@ -33,7 +33,7 @@ public class Test3 extends TestHelper {
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         String res = runJSON("testpython2.json", values);
         P(res);
-        assertEquals("{}",res);
+        assertEquals("{}", res);
     }
 
 

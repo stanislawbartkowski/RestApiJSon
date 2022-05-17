@@ -113,7 +113,7 @@ public class Test17 extends TestHelper {
         Helper.ListPaths files = new Helper.ListPaths(jdir17);
         JSONObject o = HelperJSon.readJS(files, "testpar8.yaml");
         JSONArray a = o.optJSONArray("B");
-        assertEquals(2,a.length());
+        assertEquals(2, a.length());
         JSONObject o1 = a.getJSONObject(1);
     }
 

@@ -3,6 +3,6 @@
   "output": "TMPFILE",
   "format": "ZIP",
   "method": "POST",
-  "upload" : true,
+  "upload": true,
   "action": "./csrcert.sh"
 }

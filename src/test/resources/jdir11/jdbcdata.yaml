@@ -1,5 +1,5 @@
 proc: SQL
 action: SELECT * FROM RESTTEST WHERE ID=?
 pars:
-    - name:  id
-      type: int
+  - name: id
+    type: int

@@ -13,7 +13,7 @@ public class RestConfigFactory implements Provider<IRestConfig> {
 
     private static IRestConfig instance;
 
-    public static void setInstance(Path p,Optional<List<String>> customplugins) throws RestError {
+    public static void setInstance(Path p, Optional<List<String>> customplugins) throws RestError {
         instance = ModuleBuild.getI().getInstance(ConstructRestConfig.class).create(p, customplugins);
     }
 

@@ -1,9 +1,10 @@
 {
-  "proc" : "PYTHON3",
-  "action" : "python",
-  "format" : "TEXT",
-  "pars" : [
-    { "name" :  "PARAMS"}
+  "proc": "PYTHON3",
+  "action": "python",
+  "format": "TEXT",
+  "pars": [
+    {
+      "name": "PARAMS"
+    }
   ]
-
 }

@@ -1,4 +1,4 @@
 proc: PYTHON3
-output : TMPFILE
-format : MIXED
-action : test15mu.py
+output: TMPFILE
+format: MIXED
+action: test15mu.py

@@ -1,5 +1,5 @@
 {
-  "proc" : "RESOURCE",
-  "dir" : "resoudir",
-  "format" : "JSON"
+  "proc": "RESOURCE",
+  "dir": "resoudir",
+  "format": "JSON"
 }

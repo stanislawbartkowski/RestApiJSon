@@ -1,5 +1,5 @@
 {
-  "proc" : "RESOURCE",
-  "dir" : "resdir",
-  "format" : "TEXT"
+  "proc": "RESOURCE",
+  "dir": "resdir",
+  "format": "TEXT"
 }

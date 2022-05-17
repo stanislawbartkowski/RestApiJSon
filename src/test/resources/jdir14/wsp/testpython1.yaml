@@ -1,4 +1,4 @@
 proc: PYTHON3
-output : STDOUT
-format : TEXT
-action : test.py
+output: STDOUT
+format: TEXT
+action: test.py

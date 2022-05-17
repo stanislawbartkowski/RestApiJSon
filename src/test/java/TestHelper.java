@@ -4,15 +4,18 @@ import com.rest.guice.ModuleBuild;
 import com.rest.guice.RestConfigFactory;
 import com.rest.guice.rest.RegisterExecutors;
 import com.rest.guice.rest.SetInjector;
+import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
 import com.rest.runjson.IRunPlugin;
 import com.rest.runjson.RestRunJson;
+import org.javatuples.Pair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -20,14 +23,15 @@ import java.util.Optional;
 
 abstract public class TestHelper {
 
-    private static final String jdir1 = "src/test/resources/jdir1";
-    private static final String jdir2 = "src/test/resources/jdir2";
-    private static final String jdir3 = "src/test/resources/jdir3";
-    private static final String jdir4 = "src/test/resources/jdir4";
-    private static final String jdir5 = "src/test/resources/jdir5";
-    private static final String jdir6 = "src/test/resources/jdir6";
-    private static final String jdirresou = "src/test/resources/jresoudir";
+    protected static final String jdir1 = "src/test/resources/jdir1";
+    protected static final String jdir2 = "src/test/resources/jdir2";
+    protected static final String jdir3 = "src/test/resources/jdir3";
+    protected static final String jdir4 = "src/test/resources/jdir4";
+    protected static final String jdir5 = "src/test/resources/jdir5";
+    protected static final String jdir6 = "src/test/resources/jdir6";
+    protected static final String jdirresou = "src/test/resources/jresoudir";
     protected static final String jdir17 = "src/test/resources/jdir17";
+    protected static final String jdir18 = "src/test/resources/jdir18";
 
     private static final String testpar1 = "src/test/resources/testpar";
 
@@ -119,17 +123,31 @@ abstract public class TestHelper {
         return new JSONObject(s);
     }
 
-    protected IRestActionJSON readJSONAction(Path path) throws RestError {
-        return rest.readJSONAction(path);
+    private Pair<String, String> dePath(Path p) {
+        String file = p.getFileName().toString();
+        String dir = p.subpath(0, p.getNameCount() - 1).toString();
+        return Pair.with(dir, file);
+
     }
 
-    String runJSON(String testpar, Path pp, Map<String, ParamValue> values) throws RestError {
+    protected IRestActionJSON readJSONAction(String dir, String filename) throws RestError {
+        Helper.ListPaths f = new Helper.ListPaths(dir);
+        return rest.readJSONAction(f, filename, Optional.empty());
+    }
+
+    protected IRestActionJSON readJSONAction(Path p) throws RestError {
+        Pair<String, String> pa = dePath(p);
+        return readJSONAction(pa.getValue0(), pa.getValue1());
+    }
+
+
+    String runJSON(String testpar, Path p, Map<String, ParamValue> values) throws RestError {
 
         init(testpar);
         RegisterExecutors.registerExecutors(IRestActionJSON.SQL);
         getrest();
-        P(pp.toString());
-        IRestActionJSON j = readJSONAction(pp);
+        P(p.toString());
+        IRestActionJSON j = readJSONAction(p);
         RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(), values);
         return ires.StringValue();
     }

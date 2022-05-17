@@ -1,6 +1,8 @@
 package com.rest.readjson;
 
 import com.rest.restservice.RestLogger;
+import org.javatuples.Pair;
+import org.javatuples.Tuple;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -125,10 +127,15 @@ public class HelperJSon {
     }
 
 
-    public static JSONObject readJS(Helper.ListPaths files, String resfile) throws RestError {
-        Optional<Path> resourceF = files.getPath(resfile, Optional.empty());
+    public static Pair<JSONObject, Path> readJSP(Helper.ListPaths files, String resfile, Optional<String> opt) throws RestError {
+        Optional<Path> resourceF = files.getPath(resfile, opt);
         String s = Helper.readTextFile(resourceF.get());
         JSONObject o = new JSONObject(s);
-        return transformO(files, o);
+        return Pair.with(transformO(files, o), resourceF.get());
+    }
+
+    public static JSONObject readJS(Helper.ListPaths files, String resfile) throws RestError {
+        Pair<JSONObject, Path> pa = readJSP(files, resfile, Optional.empty());
+        return pa.getValue0();
     }
 }

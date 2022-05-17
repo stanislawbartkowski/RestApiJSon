@@ -36,8 +36,8 @@ public class GetResourceDirExecutor extends AbstractResourceDirExecutor {
         try {
             List<Path> plist = createList(j);
             for (Path p : plist) {
-                File f = new File(j.action(),p.getName(p.getNameCount()-1).toString());
-                JSONObject jo  = HelperJSon.readJS(rootdirlist,f.toString());
+                File f = new File(j.action(), p.getName(p.getNameCount() - 1).toString());
+                JSONObject jo = HelperJSon.readJS(rootdirlist, f.toString());
                 a.put(jo);
             }
         } catch (IOException e) {

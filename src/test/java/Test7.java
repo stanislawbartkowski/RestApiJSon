@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 
 public class Test7 extends PTestRestHelper {
 
-    private static final String ipath="src/test/resources/cacenter/testperm/www.example.com.csr.pem";
+    private static final String ipath = "src/test/resources/cacenter/testperm/www.example.com.csr.pem";
 
     private void verifyzipresult(int no) throws IOException {
         ZipInputStream zip = getZipResult();
@@ -23,13 +23,13 @@ public class Test7 extends PTestRestHelper {
             e = zip.getNextEntry();
             i = i + 1;
         }
-        assertEquals(no,i);
+        assertEquals(no, i);
     }
 
     @Test
     public void test1() throws IOException {
         P("Test na wywołanie subcert");
-        int res = makecall("/subcert", "subject=/C=PL/ST=Mazovia/L=Warsaw/O=MyHome/OU=MyRoom/CN=www.example.com","POST");
+        int res = makecall("/subcert", "subject=/C=PL/ST=Mazovia/L=Warsaw/O=MyHome/OU=MyRoom/CN=www.example.com", "POST");
         verifyzipresult(4);
     }
 

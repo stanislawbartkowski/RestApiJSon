@@ -8,15 +8,28 @@ import com.rest.restservice.RestParams;
 import com.rest.restservice.RestStart;
 import com.rest.runjson.RestRunJson;
 import com.sun.net.httpserver.HttpExchange;
+import org.javatuples.Pair;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 
 public class RestVersion extends RestHelper.RestServiceHelper {
 
     public RestVersion() {
         super("restversion", false);
+    }
+
+
+    private static List<Pair<String, String>> vert = new ArrayList<>();
+
+    public static void addVer(String key, String ver) {
+        vert.add(Pair.with(key, ver));
+    }
+
+    static {
+        addVer("restver", RestStart.VERSTRING);
+        addVer("jsonapiver", IRestConfig.VERSION);
     }
 
 
@@ -27,7 +40,11 @@ public class RestVersion extends RestHelper.RestServiceHelper {
 
     @Override
     public void servicehandle(RestHelper.IQueryInterface v) throws IOException, InterruptedException {
-        String ver = String.format("{\"restver\": \"%s\", \"jsonapiver\": \"%s\"}", IRestConfig.VERSION, RestStart.VERSTRING);
-        produceOKResponse(v, ver);
+        JSONObject o = new JSONObject();
+        for (Pair<String, String> ve : vert) {
+            o.put(ve.getValue0(), ve.getValue1());
+
+        }
+        produceOKResponse(v, o.toString());
     }
 }

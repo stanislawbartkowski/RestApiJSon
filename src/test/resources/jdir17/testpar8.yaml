@@ -2,7 +2,7 @@ A: helloA
 B:
   - elem1: A
   - a1:
-      - replace-# : replace/replace7
+      - replace-#: replace/replace7
       - aa1: AA1
       - aa2: AA2
 

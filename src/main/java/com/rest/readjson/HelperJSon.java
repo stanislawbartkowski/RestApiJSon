@@ -54,6 +54,11 @@ public class HelperJSon {
                 } catch (RestError ex) {
                     RestLogger.L.severe(String.format("Error while transforming JSArray replacement %s - %s", key, val));
                     err.set(Optional.of(ex));
+                } catch(org.json.JSONException je) {
+                    String mess = String.format("Error while transforming JSArray replacement %s - %s", key, val);
+                    RestLogger.L.log(Level.SEVERE,mess,je);
+                    err.set(Optional.of(new RestError(je.getMessage())));
+
                 }
                 return;
             }

@@ -11,8 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 
 public class Test17 extends TestHelper {
 
@@ -127,4 +126,28 @@ public class Test17 extends TestHelper {
         runtest("testpar9.yaml");
     }
 
-}
+    @Test
+    public void test12() throws RestError {
+        Helper.ListPaths files = new Helper.ListPaths(jdir17);
+        JSONObject o = HelperJSon.readJS(files, "step3.yaml");
+        System.out.println(o);
+        JSONArray a = o.optJSONArray("fields");
+        System.out.println(a.length());
+        assertEquals(8,a.length());
+    }
+
+    @Test
+    public void test13() throws RestError {
+        Helper.ListPaths files = new Helper.ListPaths(jdir17);
+        JSONObject o = HelperJSon.readJS(files, "step31.yaml");
+        System.out.println(o);
+        JSONArray a = o.optJSONArray("fields");
+        assertNotNull(a);
+        System.out.println(a.length());
+        assertEquals(8,a.length());
+        assertNotNull(o.optJSONObject("formprops"));
+        assertNotNull(o.getJSONObject("cardprops"));
+    }
+
+
+    }

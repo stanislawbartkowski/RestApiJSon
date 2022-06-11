@@ -46,7 +46,7 @@ public class HelperJSon {
                     return;
                 }
                 String val = oo.getString(key).trim();
-                String root = (key.equals(REPLACEA)) ? DEFROOT : oo.getString(key.substring(REPLACEA.length()));
+                String root = (key.equals(REPLACEA)) ? DEFROOT : key.substring(REPLACEA.length());
                 try {
                     JSONObject resa = readJS(files, val);
                     JSONArray aa = resa.getJSONArray(root);

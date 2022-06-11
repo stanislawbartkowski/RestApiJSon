@@ -149,5 +149,15 @@ public class Test17 extends TestHelper {
         assertNotNull(o.getJSONObject("cardprops"));
     }
 
-
+    @Test
+    public void test14() throws RestError {
+        Helper.ListPaths files = new Helper.ListPaths(jdir17);
+        JSONObject o = HelperJSon.readJS(files, "step32.yaml");
+        System.out.println(o);
+        JSONArray a = o.optJSONArray("fields");
+        assertNotNull(a);
+        System.out.println(a.length());
+        assertEquals(8,a.length());
     }
+
+}

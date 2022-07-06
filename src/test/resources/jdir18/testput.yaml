@@ -1,0 +1,4 @@
+proc: PYTHON3
+output: TMPFILE
+method: PUT
+action: test18put.py

@@ -61,16 +61,11 @@ public class RestService extends RestHelper.RestServiceHelper {
         String[] path = getPath(httpExchange);
         String name = Arrays.stream(path).reduce(null, (s, e) -> s == null ? e : s + "/" + e);
         String meth = httpExchange.getRequestMethod();
-        RestLogger.info("Rest method " + path + " HTTP method " + meth);
+        RestLogger.info(String.format("Rest method: %s HTTP method: %s ",name,meth));
         // OPTIONS - info only
         if (RestHelper.OPTIONS.equals(meth))
             return new RestParams(meth, Optional.empty(), corsallowed, httpMethods, Optional.empty(), false);
         try {
-            // .json or yaml
-            // firstly looks for _method then default
-
-//            Optional<Path> p = iconfig.getJSonDirPaths().getPath(name + "-" + meth.toLowerCase(), Optional.of(name));
-
             irest = restJSON.readJSONAction(iconfig.getJSonDirPaths(), name + "-" + meth.toLowerCase(), Optional.of(name));
 
             RestParams.CONTENT fo = mapf.get(irest.format());

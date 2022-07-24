@@ -1,4 +1,5 @@
 import com.rest.conf.IRestConfig;
+import com.rest.conf.RegisterGet;
 import com.rest.guice.ModuleBuild;
 import com.rest.guice.RestConfigFactory;
 import com.rest.guice.rest.SetInjector;
@@ -29,6 +30,7 @@ public class RestMain extends RestStart {
         RestService res = ModuleBuild.getI().getInstance(RestService.class);
 
         RestStart(cmd.get().getPORT(), ires.isSingle(), (server) -> {
+            RegisterGet.RegisterGetService(ires, server);
             RestHelper.registerService(server, new RestVersion());
             RestHelper.registerService(server, res);
         }, new String[]{});

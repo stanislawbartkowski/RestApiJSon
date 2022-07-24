@@ -31,7 +31,6 @@ abstract public class TestHelper {
     protected static final String jdir6 = "src/test/resources/jdir6";
     protected static final String jdirresou = "src/test/resources/jresoudir";
     protected static final String jdir17 = "src/test/resources/jdir17";
-    protected static final String jdir18 = "src/test/resources/jdir18";
 
     private static final String testpar1 = "src/test/resources/testpar";
 

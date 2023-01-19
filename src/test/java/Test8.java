@@ -42,7 +42,7 @@ public class Test8 extends TestHelper {
         IRunPlugin irun = exec.getExecutor(j);
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         values.put("resource", new ParamValue(res));
-        return run.executeJson(j, Optional.empty(), values);
+        return run.executeJson(j, Optional.empty(), values,new HashMap<String,String>());
     }
 
     @Test

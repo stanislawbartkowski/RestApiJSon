@@ -1,0 +1,4 @@
+proc: PYTHON3
+output: STDOUT
+format: TEXT
+action: test20.py

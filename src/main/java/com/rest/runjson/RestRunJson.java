@@ -39,7 +39,7 @@ public class RestRunJson {
         this.executors = executors;
     }
 
-    public IReturnValue executeJson(IRestActionJSON j, Optional<File> uploaded, Map<String, ParamValue> values) throws RestError {
+    public IReturnValue executeJson(IRestActionJSON j, Optional<File> uploaded, Map<String, ParamValue> values, Map<String, String> reqparams) throws RestError {
 
         IRunPlugin irun = executors.getExecutor(j);
         IRunPlugin.RunResult res = new IRunPlugin.RunResult();
@@ -65,6 +65,9 @@ public class RestRunJson {
         }
         if (uploaded.isPresent()) {
             values.put(IRunPlugin.UPLOADEDFILE, new ParamValue(uploaded.get().toString()));
+        }
+        for (Map.Entry<String, String> e : reqparams.entrySet()) {
+            values.put(IRunPlugin.REQPARAM + e.getKey(), new ParamValue(e.getValue()));
         }
         irun.executeJSON(j, res, values);
 

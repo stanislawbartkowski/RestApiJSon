@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -147,7 +148,7 @@ abstract public class TestHelper {
         getrest();
         P(p.toString());
         IRestActionJSON j = readJSONAction(p);
-        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(), values);
+        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(), values, new HashMap<String,String>());
         return ires.StringValue();
     }
 

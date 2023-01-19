@@ -7,6 +7,8 @@ import org.junit.Assert;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.zip.ZipInputStream;
 
@@ -29,16 +31,29 @@ abstract public class TestRestHelper {
         System.out.println(s);
     }
 
-    protected int makecall(String path, String query, String method) throws IOException {
+    protected int makecall(String path, String query, String method, Map<String,String> props) throws IOException {
         URL url = new URL("http://" + HOST + ":" + PORT + path + (query != null ? "?" + query : ""));
         con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(method);
+        for (Map.Entry<String,String> m : props.entrySet()) {
+            con.setRequestProperty(m.getKey(),m.getValue());
+        }
         return con.getResponseCode();
     }
 
-    protected int makegetcall(String path, String query) throws IOException {
-        return makecall(path, query, "GET");
+    protected int makecall(String path, String query, String method) throws IOException {
+        return makecall(path,query,method,new HashMap<String,String>());
     }
+
+
+    protected int makegetcall(String path, String query,Map<String,String> props) throws IOException {
+        return makecall(path, query, "GET",props);
+    }
+
+    protected int makegetcall(String path, String query) throws IOException {
+        return makecall(path, query, "GET",new HashMap<String,String> ());
+    }
+
 
     protected int makegetcalluploadmeth(String path, String meth, String query, String input) throws IOException {
         URL url = new URL("http://" + HOST + ":" + PORT + path + (query != null ? "?" + query : ""));
@@ -140,13 +155,17 @@ abstract public class TestRestHelper {
         Assert.assertEquals(validdata, da.trim());
     }
 
-    protected String getok(String meth, String query) throws IOException {
-        int res = makegetcall(meth, query);
+    protected String getok(String meth, String query, Map<String,String> props) throws IOException {
+        int res = makegetcall(meth, query,props);
         P("Result: " + res);
         Assert.assertEquals(200, res);
         String da = getData();
         P(da);
         return da;
+    }
+
+    protected String getok(String meth, String query) throws IOException {
+        return getok(meth,query,new HashMap<String,String>());
     }
 
 

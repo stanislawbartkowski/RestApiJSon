@@ -19,6 +19,8 @@ public class ConstructRestConfig {
     private static final String MULTI = "multithread";
     private static final String MULTITRUE = "true";
 
+    private static final String REQPARAMS = "reqparams";
+
     private static final Set<String> allowedPlugins = new HashSet<String>();
 
     static {
@@ -73,6 +75,11 @@ public class ConstructRestConfig {
         @Override
         public Helper.ListPaths getJSonDirPaths() {
             return fparam;
+        }
+
+        @Override
+        public String getAllowedReqs() {
+            return prop.getProperty(REQPARAMS);
         }
     }
 

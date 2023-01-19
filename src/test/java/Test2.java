@@ -21,7 +21,7 @@ public class Test2 extends TestHelper {
         Path pp = getPath2(f);
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);
-        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(), values);
+        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(), values,new HashMap<String,String>());
         return ires.StringValue();
     }
 

@@ -17,6 +17,8 @@ public interface IRunPlugin {
     String UPLOADEDFILE = "UPLOADEDFILE";
     String PARAMACTION = "action";
 
+    String REQPARAM = "REQUEST_";
+
     class RunResult {
         public File tempfile;
         public String res;

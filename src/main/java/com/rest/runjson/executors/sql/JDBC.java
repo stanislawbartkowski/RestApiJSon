@@ -15,16 +15,33 @@ import java.sql.JDBCType;
 
 public class JDBC {
 
-    private static Connection conn;
+    private static Connection jconn;
 
-    public static void connect(String url, String user, String password) throws SQLException {
+    private static final int validtimeout = 5;
+
+    private static String url;
+    private static String user;
+    private static String password;
+
+    public static void setConnData(String url, String user, String password) {
+        JDBC.url = url;
+        JDBC.user = user;
+        JDBC.password = password;
+    }
+
+    public static void connect() throws SQLException {
         RestLogger.L.info("Connecting to " + url + " user " + user);
-        conn = DriverManager.getConnection(url, user, password);
+        jconn = DriverManager.getConnection(url, user, password);
         RestLogger.L.info("Connected");
     }
 
-    public static Connection getConnection() {
-        return conn;
+    public static Connection getConnection() throws SQLException {
+        if (! jconn.isValid(validtimeout)) {
+            String mess = String.format("Connection is invalid after waiting for %d sec. Reconnecting ",validtimeout);
+            RestLogger.L.info(mess);
+            connect();
+        }
+        return jconn;
     }
 
     private static JSONObject createRow(ResultSet res) throws SQLException {
@@ -62,7 +79,7 @@ public class JDBC {
     public static JSONArray runquery(String q, List<SQLParam> plist, Map<String, ParamValue> values, boolean updatequery) throws SQLException {
 
         RestLogger.L.info(q);
-        PreparedStatement prep = conn.prepareStatement(q);
+        PreparedStatement prep = getConnection().prepareStatement(q);
         for (SQLParam p : plist) {
             ParamValue v = values.get(p.getParam().getName());
             switch (p.getParam().getType()) {

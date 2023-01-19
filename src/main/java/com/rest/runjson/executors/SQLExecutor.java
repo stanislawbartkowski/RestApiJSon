@@ -45,7 +45,8 @@ public class SQLExecutor implements IRunPlugin {
         String user = Helper.getValue(conf.prop(), USER, true).get();
         String password = Helper.getValuePassword(conf.prop(), PASSWORD, true).get();
         try {
-            JDBC.connect(url, user, password);
+            JDBC.setConnData(url, user, password);
+            JDBC.connect();
         } catch (SQLException throwables) {
             String errmess = "Cannot connect " + url;
             Helper.throwException(errmess, throwables);

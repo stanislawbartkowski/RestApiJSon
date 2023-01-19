@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RestService extends RestHelper.RestServiceHelper {
 
@@ -27,6 +28,7 @@ public class RestService extends RestHelper.RestServiceHelper {
     private final IRestConfig iconfig;
     private final boolean corsallowed = true;
     private IRestActionJSON irest = null;
+    private Map<String,String> reqparams;
 
     private final List<String> httpMethods = Arrays.asList(RestHelper.GET, RestHelper.PUT, RestHelper.POST, RestHelper.DELETE);
 
@@ -80,6 +82,20 @@ public class RestService extends RestHelper.RestServiceHelper {
             if (in != null) {
                 in.modifPars(irest, path, par);
             }
+            // request params
+            reqparams = new HashMap<String,String>();
+            if (iconfig.getAllowedReqs() != null) {
+                Set<String> s = Arrays.stream(iconfig.getAllowedReqs().split(",")).collect(Collectors.toSet());
+                for (String key : httpExchange.getRequestHeaders().keySet()) {
+                    String k = key.toLowerCase();
+                    if (s.contains(k)) {
+                        List<String> li = httpExchange.getRequestHeaders().get(key);
+                        if (!li.isEmpty()) reqparams.put(k,li.get(0));
+                    }
+
+                }
+
+            }
             return par;
         } catch (RestError restError) {
             throw new IOException(restError.getMessage());
@@ -100,7 +116,7 @@ public class RestService extends RestHelper.RestServiceHelper {
                     fos.write(v.getRequestData().array());
                 }
             }
-            RestRunJson.IReturnValue ires = run.executeJson(irest, tempupload, v.getValues());
+            RestRunJson.IReturnValue ires = run.executeJson(irest, tempupload, v.getValues(),reqparams);
             if (tempupload.isPresent()) tempupload.get().delete();
             if (ires.secondPart() != null) {
                 produce2PartResponse(v, Optional.of(ires.StringValue()), Optional.of(ires.secondPart()), RestHelper.HTTPOK, Optional.empty());

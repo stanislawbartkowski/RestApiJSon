@@ -65,15 +65,16 @@ public class RestService extends RestHelper.RestServiceHelper {
         String meth = httpExchange.getRequestMethod();
         RestLogger.info(String.format("Rest method: %s HTTP method: %s ",name,meth));
         // OPTIONS - info only
+        Optional<String> headersAllowed = iconfig.getAllowedReqs() == null ? Optional.empty() : Optional.of(iconfig.getAllowedReqs());
         if (RestHelper.OPTIONS.equals(meth))
-            return new RestParams(meth, Optional.empty(), corsallowed, httpMethods, Optional.empty(), false);
+            return new RestParams(meth, Optional.empty(), corsallowed, httpMethods, headersAllowed, false);
         try {
             irest = restJSON.readJSONAction(iconfig.getJSonDirPaths(), name + "-" + meth.toLowerCase(), Optional.of(name));
 
             RestParams.CONTENT fo = mapf.get(irest.format());
             Optional<RestParams.CONTENT> out = fo == null ? Optional.empty() : Optional.of(fo);
 
-            RestParams par = new RestParams(irest.getMethod().toString(), out, corsallowed, httpMethods, Optional.empty(), irest.isUpload());
+            RestParams par = new RestParams(irest.getMethod().toString(), out, corsallowed, httpMethods, headersAllowed, irest.isUpload());
             irest.getParams().stream().forEach(s -> {
                 par.addParam(s.getName(), s.getType());
             });

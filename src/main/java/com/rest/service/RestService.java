@@ -51,7 +51,7 @@ public class RestService extends RestHelper.RestServiceHelper {
 
     @Inject
     public RestService(IRestConfig iconfig, IEnhancer in, RestActionJSON restJSON, RestRunJson run, Executors exec) {
-        super("", false);
+        super("");
         this.in = in;
         this.iconfig = iconfig;
         this.restJSON = restJSON;

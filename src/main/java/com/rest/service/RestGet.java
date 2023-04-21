@@ -20,7 +20,7 @@ public class RestGet  extends RestHelper.RestServiceHelper {
     private final String url;
 
     public RestGet(String url, String destdir) {
-        super(url, false);
+        super(url);
         this.destdir = destdir;
         this.url = url;
     }

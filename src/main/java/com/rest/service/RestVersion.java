@@ -16,7 +16,7 @@ import java.util.Optional;
 public class RestVersion extends RestHelper.RestServiceHelper {
 
     public RestVersion() {
-        super("restversion", false);
+        super("restversion");
     }
 
 

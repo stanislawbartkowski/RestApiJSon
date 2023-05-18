@@ -28,7 +28,8 @@ public interface IRestActionJSON {
         ZIP("ZIP"),
         JS("JS"),
         XML("XML"),
-        MIXED("MIXED");
+        MIXED("MIXED"),
+        MIXEDBINARY("MIXEDBINARY");
 
         private final String m;
 

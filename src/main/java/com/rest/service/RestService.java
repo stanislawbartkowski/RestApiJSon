@@ -47,6 +47,7 @@ public class RestService extends RestHelper.RestServiceHelper {
         mapf.put(IRestActionJSON.FORMAT.ZIP, RestParams.CONTENT.ZIP);
         mapf.put(IRestActionJSON.FORMAT.XML, RestParams.CONTENT.XML);
         mapf.put(IRestActionJSON.FORMAT.MIXED, RestParams.CONTENT.MIXED);
+        mapf.put(IRestActionJSON.FORMAT.MIXEDBINARY, RestParams.CONTENT.MIXED);
     }
 
     @Inject
@@ -125,6 +126,10 @@ public class RestService extends RestHelper.RestServiceHelper {
             if (tempupload.isPresent()) tempupload.get().delete();
             if (ires.secondPart() != null) {
                 produce2PartResponse(v, Optional.of(ires.StringValue()), Optional.of(ires.secondPart()), RestHelper.HTTPOK, Optional.empty());
+                return;
+            }
+            if (ires.secondBytePart() != null) {
+                produce2PartByteResponse(v, Optional.of(ires.StringValue()), Optional.of(ires.secondBytePart()), RestHelper.HTTPOK, Optional.empty());
                 return;
             }
             if (ires.ByteValue() != null) {

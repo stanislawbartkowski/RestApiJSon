@@ -26,6 +26,8 @@ public class RestRunJson {
 
         String secondPart();
 
+        byte[] secondBytePart();
+
     }
 
     final private IRestConfig rConfig;
@@ -50,7 +52,7 @@ public class RestRunJson {
         boolean tempfile = j.output() == IRestActionJSON.OUTPUT.TMPFILE;
         boolean json = j.format() == IRestActionJSON.FORMAT.JSON || j.format() == IRestActionJSON.FORMAT.MIXED;
         boolean zip = j.format() == IRestActionJSON.FORMAT.ZIP;
-        boolean contentfile = j.format() == IRestActionJSON.FORMAT.MIXED;
+        boolean contentfile = j.format() == IRestActionJSON.FORMAT.MIXED || j.format() == IRestActionJSON.FORMAT.MIXEDBINARY;
         if (zip && !tempfile) {
             String errmess = j.getJsonPath().toString() + " " + res.tempfile.toString() + " ZIP output requires temporary file setting";
             Helper.throwSevere(errmess);
@@ -91,6 +93,11 @@ public class RestRunJson {
                     public String secondPart() {
                         return null;
                     }
+
+                    @Override
+                    public byte[] secondBytePart() {
+                        return null;
+                    }
                 };
             } catch (IOException e) {
                 Helper.throwException(j.getJsonPath().toString() + " Error while reading output result", e);
@@ -106,7 +113,18 @@ public class RestRunJson {
         }
 
         if (contentfile) {
-            res.content = Helper.readTextFile(res.contenfile.toPath());
+            try {
+                if (j.format() == IRestActionJSON.FORMAT.MIXED) {
+                    res.content = Helper.readTextFile(res.contenfile.toPath());
+                    res.bytecontent = null;
+                }
+                if (j.format() == IRestActionJSON.FORMAT.MIXEDBINARY) {
+                    res.content = null;
+                    res.bytecontent = Files.readAllBytes(res.contenfile.toPath());
+                }
+            } catch (IOException e) {
+                Helper.throwException(res.contenfile.toString() + " Error while reading output result", e);
+            }
         }
 
         if (json) {
@@ -149,6 +167,11 @@ public class RestRunJson {
             @Override
             public String secondPart() {
                 return res.content;
+            }
+
+            @Override
+            public byte[] secondBytePart() {
+                return res.bytecontent;
             }
         };
     }

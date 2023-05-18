@@ -25,6 +25,7 @@ public interface IRunPlugin {
         public JSONObject json;
         public File contenfile;
         public String content;
+        public byte[] bytecontent;
     }
 
     default void modifPars(IRestActionJSON irest, String[] path, RestParams par) throws RestError {

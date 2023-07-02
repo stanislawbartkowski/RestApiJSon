@@ -13,7 +13,7 @@ def getconn():
     driverclass = os.environ["ENV_driverclass"]
     jdbcjar = os.environ["ENV_jdbcjar"]
 
-    #    return jaydebeapi.connect("com.ibm.db2.jcc.DB2Driver","jdbc:db2://thinkde:50000/sample",["db2inst1","secret123"],"/opt/ibm/db2/V11.5/java/db2jcc4.jar")
+    #    return jaydebeapi.connect("com.ibm.db2.jcc.DB2Driver","jdbc:db2://ubun:50000/sample",["db2inst1","secret123"],"/opt/ibm/db2/V11.5/java/db2jcc4.jar")
     return jaydebeapi.connect(driverclass, url, [user, password], jdbcjar)
 
 

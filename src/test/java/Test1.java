@@ -32,7 +32,7 @@ public class Test1 extends TestHelper {
 
     @Test
     public void test2() throws RestError {
-        Path p = getPath1("testdefa.json");
+        Path p = getPath1("testdefa");
         IRestActionJSON j = readJSONAction(p);
         assertEquals("Custom action", j.action());
         assertEquals(IRestActionJSON.PYTHON3, j.getProc());

@@ -50,6 +50,6 @@ public class GetResourceExecutor extends AbstractResourceDirExecutor {
         if (!isjson) {
             Optional<Path> resourceF = rootdirlist.getPath(resourcepath, Optional.empty());
             res.res = Helper.readTextFile(resourceF.get());
-        } else res.res = HelperJSon.readJS(rootdirlist, resourcepath).toString();
+        } else res.res = HelperJSon.readJS(rootdirlist, resourcepath, Helper.authLabel(values)).toString();
     }
 }

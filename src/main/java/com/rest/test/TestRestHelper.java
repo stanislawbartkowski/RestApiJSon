@@ -54,7 +54,6 @@ abstract public class TestRestHelper {
         return makecall(path, query, "GET",new HashMap<String,String> ());
     }
 
-
     protected int makegetcalluploadmeth(String path, String meth, String query, String input) throws IOException {
         URL url = new URL("http://" + HOST + ":" + PORT + path + (query != null ? "?" + query : ""));
         con = (HttpURLConnection) url.openConnection();
@@ -152,6 +151,11 @@ abstract public class TestRestHelper {
 
     protected void testok(String meth, String query, String validdata) throws IOException {
         String da = getok(meth, query);
+        Assert.assertEquals(validdata, da.trim());
+    }
+
+    protected void testok(String meth, String query, String validdata, Map<String,String> props) throws IOException {
+        String da = getok(meth, query, props);
         Assert.assertEquals(validdata, da.trim());
     }
 

@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.rest.restservice.PARAMTYPE;
 import com.rest.restservice.RestLogger;
 import com.rest.restservice.ParamValue;
+import com.rest.runjson.IRunPlugin;
 
 public class Helper {
 
@@ -173,5 +175,11 @@ public class Helper {
             Helper.throwException(errmess, ex);
             return null;
         }
+    }
+
+    public static Optional<String> authLabel(Map<String, ParamValue> values) {
+        ParamValue val = values.get(IRunPlugin.REQAUTHLABEL);
+        if (val == null || val.getStringvalue() == null) return Optional.empty();
+        return Optional.of(val.getStringvalue());
     }
 }

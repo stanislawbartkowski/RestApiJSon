@@ -351,7 +351,7 @@ public class RestActionJSON {
 //        String jsonstring = null;
 //        Path p = getFile(pin);
         //jsonstring = readTextFile(p);
-        Pair<JSONObject, Path> pa = HelperJSon.readJSP(rootp, pname, oname);
+        Pair<JSONObject, Path> pa = HelperJSon.readJSP(rootp, pname, oname, Optional.empty());
         JSONObject json = pa.getValue0();
         Path p = pa.getValue1();
         verifyAttributes(json, allowedKeys, additionalKeys, p);

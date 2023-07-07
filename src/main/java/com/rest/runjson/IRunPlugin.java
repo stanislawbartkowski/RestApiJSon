@@ -19,6 +19,8 @@ public interface IRunPlugin {
 
     String REQPARAM = "REQUEST_";
 
+    String REQAUTHLABEL = REQPARAM + "authlabel";
+
     class RunResult {
         public File tempfile;
         public String res;

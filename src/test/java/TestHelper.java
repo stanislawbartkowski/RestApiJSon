@@ -4,10 +4,7 @@ import com.rest.guice.ModuleBuild;
 import com.rest.guice.RestConfigFactory;
 import com.rest.guice.rest.RegisterExecutors;
 import com.rest.guice.rest.SetInjector;
-import com.rest.readjson.Helper;
-import com.rest.readjson.IRestActionJSON;
-import com.rest.readjson.RestActionJSON;
-import com.rest.readjson.RestError;
+import com.rest.readjson.*;
 import com.rest.restservice.ParamValue;
 import com.rest.runjson.IRunPlugin;
 import com.rest.runjson.RestRunJson;
@@ -32,6 +29,7 @@ abstract public class TestHelper {
     protected static final String jdir6 = "src/test/resources/jdir6";
     protected static final String jdirresou = "src/test/resources/jresoudir";
     protected static final String jdir17 = "src/test/resources/jdir17";
+    protected static final String jdir21 = "src/test/resources/jdir21";
 
     private static final String testpar1 = "src/test/resources/testpar";
 
@@ -70,6 +68,11 @@ abstract public class TestHelper {
         registerEmpty();
     }
 
+    protected JSONObject readJS(Helper.ListPaths files, String fname) throws RestError {
+        return HelperJSon.readJS(files, fname, Optional.empty());
+    }
+
+
     protected void initno() throws RestError {
         initnomore("testinit.properties");
     }
@@ -104,6 +107,10 @@ abstract public class TestHelper {
 
     Path getPath17(String j) {
         return Paths.get(jdir17, j);
+    }
+
+    Path getPath21(String j) {
+        return Paths.get(jdir21, j);
     }
 
     Path getPathPar(String j) {
@@ -148,7 +155,7 @@ abstract public class TestHelper {
         getrest();
         P(p.toString());
         IRestActionJSON j = readJSONAction(p);
-        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(), values, new HashMap<String,String>());
+        RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(), values, new HashMap<String, String>());
         return ires.StringValue();
     }
 

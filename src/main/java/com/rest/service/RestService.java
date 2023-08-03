@@ -98,7 +98,6 @@ public class RestService extends RestHelper.RestServiceHelper {
                             reqparams.put(k, reqparam);
                         }
                     }
-
                 }
 
             }

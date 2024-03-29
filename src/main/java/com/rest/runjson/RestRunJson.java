@@ -136,28 +136,31 @@ public class RestRunJson {
             }
         }
 
-        if (json) {
-            if (res.json == null) {
-                if (res.res == null) {
-                    String errmess = j.getJsonPath().toString() + " expected JSON result";
-                    Helper.throwSevere(errmess);
+        if (res.fileContent.isEmpty()) {
+            if (json) {
+                if (res.json == null) {
+                    if (res.res == null) {
+                        String errmess = j.getJsonPath().toString() + " expected JSON result";
+                        Helper.throwSevere(errmess);
+                    }
+                    JSONTokener tokener = new JSONTokener(res.res);
+                    try {
+                        res.json = new JSONObject(tokener);
+                    } catch (org.json.JSONException e) {
+                        Helper.throwException(res.res, e);
+                    }
                 }
-                JSONTokener tokener = new JSONTokener(res.res);
-                try {
-                    res.json = new JSONObject(tokener);
-                } catch (org.json.JSONException e) {
-                    Helper.throwException(res.res, e);
-                }
+                Optional<Pair<String, String>> orename = rConfig.getRenameRes();
+                if (orename.isPresent())
+                    ConvertRes.rename(res.json, orename.get().getValue0(), orename.get().getValue1());
+                res.res = res.json.toString();
             }
-            Optional<Pair<String, String>> orename = rConfig.getRenameRes();
-            if (orename.isPresent()) ConvertRes.rename(res.json, orename.get().getValue0(), orename.get().getValue1());
-            res.res = res.json.toString();
+            if (res.res == null) {
+                String errmess = j.getJsonPath().toString() + " expected " + j.format().toString() + " result";
+                Helper.throwSevere(errmess);
+            }
+            VerifyResult.verifyResult(res.res, j.format());
         }
-        if (res.res == null) {
-            String errmess = j.getJsonPath().toString() + " expected " + j.format().toString() + " result";
-            Helper.throwSevere(errmess);
-        }
-        VerifyResult.verifyResult(res.res, j.format());
         // clear the result
         //if (tempfile) res.tempfile.delete();
         if (contentfile) res.contenfile.delete();

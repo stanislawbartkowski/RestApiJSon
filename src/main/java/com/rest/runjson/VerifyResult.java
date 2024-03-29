@@ -27,6 +27,7 @@ class VerifyResult {
 
         // do not verify JSON - already verified
         switch (format) {
+/*
             case JS: {
                 ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
                 if (engine == null) {
@@ -40,6 +41,7 @@ class VerifyResult {
                 }
                 break;
             }
+ */
             case XML: {
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = null;

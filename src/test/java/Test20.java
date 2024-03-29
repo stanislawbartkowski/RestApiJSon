@@ -53,12 +53,11 @@ public class Test20 extends PTestRestHelper {
         Map<String, String> props = new HashMap<String, String>() {{
             put("uuid", "111111111");
             put("user", "perseus");
-            put("Authorization","Bearer xxxxxxxx" );
+            put("Authorization", "Bearer xxxxxxxx");
         }};
         String res = getok("/test1", null, props);
 
     }
-
 
 
     @Test
@@ -66,7 +65,7 @@ public class Test20 extends PTestRestHelper {
         Map<String, String> props = new HashMap<String, String>() {{
             put("uuid", "111111111");
             put("user", "perseus");
-            put("Authorization","Bearer " + token );
+            put("Authorization", "Bearer " + token);
         }};
         String res = getok("/test1", null, props);
 

@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 // -c src/test/resources/testpar/restpar18.properties -p 7999
 
 
-public class Test18 extends PTestRestHelper  {
+public class Test18 extends PTestRestHelper {
 
     @Test
     public void test1() throws IOException {

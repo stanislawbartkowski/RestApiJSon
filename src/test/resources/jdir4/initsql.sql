@@ -9,5 +9,5 @@ insert into test values(3);
 insert into test values(2);
 
 create table testm (name varchar(100));
-delete from testn
+delete from testm
 

@@ -36,8 +36,8 @@ public class JDBC {
     }
 
     public static Connection getConnection() throws SQLException {
-        if (! jconn.isValid(validtimeout)) {
-            String mess = String.format("Connection is invalid after waiting for %d sec. Reconnecting ",validtimeout);
+        if (!jconn.isValid(validtimeout)) {
+            String mess = String.format("Connection is invalid after waiting for %d sec. Reconnecting ", validtimeout);
             RestLogger.L.info(mess);
             connect();
         }

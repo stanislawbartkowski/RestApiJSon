@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
 import org.yaml.snakeyaml.util.UriEncoder;
 
 public class RestService extends RestHelper.RestServiceHelper {
@@ -121,7 +122,11 @@ public class RestService extends RestHelper.RestServiceHelper {
                     fos.write(v.getRequestData().array());
                 }
             }
+            long start = System.currentTimeMillis();
             RestRunJson.IReturnValue ires = run.executeJson(irest, tempupload, v.getValues(), reqparams);
+            long finish = System.currentTimeMillis();
+            RestLogger.info(String.format("Execution time %.3g sec", (float) (finish - start) / 1000));
+
             if (tempupload.isPresent()) tempupload.get().delete();
             if (ires.secondPart() != null) {
                 produce2PartResponse(v, Optional.of(ires.StringValue()), Optional.of(ires.secondPart()), RestHelper.HTTPOK, Optional.empty());
@@ -129,6 +134,10 @@ public class RestService extends RestHelper.RestServiceHelper {
             }
             if (ires.secondBytePart() != null) {
                 produce2PartByteResponse(v, Optional.of(ires.StringValue()), Optional.of(ires.secondBytePart()), RestHelper.HTTPOK, Optional.empty());
+                return;
+            }
+            if (ires.fileValue().isPresent()) {
+                produceResponseFromFile(v, ires.fileValue().get(), true, RestHelper.HTTPOK, Optional.empty());
                 return;
             }
             if (ires.ByteValue() != null) {

@@ -9,6 +9,7 @@ import com.rest.restservice.ParamValue;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Optional;
 
 public interface IRunPlugin {
 
@@ -28,6 +29,8 @@ public interface IRunPlugin {
         public File contenfile;
         public String content;
         public byte[] bytecontent;
+
+        public Optional<File> fileContent = Optional.empty();
     }
 
     default void modifPars(IRestActionJSON irest, String[] path, RestParams par) throws RestError {

@@ -8,131 +8,131 @@ metadata:
     tags: java
 objects:
 
-- apiVersion: image.openshift.io/v1
-  kind: ImageStream
-  metadata:
-    annotations:
-    labels:
-      app: restapijdbc
-    name: restapijdbc
-  spec:
-    lookupPolicy:
-      local: false
-    tags:
-    - annotations:
-        openshift.io/imported-from: quay.io/stanislawbartkowski/restapijdbc
-      from:
-        kind: DockerImage
-        name: quay.io/stanislawbartkowski/restapijdbc
-      generation: 2
-      importPolicy: {}
-      name: latest
-      referencePolicy:
-        type: Source
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      annotations:
+      labels:
+        app: restapijdbc
+      name: restapijdbc
+    spec:
+      lookupPolicy:
+        local: false
+      tags:
+        - annotations:
+            openshift.io/imported-from: quay.io/stanislawbartkowski/restapijdbc
+          from:
+            kind: DockerImage
+            name: quay.io/stanislawbartkowski/restapijdbc
+          generation: 2
+          importPolicy: { }
+          name: latest
+          referencePolicy:
+            type: Source
 
-- apiVersion: v1
-  kind: Secret
-  data:
-    PASSWORD: ${PASSWORD}
-    USER: ${USER}
-  metadata:
-    name: mysql
-  type: Opaque
+  - apiVersion: v1
+    kind: Secret
+    data:
+      PASSWORD: ${PASSWORD}
+      USER: ${USER}
+    metadata:
+      name: mysql
+    type: Opaque
 
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    name: restapijdbc
-  spec:
-    storageClassName: managed-nfs-storage  
-    accessModes:
-      - ReadWriteMany
-    resources:
-      requests:
-        storage: 1Mi          
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: restapijdbc
+    spec:
+      storageClassName: managed-nfs-storage
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 1Mi
 
-- apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    name: restapijdbc
-  spec:
-    selector:
-      matchLabels:
-        deployment: restapijdbc
-    template:
-      metadata:
-        annotations:
-          openshift.io/generated-by: OpenShiftNewApp
-        creationTimestamp: null
-        labels:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: restapijdbc
+    spec:
+      selector:
+        matchLabels:
           deployment: restapijdbc
-      spec:
-        containers:
-        - env:
-          - name: DB
-            value: ${DB}
-          - name: URL
-            value: ${URL}
-          - name: PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: PASSWORD
-                name: mysql
-          - name: USER
-            valueFrom:
-              secretKeyRef:
-                key: USER
-                name: mysql
-          image: quay.io/stanislawbartkowski/restapijdbc@sha256:6ce230341af0cab844006dd4c35d1a6ca5e3aeddd3219bd85015072eb7917d73
+      template:
+        metadata:
+          annotations:
+            openshift.io/generated-by: OpenShiftNewApp
+          creationTimestamp: null
+          labels:
+            deployment: restapijdbc
+        spec:
+          containers:
+            - env:
+                - name: DB
+                  value: ${DB}
+                - name: URL
+                  value: ${URL}
+                - name: PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: PASSWORD
+                      name: mysql
+                - name: USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: USER
+                      name: mysql
+              image: quay.io/stanislawbartkowski/restapijdbc@sha256:6ce230341af0cab844006dd4c35d1a6ca5e3aeddd3219bd85015072eb7917d73
+              name: restapijdbc
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              volumeMounts:
+                - mountPath: /var/resources
+                  name: restapijdbc-volume-1
+          volumes:
+            - name: restapijdbc-volume-1
+              persistentVolumeClaim:
+                claimName: restapijdbc
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: restapijdbcn
+    spec:
+      type: NodePort
+      ports:
+        - port: 8080
+          name: restapijdbcn
+      selector:
+        deployment: restapijdbc
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: restapijdbc
+    spec:
+      ports:
+        - port: 8080
           name: restapijdbc
-          ports:
-          - containerPort: 8080
-            protocol: TCP
-          volumeMounts:
-          - mountPath: /var/resources
-            name: restapijdbc-volume-1
-        volumes:
-        - name: restapijdbc-volume-1
-          persistentVolumeClaim:
-            claimName: restapijdbc
-
-- apiVersion: v1
-  kind: Service
-  metadata:
-    name: restapijdbcn
-  spec:
-    type: NodePort
-    ports:
-      - port: 8080
-        name: restapijdbcn
-    selector:
-      deployment: restapijdbc
-
-- apiVersion: v1
-  kind: Service
-  metadata:
-    name: restapijdbc
-  spec:
-    ports:
-      - port: 8080
-        name: restapijdbc
-    selector:
-      deployment: restapijdbc
+      selector:
+        deployment: restapijdbc
 
 parameters:
-- name: URL
-  displayName: URL string
-  description: Database access URL string
-  required: true
-- name: DB
-  displayName: Database type
-  description: Values allowed, db2, postgres or mysql
-  required: true
-- name: USER
-  displayName: Database user name
-  description: User to access the database
-  required: true
-- name: PASSWORD
-  displayName: Database Password
-  description: Password to access the database
-  required: true
+  - name: URL
+    displayName: URL string
+    description: Database access URL string
+    required: true
+  - name: DB
+    displayName: Database type
+    description: Values allowed, db2, postgres or mysql
+    required: true
+  - name: USER
+    displayName: Database user name
+    description: User to access the database
+    required: true
+  - name: PASSWORD
+    displayName: Database Password
+    description: Password to access the database
+    required: true

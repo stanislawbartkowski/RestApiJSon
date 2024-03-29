@@ -24,6 +24,18 @@ public class Test6 extends PTestRestHelper {
         assertEquals("Hello, I'm uploaded", s);
 
     }
+    @Test
+    public void test2() throws IOException {
+        P("Upload file");
+        String i = "src/test/resources/jdir5/inpututf8.txt";
+        int res = makegetcallupload("/testshell1", null, i);
+        P("Result: " + res);
+        Assert.assertEquals(200, res);
+        String s = getData();
+        P(s);
+        assertEquals("Zażółcona łączka", s);
+
+    }
 
 }
 

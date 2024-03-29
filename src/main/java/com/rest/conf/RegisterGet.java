@@ -11,21 +11,20 @@ public class RegisterGet {
 
     }
 
-    private static final String GET="get";
+    private static final String GET = "get";
 
-    public static void  RegisterGetService(IRestConfig i, HttpServer server) {
-        i.prop().forEach((key,value) -> {
+    public static void RegisterGetService(IRestConfig i, HttpServer server) {
+        i.prop().forEach((key, value) -> {
             String k = key.toString();
             if (k.startsWith(GET)) {
                 String v = value.toString();
                 String elem[] = v.split(":");
                 if (elem.length != 2) {
-                    RestLogger.L.severe(String.format("%s %s - key value should contain 2 parts separated by :, found %d", k,v,elem.length));
-                }
-                else {
+                    RestLogger.L.severe(String.format("%s %s - key value should contain 2 parts separated by :, found %d", k, v, elem.length));
+                } else {
                     String dest = elem[0].strip();
                     String paths[] = elem[1].split(",");
-                    for (String url : paths) RestHelper.registerService(server,new RestGet(url.strip(),dest));
+                    for (String url : paths) RestHelper.registerService(server, new RestGet(url.strip(), dest));
                 }
             }
         });

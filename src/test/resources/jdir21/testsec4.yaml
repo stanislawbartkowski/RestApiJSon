@@ -1,6 +1,6 @@
 res:
-  - a : 1
+  - a: 1
   - a:
-    - b: 1
-    - b: 2
-      authlabel: admin
+      - b: 1
+      - b: 2
+        authlabel: admin

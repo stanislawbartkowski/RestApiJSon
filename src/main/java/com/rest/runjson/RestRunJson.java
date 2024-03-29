@@ -28,6 +28,8 @@ public class RestRunJson {
 
         byte[] secondBytePart();
 
+        Optional<File> fileValue();
+
     }
 
     final private IRestConfig rConfig;
@@ -98,6 +100,11 @@ public class RestRunJson {
                     public byte[] secondBytePart() {
                         return null;
                     }
+
+                    @Override
+                    public Optional<File> fileValue() {
+                        return Optional.empty();
+                    }
                 };
             } catch (IOException e) {
                 Helper.throwException(j.getJsonPath().toString() + " Error while reading output result", e);
@@ -105,11 +112,13 @@ public class RestRunJson {
         }
 
         if (tempfile) {
-            res.res = Helper.readTextFile(res.tempfile.toPath());
-            if (res.res.equals("")) {
+            //res.res = Helper.readTextFile(res.tempfile.toPath());
+            if (res.tempfile.length() == 0) {
                 String errmess = j.getJsonPath().toString() + " " + res.tempfile.toString() + " Expected result in temporary file but the file is empty";
+                res.tempfile.delete();
                 Helper.throwSevere(errmess);
             }
+            res.fileContent = Optional.of(res.tempfile);
         }
 
         if (contentfile) {
@@ -150,7 +159,7 @@ public class RestRunJson {
         }
         VerifyResult.verifyResult(res.res, j.format());
         // clear the result
-        if (tempfile) res.tempfile.delete();
+        //if (tempfile) res.tempfile.delete();
         if (contentfile) res.contenfile.delete();
         // convert all to string
         return new IReturnValue() {
@@ -172,6 +181,11 @@ public class RestRunJson {
             @Override
             public byte[] secondBytePart() {
                 return res.bytecontent;
+            }
+
+            @Override
+            public Optional<File> fileValue() {
+                return res.fileContent;
             }
         };
     }

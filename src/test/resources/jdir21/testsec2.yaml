@@ -1,4 +1,4 @@
 res:
-- a : 1
-  authlabel: admin
-- a: 2
+  - a: 1
+    authlabel: admin
+  - a: 2

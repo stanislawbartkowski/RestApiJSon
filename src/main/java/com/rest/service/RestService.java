@@ -3,6 +3,7 @@ package com.rest.service;
 import com.google.inject.Inject;
 import com.rest.conf.Executors;
 import com.rest.conf.IRestConfig;
+import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestActionJSON;
 import com.rest.readjson.RestError;
@@ -128,12 +129,12 @@ public class RestService extends RestHelper.RestServiceHelper {
             RestLogger.info(String.format("Execution time %.3g sec", (float) (finish - start) / 1000));
 
             if (tempupload.isPresent()) tempupload.get().delete();
-            if (ires.secondPart() != null) {
-                produce2PartResponse(v, Optional.of(ires.StringValue()), Optional.of(ires.secondPart()), RestHelper.HTTPOK, Optional.empty());
-                return;
-            }
-            if (ires.secondBytePart() != null) {
-                produce2PartByteResponse(v, Optional.of(ires.StringValue()), Optional.of(ires.secondBytePart()), RestHelper.HTTPOK, Optional.empty());
+            if ((ires.secondPart() != null) || (ires.secondBytePart() != null)) {
+                String res = ires.fileValue().isPresent() ? Helper.readTextFile(ires.fileValue().get().toPath()) : ires.StringValue();
+                if (ires.secondBytePart() != null)
+                    produce2PartResponse(v, Optional.of(res), Optional.of(ires.secondPart()), RestHelper.HTTPOK, Optional.empty());
+                if (ires.secondBytePart() != null)
+                    produce2PartByteResponse(v, Optional.of(res), Optional.of(ires.secondBytePart()), RestHelper.HTTPOK, Optional.empty());
                 return;
             }
             if (ires.fileValue().isPresent()) {

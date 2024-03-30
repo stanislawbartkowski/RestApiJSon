@@ -131,7 +131,8 @@ public class RestService extends RestHelper.RestServiceHelper {
             if (tempupload.isPresent()) tempupload.get().delete();
             if ((ires.secondPart() != null) || (ires.secondBytePart() != null)) {
                 String res = ires.fileValue().isPresent() ? Helper.readTextFile(ires.fileValue().get().toPath()) : ires.StringValue();
-                if (ires.secondBytePart() != null)
+                if (ires.fileValue().isPresent()) ires.fileValue().get().delete();
+                if (ires.secondPart() != null)
                     produce2PartResponse(v, Optional.of(res), Optional.of(ires.secondPart()), RestHelper.HTTPOK, Optional.empty());
                 if (ires.secondBytePart() != null)
                     produce2PartByteResponse(v, Optional.of(res), Optional.of(ires.secondBytePart()), RestHelper.HTTPOK, Optional.empty());

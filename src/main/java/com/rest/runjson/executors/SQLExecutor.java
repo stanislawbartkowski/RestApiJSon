@@ -13,6 +13,9 @@ import com.rest.runjson.executors.sql.SQLParam;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,13 +65,15 @@ public class SQLExecutor implements IRunPlugin {
         for (IRestActionJSON.IRestParam re : j.getParams()) sqlp.add(new SQLParam(i++, re));
         JSONArray a = null;
         try {
-            a = JDBC.runquery(j.action(), sqlp, values, j.updateQuery());
-        } catch (SQLException throwables) {
+            try  (BufferedWriter writer = new BufferedWriter(new FileWriter(res.tempfile))) {
+                a =JDBC.runquery(j.action(),sqlp,values,j.updateQuery(), writer);
+            }
+        } catch (SQLException | IOException throwables) {
             String errmess = "Cannot execute " + j.action();
             Helper.throwException(errmess, throwables);
         }
-        res.json = new JSONObject();
+        //res.json = new JSONObject();
         // add res only for query statements
-        if (!j.updateQuery()) res.json.put("res", a);
+        //if (!j.updateQuery()) res.json.put("res", a);
     }
 }

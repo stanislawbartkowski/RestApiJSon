@@ -51,7 +51,7 @@ public class RestRunJson {
         res.res = null;
         res.json = null;
         res.content = null;
-        boolean tempfile = j.output() == IRestActionJSON.OUTPUT.TMPFILE;
+        boolean tempfile = (j.output() == IRestActionJSON.OUTPUT.TMPFILE || j.getProc().equals(IRestActionJSON.SQL));
         boolean json = j.format() == IRestActionJSON.FORMAT.JSON || j.format() == IRestActionJSON.FORMAT.MIXED;
         boolean zip = j.format() == IRestActionJSON.FORMAT.ZIP;
         boolean contentfile = j.format() == IRestActionJSON.FORMAT.MIXED || j.format() == IRestActionJSON.FORMAT.MIXEDBINARY;

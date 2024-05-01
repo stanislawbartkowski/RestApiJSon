@@ -14,6 +14,7 @@ public class Test4 extends TestHelper {
         return super.runJSON("testpar4.properties", getPath4(f), values);
     }
 
+
     @Test
     public void test1() throws RestError {
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();

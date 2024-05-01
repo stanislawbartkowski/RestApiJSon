@@ -3,6 +3,9 @@ package com.rest.runjson.executors.sql;
 import com.rest.restservice.ParamValue;
 import com.rest.restservice.RestLogger;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
@@ -76,10 +79,18 @@ public class JDBC {
         return j;
     }
 
-    public static JSONArray runquery(String q, List<SQLParam> plist, Map<String, ParamValue> values, boolean updatequery) throws SQLException {
+    private static void writebegarray(BufferedWriter writer) throws IOException {
+        writer.write("\"res\" : [");
+    }
+
+    public static JSONArray runquery(String q, List<SQLParam> plist, Map<String, ParamValue> values, boolean updatequery, BufferedWriter writer) throws SQLException, IOException {
 
         RestLogger.L.info(q);
         PreparedStatement prep = getConnection().prepareStatement(q);
+        // start JSON
+        writer.write("{");
+        writer.newLine();
+        boolean startjson = true;
         for (SQLParam p : plist) {
             ParamValue v = values.get(p.getParam().getName());
             switch (p.getParam().getType()) {
@@ -112,10 +123,28 @@ public class JDBC {
 
             while (res.next()) {
                 JSONObject row = createRow(res);
-                ja.put(row);
+                //ja.put(row);
+                if (!startjson) {
+                    writer.write(",");
+                } else {
+                    writebegarray(writer);
+                }
+                writer.newLine();
+                writer.write(row.toString());
+                startjson = false;
+                //writer.newLine();
             }
         }
 
+        // end JSON
+        writer.newLine();
+        if (!updatequery) {
+            // if not started empty result array
+            if (startjson) writebegarray(writer);
+            writer.write("]");
+        }
+        writer.write("}");
+        writer.newLine();
         return ja;
     }
 

@@ -156,6 +156,10 @@ abstract public class TestHelper {
         P(p.toString());
         IRestActionJSON j = readJSONAction(p);
         RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(), values, new HashMap<String, String>());
+        if (ires.StringValue() == null && ires.fileValue().isPresent()) {
+            String s = Helper.readTextFile(ires.fileValue().get().toPath());
+            return s;
+        }
         return ires.StringValue();
     }
 

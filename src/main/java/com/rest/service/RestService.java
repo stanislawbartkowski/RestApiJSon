@@ -1,6 +1,7 @@
 package com.rest.service;
 
 import com.google.inject.Inject;
+import com.rest.auth.IVerifyToken;
 import com.rest.conf.Executors;
 import com.rest.conf.IRestConfig;
 import com.rest.readjson.Helper;
@@ -39,6 +40,7 @@ public class RestService extends RestHelper.RestServiceHelper {
     private final RestRunJson run;
     private final RestActionJSON restJSON;
     final private Executors exec;
+    final private IVerifyToken verifyToken;
 
     final private static Map<IRestActionJSON.FORMAT, RestParams.CONTENT> mapf = new HashMap<IRestActionJSON.FORMAT, RestParams.CONTENT>();
 
@@ -53,17 +55,23 @@ public class RestService extends RestHelper.RestServiceHelper {
     }
 
     @Inject
-    public RestService(IRestConfig iconfig, IEnhancer in, RestActionJSON restJSON, RestRunJson run, Executors exec) {
+    public RestService(IRestConfig iconfig, IEnhancer in, RestActionJSON restJSON, RestRunJson run, Executors exec, IVerifyToken verifyToken) {
         super("");
         this.in = in;
         this.iconfig = iconfig;
         this.restJSON = restJSON;
         this.run = run;
         this.exec = exec;
+        this.verifyToken = verifyToken;
     }
 
     @Override
     public RestParams getParams(HttpExchange httpExchange) throws IOException {
+
+        if (!verifyToken.verifyToken(httpExchange.getRequestHeaders())) {
+            String mess = "Not authorized";
+            throw new IOException(mess);
+        }
         String[] path = getPath(httpExchange);
         String name = Arrays.stream(path).reduce(null, (s, e) -> s == null ? e : s + "/" + e);
         String meth = httpExchange.getRequestMethod();

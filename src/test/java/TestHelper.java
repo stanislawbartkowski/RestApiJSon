@@ -1,3 +1,5 @@
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.rest.conf.Executors;
 import com.rest.conf.IRestConfig;
 import com.rest.guice.ModuleBuild;
@@ -11,13 +13,17 @@ import com.rest.runjson.RestRunJson;
 import org.javatuples.Pair;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.keycloak.authorization.client.AuthzClient;
+import org.keycloak.authorization.client.Configuration;
+import org.keycloak.authorization.client.representation.TokenIntrospectionResponse;
+import org.keycloak.representations.idm.authorization.AuthorizationRequest;
+import org.keycloak.representations.idm.authorization.AuthorizationResponse;
+import org.keycloak.representations.idm.authorization.Permission;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 abstract public class TestHelper {
 
@@ -162,5 +168,6 @@ abstract public class TestHelper {
         }
         return ires.StringValue();
     }
+
 
 }

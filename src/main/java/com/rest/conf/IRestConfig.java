@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface IRestConfig {
 
-    String VERSION = "RestAPIJSON version 1.7 (r:0) 2024/05/01";
+    String VERSION = "RestAPIJSON version 1.7 (r:1) 2024/05/04";
 
     Optional<Pair<String, String>> getRenameRes();
 
@@ -25,4 +25,13 @@ public interface IRestConfig {
 
     String getAllowedReqs();
 
+    String getAuthUrl();
+
+    String getAuthRealm();
+
+    String getAuthClientId();
+
+    default boolean isSecured() {
+        return getAuthUrl() != null;
+    }
 }

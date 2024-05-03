@@ -2,6 +2,8 @@ package com.rest.guice;
 
 import com.google.inject.*;
 import com.google.inject.name.Names;
+import com.rest.auth.IVerifyToken;
+import com.rest.auth.VerifyToken;
 import com.rest.conf.ConstructRestConfig;
 import com.rest.conf.Executors;
 import com.rest.conf.IRestConfig;
@@ -31,6 +33,7 @@ public abstract class AbstractCommonModule extends AbstractModule {
         bind(IRunPlugin.class).annotatedWith(Names.named(IRestActionJSON.RESOURCEDIR))
                 .to(GetResourceDirExecutor.class).in(Scopes.SINGLETON);
         bind(RestRunJson.class).in(Scopes.SINGLETON);
+        bind(IVerifyToken.class).to(VerifyToken.class).in(Scopes.SINGLETON);
 
         bind(RestMainHelper.class).in(Singleton.class);
     }

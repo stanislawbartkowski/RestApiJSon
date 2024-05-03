@@ -21,6 +21,10 @@ public class ConstructRestConfig {
 
     private static final String REQPARAMS = "reqparams";
 
+    private static final String AUTHURL = "authurl";
+    private static final String AUTHREALM = "authrealm";
+    private static final String AUTHCLIENTID = "clientid";
+
     private static final Set<String> allowedPlugins = new HashSet<String>();
 
     static {
@@ -81,6 +85,21 @@ public class ConstructRestConfig {
         public String getAllowedReqs() {
             return prop.getProperty(REQPARAMS);
         }
+
+        @Override
+        public String getAuthUrl() {
+            return prop.getProperty(AUTHURL);
+        }
+
+        @Override
+        public String getAuthRealm() {
+            return prop.getProperty(AUTHREALM);
+        }
+
+        @Override
+        public String getAuthClientId() {
+            return prop.getProperty(AUTHCLIENTID);
+        }
     }
 
     private Set<String> readListOfPlugins(Properties pro) throws RestError {
@@ -134,6 +153,16 @@ public class ConstructRestConfig {
         Optional<String> multi = Helper.getValue(pro, MULTI, false);
         if (multi.isPresent() && multi.get().equals("true")) RestLogger.info("Multi-thread enabled");
         else RestLogger.info("Single thread");
+
+        if (pro.getProperty(AUTHURL) != null) {
+            String mess = String.format("Keycloak server %s - security enabled",pro.getProperty(AUTHURL));
+            RestLogger.info(mess);
+            Helper.getValue(pro,AUTHREALM,true);
+            Helper.getValue(pro, AUTHCLIENTID, true);
+        } else {
+            String mess = String.format("Parameter %s not defined, security disabled",AUTHURL);
+            RestLogger.info(mess);
+        }
 
         return new RestConfig(pro, readListOfPlugins(pro), getRename(pro.getProperty(RENAME)));
     }

@@ -87,7 +87,9 @@ public class KeycloakAuth {
     public static void verifyToken(String token, PublicKey publicKey, String clientId) throws VerificationException {
 
         TokenVerifier<AccessToken> vtoken = TokenVerifier.create(token, AccessToken.class);
-        vtoken.audience(clientId);
+        // 2024/05/03 - remove audience checking
+        // TODO: future
+        //vtoken.audience(clientId);
         vtoken.publicKey(publicKey);
         vtoken.verify();
     }

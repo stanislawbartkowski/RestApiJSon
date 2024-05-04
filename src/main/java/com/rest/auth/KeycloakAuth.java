@@ -56,11 +56,19 @@ public class KeycloakAuth {
         return Optional.of(o);
     }
 
+    private static void tokenInfo(DecodedJWT jwt) {
+        String mess = String.format("id: %s, keyid: %s audience: %s algo: %s",jwt.getId(), jwt.getKeyId(), jwt.getAudience(), jwt.getAlgorithm());
+        RestLogger.info(mess);
+        mess = String.format("Issuer %s at: %s expires: %s",jwt.getIssuer(), jwt.getIssuedAt(),jwt.getExpiresAt() );
+        RestLogger.info(mess);
+    }
+
     public static Optional<PublicKey> getPublicKeyForToken(String keycloakurl, String realm, String token) throws JWTDecodeException, NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 
         Optional<JSONObject> pubkey = getKeycloakPublicKey(keycloakurl, realm);
         if (pubkey.isEmpty()) return Optional.empty();
         DecodedJWT jwt = JWT.decode(token);
+        tokenInfo(jwt);
         String id = jwt.getKeyId();
         JSONObject p = pubkey.get();
         JSONArray a = p.getJSONArray("keys");

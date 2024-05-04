@@ -31,6 +31,14 @@ public class VerifyToken implements IVerifyToken {
     @Override
     public boolean verifyToken(Headers headers) {
         if (!iConfig.isSecured()) return true;
+
+        System.out.println("-------------");
+        for (String s : headers.keySet()) {
+            System.out.println(s);
+            System.out.println(headers.get(s));
+        }
+        System.out.println("-------------");
+
         List<String> li = headers.get(AUTHORIZATION);
         if (li == null || li.size() == 0) {
             String mess = String.format("%s param not found in the request header", AUTHORIZATION);

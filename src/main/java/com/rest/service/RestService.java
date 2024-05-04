@@ -68,10 +68,6 @@ public class RestService extends RestHelper.RestServiceHelper {
     @Override
     public RestParams getParams(HttpExchange httpExchange) throws IOException {
 
-        if (!verifyToken.verifyToken(httpExchange.getRequestHeaders())) {
-            String mess = "Not authorized";
-            throw new IOException(mess);
-        }
         String[] path = getPath(httpExchange);
         String name = Arrays.stream(path).reduce(null, (s, e) -> s == null ? e : s + "/" + e);
         String meth = httpExchange.getRequestMethod();
@@ -80,6 +76,13 @@ public class RestService extends RestHelper.RestServiceHelper {
         Optional<String> headersAllowed = iconfig.getAllowedReqs() == null ? Optional.empty() : Optional.of(iconfig.getAllowedReqs());
         if (RestHelper.OPTIONS.equals(meth))
             return new RestParams(meth, Optional.empty(), corsallowed, httpMethods, headersAllowed, false);
+
+        // after OPTIONS
+        if (!verifyToken.verifyToken(httpExchange.getRequestHeaders())) {
+            String mess = "Not authorized";
+            throw new IOException(mess);
+        }
+
         try {
             irest = restJSON.readJSONAction(iconfig.getJSonDirPaths(), name + "-" + meth.toLowerCase(), Optional.of(name));
 

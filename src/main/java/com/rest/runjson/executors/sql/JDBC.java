@@ -59,6 +59,7 @@ public class JDBC {
                     j.put(colname, in);
                     break;
                 case DECIMAL:
+                case NUMERIC:
                     BigDecimal d = res.getBigDecimal(i);
                     j.put(colname, d);
                     break;

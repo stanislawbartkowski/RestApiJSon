@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface IRestConfig {
 
-    String VERSION = "RestAPIJSON version 1.7 (r:1) 2024/05/04";
+    String VERSION = "RestAPIJSON version 1.7 (r:2) 2024/07/05";
 
     Optional<Pair<String, String>> getRenameRes();
 

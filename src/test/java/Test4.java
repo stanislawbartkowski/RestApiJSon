@@ -2,16 +2,18 @@ import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Test;
+import org.testng.annotations.Ignore;
+import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
+@Ignore("Requires PostgreSQL")
 public class Test4 extends TestHelper {
 
     private String runJSON(String f, Map<String, ParamValue> values) throws RestError {
@@ -26,7 +28,7 @@ public class Test4 extends TestHelper {
         P(res);
         JSONArray a = getA(res);
         P(a.toString());
-        assertEquals(4, a.length());
+        assertEquals(a.length(), 4);
     }
 
     @Test
@@ -37,7 +39,7 @@ public class Test4 extends TestHelper {
         P(res);
         JSONArray a = getA(res);
         P(a.toString());
-        assertEquals(1, a.length());
+        assertEquals(a.length(), 1);
     }
 
     @Test
@@ -48,7 +50,7 @@ public class Test4 extends TestHelper {
         P(res);
         JSONArray a = getA(res);
         P(a.toString());
-        assertEquals(2, a.length());
+        assertEquals(a.length(), 2);
     }
 
     @Test

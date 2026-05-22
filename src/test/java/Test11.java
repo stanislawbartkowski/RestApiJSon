@@ -1,15 +1,17 @@
 import com.rest.readjson.RestError;
 import org.json.JSONArray;
-import org.junit.Test;
+import org.testng.annotations.Ignore;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 // -c src/test/resources/testpar/restpar11.properties -p 7999
 // CREATE TABLE RESTTEST (ID INT, NAME VARCHAR(100));
 
+@Ignore("Requires PostgreSQL")
 public class Test11 extends PTestRestHelper {
 
     @Test
@@ -17,7 +19,7 @@ public class Test11 extends PTestRestHelper {
         P("Test na wywołanie python");
         JSONArray a = testoka("/getdata", null);
         a.forEach(System.out::println);
-        assertEquals(1, a.length());
+        assertEquals(a.length(), 1);
     }
 
     private void checktable(boolean empty) throws RestError, IOException {
@@ -36,7 +38,7 @@ public class Test11 extends PTestRestHelper {
         P("Test na wywołanie post data python");
         int res = makegetcallupload("/jdbcdata", null, addpath);
         System.out.println(res);
-        assertEquals(200, res);
+        assertEquals(res, 200);
         String s = getData();
         P(s);
         checktable(false);
@@ -47,7 +49,7 @@ public class Test11 extends PTestRestHelper {
         P("Test na wywołanie put change");
         int res = makegetcalluploadmeth("/jdbcdata", "PUT", null, changepath);
         System.out.println(res);
-        assertEquals(200, res);
+        assertEquals(res, 200);
         String s = getData();
         P(s);
         checktable(false);
@@ -58,11 +60,11 @@ public class Test11 extends PTestRestHelper {
         P("metoda delete");
         int res = makecall("/jdbcdata", "id=11", "DELETE");
         System.out.println(res);
-        assertEquals(200, res);
+        assertEquals(res, 200);
         String s = getData();
         P(s);
         // make sure that json is empty, does not contain 'res' property
-        assertEquals("{}", s);
+        assertEquals(s, "{}");
         checktable(true);
     }
 }

@@ -1,11 +1,12 @@
 
 import com.rest.guice.rest.RegisterExecutors;
 
+import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
 import com.rest.runjson.RestRunJson;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-import static org.junit.Assert.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 public class Test3 extends TestHelper {
 
@@ -25,6 +26,9 @@ public class Test3 extends TestHelper {
         P(pp.toString());
         IRestActionJSON j = readJSONAction(pp);
         RestRunJson.IReturnValue ires = run.executeJson(j, Optional.empty(), values, new HashMap<String, String>());
+        if (ires.fileValue().isPresent()) {
+            return Helper.readTextFile(ires.fileValue().get().toPath());
+        }
         return ires.StringValue();
     }
 
@@ -33,7 +37,7 @@ public class Test3 extends TestHelper {
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         String res = runJSON("testpython2.json", values);
         P(res);
-        assertEquals("{}", res);
+        assertEquals(res, "{}");
     }
 
 

@@ -2,7 +2,7 @@ package com.rest.test;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Assert;
+import org.testng.Assert;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -122,7 +122,7 @@ abstract public class TestRestHelper {
     protected String callok(String meth, String query) throws IOException {
         int res = makegetcall(meth, query);
         P("Result: " + res);
-        Assert.assertEquals(200, res);
+        Assert.assertEquals(res, 200);
         return getData();
     }
 
@@ -140,7 +140,7 @@ abstract public class TestRestHelper {
     protected void test400(String meth, String query) throws IOException {
         int res = makegetcall(meth, query);
         P("Result: " + res);
-        Assert.assertEquals(400, res);
+        Assert.assertEquals(res, 400);
         String da = getErrData();
         P(da);
     }
@@ -151,18 +151,18 @@ abstract public class TestRestHelper {
 
     protected void testok(String meth, String query, String validdata) throws IOException {
         String da = getok(meth, query);
-        Assert.assertEquals(validdata, da.trim());
+        Assert.assertEquals(da.trim(), validdata);
     }
 
     protected void testok(String meth, String query, String validdata, Map<String, String> props) throws IOException {
         String da = getok(meth, query, props);
-        Assert.assertEquals(validdata, da.trim());
+        Assert.assertEquals(da.trim(), validdata);
     }
 
     protected String getok(String meth, String query, Map<String, String> props) throws IOException {
         int res = makegetcall(meth, query, props);
         P("Result: " + res);
-        Assert.assertEquals(200, res);
+        Assert.assertEquals(res, 200);
         String da = getData();
         P(da);
         return da;
@@ -176,7 +176,7 @@ abstract public class TestRestHelper {
     protected JSONArray testoka(String meth, String query, String attr) throws IOException {
         int res = makegetcall(meth, query);
         P("Result: " + res);
-        Assert.assertEquals(200, res);
+        Assert.assertEquals(res, 200);
         String da = getData();
         P(da);
         return getA(da, attr);

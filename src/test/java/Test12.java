@@ -1,13 +1,13 @@
 import com.rest.readjson.RestError;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 
 import com.rest.runjson.ConvertRes;
 
-import static org.junit.Assert.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 public class Test12 extends PTestRestHelper {
 
@@ -20,7 +20,7 @@ public class Test12 extends PTestRestHelper {
         System.out.println(o.toString());
         JSONArray a = (JSONArray) o.get("data");
         System.out.println(a);
-        assertEquals(a.length(), 1);
+        assertEquals(1, a.length());
     }
 
     @Test
@@ -32,7 +32,7 @@ public class Test12 extends PTestRestHelper {
         System.out.println(o.toString());
         JSONArray a = (JSONArray) o.get("xxx");
         System.out.println(a);
-        assertEquals(a.length(), 1);
+        assertEquals(1, a.length());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class Test12 extends PTestRestHelper {
         ConvertRes.rename(o, "res", "data");
         System.out.println(o.toString());
         int i = o.getInt("res");
-        assertEquals(i, 99);
+        assertEquals(99, i);
     }
 
 }

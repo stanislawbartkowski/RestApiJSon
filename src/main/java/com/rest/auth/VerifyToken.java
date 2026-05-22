@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 
-import static org.junit.Assert.assertTrue;
-
 public class VerifyToken implements IVerifyToken {
 
     private final IRestConfig iConfig;

@@ -6,8 +6,8 @@ import com.rest.runjson.IRunPlugin;
 import com.rest.runjson.RestRunJson;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -15,12 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.expectThrows;
 
 public class Test8 extends TestHelper {
 
-    @Before
+    @BeforeMethod
     public void beforeEachTestMethod() throws IOException, RestError {
         init("testparresource.properties");
         RestMainHelper.registerExecutors(iconfig);
@@ -32,13 +32,13 @@ public class Test8 extends TestHelper {
         P("Hello");
         Path p = getPath6("test1.json");
         IRestActionJSON j = readJSONAction(p);
-        assertEquals("super", j.action());
+        assertEquals(j.action(), "super");
     }
 
     private RestRunJson.IReturnValue runResource(String json, String res) throws RestError {
         Path p = getPath6(json);
         IRestActionJSON j = readJSONAction(p);
-        assertEquals("resoudir", j.action());
+        assertEquals(j.action(), "resoudir");
         IRunPlugin irun = exec.getExecutor(j);
         Map<String, ParamValue> values = new HashMap<String, ParamValue>();
         values.put("resource", new ParamValue(res));
@@ -48,12 +48,12 @@ public class Test8 extends TestHelper {
     @Test
     public void test2() throws RestError {
         RestRunJson.IReturnValue ires = runResource("test2.json", "list");
-        assertEquals("{}", ires.StringValue());
+        assertEquals(ires.StringValue(), "{}");
     }
 
     @Test
     public void test3() throws RestError {
-        RestError thrown = assertThrows(
+        RestError thrown = expectThrows(
                 RestError.class,
                 () -> runResource("test4.json", "codeerr"));
         P(thrown.getMessage());
@@ -63,7 +63,7 @@ public class Test8 extends TestHelper {
     public void test4() throws RestError {
         RestRunJson.IReturnValue ires = runResource("test4.json", "code");
         P(ires.StringValue());
-        assertEquals("var j = \"hello\";", ires.StringValue());
+        assertEquals(ires.StringValue(), "var j = \"hello\";");
     }
 
     @Test
@@ -83,9 +83,9 @@ public class Test8 extends TestHelper {
         P(ires.StringValue());
         JSONObject o = new JSONObject(ires.StringValue());
         String s = o.getString("hello");
-        assertEquals("Hello", s);
+        assertEquals(s, "Hello");
         JSONArray a = o.optJSONArray("pars");
-        assertEquals(2, a.length());
+        assertEquals(a.length(), 2);
     }
 
 

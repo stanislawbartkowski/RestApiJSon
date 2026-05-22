@@ -1,8 +1,8 @@
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 
 // -c src/test/resources/testpar/restpar15.properties -p 7999
@@ -15,7 +15,7 @@ public class Test15 extends PTestRestHelper {
         // check multi content
         String[] p = res.split("----------------");
         System.out.println(p.length);
-        assertEquals(3, p.length);
+        assertEquals(p.length, 3);
     }
 
 }

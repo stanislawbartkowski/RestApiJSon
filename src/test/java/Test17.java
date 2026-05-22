@@ -4,15 +4,15 @@ import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.testng.Assert.*;
 
 public class Test17 extends TestHelper {
 
@@ -24,7 +24,7 @@ public class Test17 extends TestHelper {
         System.out.println(o);
         String v = o.getString("action");
         System.out.println(v);
-        assertEquals("Custom action", v);
+        assertEquals(v, "Custom action");
     }
 
     @Test
@@ -33,8 +33,8 @@ public class Test17 extends TestHelper {
         JSONObject o = HelperJSon.readJS(files, "testpar.yaml", Optional.empty());
         System.out.println(o);
         String v = o.getString("Hello");
-        assertEquals("Wow", v);
-        assertEquals(1, o.length());
+        assertEquals(v, "Wow");
+        assertEquals(o.length(), 1);
     }
 
     @Test
@@ -43,8 +43,8 @@ public class Test17 extends TestHelper {
         JSONObject o = HelperJSon.readJS(files, "testpar1.yaml", Optional.empty());
         System.out.println(o);
         String v = o.getString("C");
-        assertEquals("newC", v);
-        assertEquals(3, o.length());
+        assertEquals(v, "newC");
+        assertEquals(o.length(), 3);
     }
 
     @Test
@@ -52,16 +52,16 @@ public class Test17 extends TestHelper {
         Helper.ListPaths files = new Helper.ListPaths(jdir17);
         JSONObject o = HelperJSon.readJS(files, "testpar2.yaml", Optional.empty());
         System.out.println(o);
-        assertEquals(3, o.length());
+        assertEquals(o.length(), 3);
         JSONObject rr = o.getJSONObject("B");
         System.out.println(rr);
-        assertEquals(2, rr.length());
+        assertEquals(rr.length(), 2);
     }
 
     @Test
     public void test5() throws RestError {
         Helper.ListPaths files = new Helper.ListPaths(jdir17);
-        RestError thrown = assertThrows(
+        RestError thrown = expectThrows(
                 RestError.class,
                 () -> HelperJSon.readJS(files, "testpar3.yaml", Optional.empty())
         );
@@ -74,16 +74,16 @@ public class Test17 extends TestHelper {
         JSONObject o = HelperJSon.readJS(files, "testpar4.yaml", Optional.empty());
         System.out.println(o);
         JSONArray a = o.optJSONArray("B");
-        assertEquals(2, a.length());
+        assertEquals(a.length(), 2);
         JSONObject e2 = a.getJSONObject(1);
         System.out.println(e2);
-        assertEquals(2, e2.length());
+        assertEquals(e2.length(), 2);
     }
 
     @Test
     public void test7() throws RestError {
         Helper.ListPaths files = new Helper.ListPaths(jdir17);
-        RestError thrown = assertThrows(
+        RestError thrown = expectThrows(
                 RestError.class,
                 () -> HelperJSon.readJS(files, "testpar5.yaml", Optional.empty())
         );
@@ -93,7 +93,7 @@ public class Test17 extends TestHelper {
     @Test
     public void test8() throws RestError {
         Helper.ListPaths files = new Helper.ListPaths(jdir17);
-        RestError thrown = assertThrows(
+        RestError thrown = expectThrows(
                 RestError.class,
                 () -> HelperJSon.readJS(files, "testpar6.yaml", Optional.empty())
         );
@@ -104,16 +104,16 @@ public class Test17 extends TestHelper {
     public void test9() throws RestError {
         Helper.ListPaths files = new Helper.ListPaths(jdir17);
         JSONObject o = HelperJSon.readJS(files, "testpar7.yaml", Optional.empty());
-        assertEquals(2, o.length());
+        assertEquals(o.length(), 2);
         JSONArray a = o.optJSONArray("B");
-        assertEquals(5, a.length());
+        assertEquals(a.length(), 5);
     }
 
     private void runtest(String res) throws RestError {
         Helper.ListPaths files = new Helper.ListPaths(jdir17);
         JSONObject o = HelperJSon.readJS(files, "testpar8.yaml", Optional.empty());
         JSONArray a = o.optJSONArray("B");
-        assertEquals(2, a.length());
+        assertEquals(a.length(), 2);
         JSONObject o1 = a.getJSONObject(1);
     }
 
@@ -134,7 +134,7 @@ public class Test17 extends TestHelper {
         System.out.println(o);
         JSONArray a = o.optJSONArray("fields");
         System.out.println(a.length());
-        assertEquals(8, a.length());
+        assertEquals(a.length(), 8);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class Test17 extends TestHelper {
         JSONArray a = o.optJSONArray("fields");
         assertNotNull(a);
         System.out.println(a.length());
-        assertEquals(8, a.length());
+        assertEquals(a.length(), 8);
         assertNotNull(o.optJSONObject("formprops"));
         assertNotNull(o.getJSONObject("cardprops"));
     }
@@ -158,7 +158,7 @@ public class Test17 extends TestHelper {
         JSONArray a = o.optJSONArray("fields");
         assertNotNull(a);
         System.out.println(a.length());
-        assertEquals(8, a.length());
+        assertEquals(a.length(), 8);
     }
 
 }

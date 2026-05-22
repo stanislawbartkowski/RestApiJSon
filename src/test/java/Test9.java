@@ -2,7 +2,7 @@
 // -c src/test/resources/testpar/testparresource.properties -p 7999
 
 import org.json.JSONArray;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 

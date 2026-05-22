@@ -3,13 +3,13 @@ import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
 import org.json.JSONArray;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 public class Test10 extends TestHelper {
 
@@ -23,7 +23,7 @@ public class Test10 extends TestHelper {
         String res = runJSON("getdept.json", values);
         P(res);
         JSONArray a = getA(res);
-        assertEquals(14, a.length());
+        assertEquals(a.length(), 14);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class Test10 extends TestHelper {
         String res = runJSON("getdepty.yaml", values);
         P(res);
         JSONArray a = getA(res);
-        assertEquals(14, a.length());
+        assertEquals(a.length(), 14);
     }
 
 

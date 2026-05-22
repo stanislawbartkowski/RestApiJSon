@@ -1,5 +1,5 @@
 import com.rest.auth.KeycloakAuth;
-import org.junit.Test;
+import org.testng.annotations.Test;
 import org.keycloak.common.VerificationException;
 
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.*;
-import static org.junit.Assert.*;
+import static org.testng.Assert.*;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 
 

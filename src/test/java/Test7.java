@@ -1,12 +1,12 @@
 import org.json.JSONArray;
-import org.junit.Assert;
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static org.junit.Assert.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 // -c src/test/resources/cacenter/carest.properties -p 7999
 
@@ -23,7 +23,7 @@ public class Test7 extends PTestRestHelper {
             e = zip.getNextEntry();
             i = i + 1;
         }
-        assertEquals(no, i);
+        assertEquals(i, no);
     }
 
     @Test

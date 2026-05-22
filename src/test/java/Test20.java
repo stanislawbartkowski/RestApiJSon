@@ -1,10 +1,10 @@
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 // -c src/test/resources/testpar/restpar20.properties -p 7999
 
@@ -26,8 +26,8 @@ public class Test20 extends PTestRestHelper {
         for (String l : lines) {
             System.out.println(l);
         }
-        assertEquals("perseus", lines[1]);
-        assertEquals("111111111", lines[2]);
+        assertEquals(lines[1], "perseus");
+        assertEquals(lines[2], "111111111");
     }
 
     @Test

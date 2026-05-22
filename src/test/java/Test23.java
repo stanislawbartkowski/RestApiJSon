@@ -1,10 +1,10 @@
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 // -c src/test/resources/testpar/restpar23.properties -p 7999
 
@@ -20,7 +20,7 @@ public class Test23 extends PTestRestHelper {
         }};
         int res = makegetcall("/test1", null, props);
         System.out.println(res);
-        assertEquals(400, res);
+        assertEquals(res, 400);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class Test23 extends PTestRestHelper {
         }};
         int res = makegetcall("/test1", null, props);
         System.out.println(res);
-        assertEquals(400, res);
+        assertEquals(res, 400);
     }
 
     @Test
@@ -45,12 +45,12 @@ public class Test23 extends PTestRestHelper {
         }};
         int res = makegetcall("/test1", null, props);
         System.out.println(res);
-        assertEquals(200, res);
+        assertEquals(res, 200);
 
         // jeszcze raz to samo, tokenw cachu
         res = makegetcall("/test1", null, props);
         System.out.println(res);
-        assertEquals(200, res);
+        assertEquals(res, 200);
 
     }
     }

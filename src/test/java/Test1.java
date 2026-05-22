@@ -2,8 +2,8 @@ import com.rest.guice.rest.RegisterExecutors;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.testng.Assert.*;
 
 public class Test1 extends TestHelper {
 
-    @Before
+    @BeforeMethod
     public void beforeEachTestMethod() throws IOException, RestError {
         initno();
     }
@@ -24,7 +24,7 @@ public class Test1 extends TestHelper {
     public void test1() throws RestError {
         Path p = getPath1("testerror.json");
         P(p.toString());
-        RestError thrown = assertThrows(
+        RestError thrown = expectThrows(
                 RestError.class,
                 () -> readJSONAction(p));
         P(thrown.getMessage());
@@ -34,27 +34,27 @@ public class Test1 extends TestHelper {
     public void test2() throws RestError {
         Path p = getPath1("testdefa");
         IRestActionJSON j = readJSONAction(p);
-        assertEquals("Custom action", j.action());
-        assertEquals(IRestActionJSON.PYTHON3, j.getProc());
+        assertEquals(j.action(), "Custom action");
+        assertEquals(j.getProc(), IRestActionJSON.PYTHON3);
     }
 
     @Test
     public void test3() throws RestError {
         Path p = getPath1("testsql.json");
         IRestActionJSON j = readJSONAction(p);
-        assertEquals("SQL action", j.action());
-        assertEquals(IRestActionJSON.SQL, j.getProc());
-        assertEquals(IRestActionJSON.FORMAT.JSON, j.format());
+        assertEquals(j.action(), "SQL action");
+        assertEquals(j.getProc(), IRestActionJSON.SQL);
+        assertEquals(j.format(), IRestActionJSON.FORMAT.JSON);
     }
 
     @Test
     public void test4() throws RestError {
         Path p = getPath1("testpars.json");
         IRestActionJSON j = readJSONAction(p);
-        assertEquals("python", j.action());
-        assertEquals(IRestActionJSON.PYTHON3, j.getProc());
-        assertEquals(1, j.getParams().size());
-        assertEquals(IRestActionJSON.FORMAT.TEXT, j.format());
+        assertEquals(j.action(), "python");
+        assertEquals(j.getProc(), IRestActionJSON.PYTHON3);
+        assertEquals(j.getParams().size(), 1);
+        assertEquals(j.format(), IRestActionJSON.FORMAT.TEXT);
     }
 
     @Test
@@ -62,12 +62,12 @@ public class Test1 extends TestHelper {
         Path p = getPath2("testshell.json");
         P(p.toString());
         IRestActionJSON j = readJSONAction(p);
-        assertEquals(IRestActionJSON.SHELL, j.getProc());
+        assertEquals(j.getProc(), IRestActionJSON.SHELL);
     }
 
     @Test
     public void test6() throws RestError {
-        RestError thrown = assertThrows(
+        RestError thrown = expectThrows(
                 RestError.class,
                 () -> init("testpar1.properties"));
         P(thrown.getMessage());
@@ -78,7 +78,7 @@ public class Test1 extends TestHelper {
         Path p = getPath3("testpython1.json");
         P(p.toString());
         IRestActionJSON j = readJSONAction(p);
-        assertEquals(IRestActionJSON.PYTHON3, j.getProc());
+        assertEquals(j.getProc(), IRestActionJSON.PYTHON3);
     }
 
 
@@ -87,7 +87,7 @@ public class Test1 extends TestHelper {
         Path p = getPath4("testsql.json");
         P(p.toString());
         IRestActionJSON j = readJSONAction(p);
-        assertEquals(IRestActionJSON.SQL, j.getProc());
+        assertEquals(j.getProc(), IRestActionJSON.SQL);
     }
 
     @Test
@@ -95,9 +95,9 @@ public class Test1 extends TestHelper {
         Path p = getPath1("testshell.json");
         IRestActionJSON j = readJSONAction(p);
         List<String> res = j.actionL();
-        assertEquals(2, res.size());
-        assertEquals("x", res.get(0));
-        assertEquals("y", res.get(1));
+        assertEquals(res.size(), 2);
+        assertEquals(res.get(0), "x");
+        assertEquals(res.get(1), "y");
     }
 
     @Test
@@ -105,7 +105,7 @@ public class Test1 extends TestHelper {
         Path p = getPath1("testshellzip.json");
         IRestActionJSON j = readJSONAction(p);
         assertTrue(j.isUpload());
-        assertEquals(IRestActionJSON.FORMAT.ZIP, j.format());
+        assertEquals(j.format(), IRestActionJSON.FORMAT.ZIP);
     }
 
     @Test
@@ -113,9 +113,9 @@ public class Test1 extends TestHelper {
         Path p = getPath1("testshelly.yaml");
         IRestActionJSON j = readJSONAction(p);
         List<String> res = j.actionL();
-        assertEquals(2, res.size());
-        assertEquals("x", res.get(0));
-        assertEquals("y", res.get(1));
+        assertEquals(res.size(), 2);
+        assertEquals(res.get(0), "x");
+        assertEquals(res.get(1), "y");
     }
 
 

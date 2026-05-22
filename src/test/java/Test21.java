@@ -3,17 +3,17 @@ import com.rest.readjson.HelperJSon;
 import com.rest.readjson.RestError;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 
 public class Test21 extends TestHelper {
 
-    @Before
+    @BeforeMethod
     public void beforeEachTestMethod() throws IOException, RestError {
         initno();
     }
@@ -26,7 +26,7 @@ public class Test21 extends TestHelper {
         JSONObject oo = HelperJSon.transformSecurity(o, "aaa");
         System.out.println(oo);
         // authlabel does not work for root object
-        assertEquals(2, oo.length());
+        assertEquals(oo.length(), 2);
     }
 
     @Test
@@ -37,12 +37,12 @@ public class Test21 extends TestHelper {
         JSONObject oo = HelperJSon.transformSecurity(o, "aaa");
         System.out.println(oo);
         // remove 1
-        assertEquals(1, oo.length());
+        assertEquals(oo.length(), 1);
 
         JSONObject o1 = HelperJSon.transformSecurity(o, "admin");
         System.out.println(o1);
         // sec label comply
-        assertEquals(2, o1.length());
+        assertEquals(o1.length(), 2);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class Test21 extends TestHelper {
         JSONObject oo = HelperJSon.transformSecurity(o, "aaa");
         System.out.println(oo);
         JSONArray a = oo.getJSONArray("res");
-        assertEquals(1, a.length());
+        assertEquals(a.length(), 1);
     }
 
     @Test
@@ -65,17 +65,17 @@ public class Test21 extends TestHelper {
         JSONObject o1 = HelperJSon.transformSecurity(o, "");
         System.out.println(o1);
         JSONArray a1 = o1.getJSONArray("res");
-        assertEquals(1, a1.length());
+        assertEquals(a1.length(), 1);
 
         JSONObject o2 = HelperJSon.transformSecurity(o, "admin");
         System.out.println(o2);
         JSONArray a2 = o2.getJSONArray("res");
-        assertEquals(1, a2.length());
+        assertEquals(a2.length(), 1);
 
         JSONObject o3 = HelperJSon.transformSecurity(o, "xxxxx");
         System.out.println(o3);
         JSONArray a3 = o3.getJSONArray("res");
-        assertEquals(2, a3.length());
+        assertEquals(a3.length(), 2);
 
     }
 
@@ -93,7 +93,7 @@ public class Test21 extends TestHelper {
 
         JSONArray aa1 = oo1.getJSONArray("a");
         System.out.println(aa1);
-        assertEquals(1, aa1.length());
+        assertEquals(aa1.length(), 1);
     }
 
 

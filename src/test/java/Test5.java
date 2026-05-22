@@ -1,4 +1,5 @@
 import org.json.JSONArray;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
@@ -7,9 +8,12 @@ import java.io.IOException;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
-// -c src/test/resources/testpar/restparam.properties -p 7999
-
 public class Test5 extends PTestRestHelper {
+
+    @BeforeClass
+    public void startServer() throws Exception {
+        TestServer.start("src/test/resources/testpar/restparam.properties", 7999);
+    }
 
     @Test
     public void test1() throws IOException {

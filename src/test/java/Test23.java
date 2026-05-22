@@ -1,3 +1,4 @@
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -6,10 +7,13 @@ import java.util.Map;
 
 import static org.testng.Assert.assertEquals;
 
-// -c src/test/resources/testpar/restpar23.properties -p 7999
-
 
 public class Test23 extends PTestRestHelper {
+
+    @BeforeClass
+    public void startServer() throws Exception {
+        TestServer.start("src/test/resources/testpar/restpar23.properties", 7999);
+    }
 
     @Test
     public void test1() throws IOException {

@@ -171,7 +171,7 @@
         <repository>
             <id>github</id>
             <name>GitHub stanislawbartkowski Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/stanislawbartkowski/RestService</url>
+            <url>https://maven.pkg.github.com/stanislawbartkowski/RestApiJSon</url>
         </repository>
     </distributionManagement>
 

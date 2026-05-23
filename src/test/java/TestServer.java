@@ -25,6 +25,7 @@ final class TestServer {
 
     static synchronized void start(String propertiesPath, int port) throws Exception {
         stop();
+        DerbyTestDb.initialize();
         SetInjector.setInjector();
         RestConfigFactory.setInstance(Paths.get(propertiesPath), Optional.empty());
         IRestConfig iconfig = ModuleBuild.getI().getInstance(IRestConfig.class);

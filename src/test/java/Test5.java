@@ -1,6 +1,5 @@
 import org.json.JSONArray;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -8,9 +7,6 @@ import java.io.IOException;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
-// restparam.properties registers the SQL plugin and connects to jdbc:postgresql://thinkde:5432/testrest at startup,
-// so even the non-SQL test1 cannot run without that database. Disable the class until the env is available.
-@Ignore("Requires PostgreSQL")
 public class Test5 extends PTestRestHelper {
 
     @BeforeClass

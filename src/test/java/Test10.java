@@ -3,7 +3,6 @@ import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
 import org.json.JSONArray;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.nio.file.Path;
@@ -12,8 +11,6 @@ import java.util.Map;
 
 import static org.testng.Assert.assertEquals;
 
-// TODO: review later — connects to jdbc:db2://ubun:50000/sample which is not available in the test environment.
-@Ignore("TODO: review later — requires DB2 at jdbc:db2://ubun:50000/sample")
 public class Test10 extends TestHelper {
 
     private String runJSON(String f, Map<String, ParamValue> values) throws RestError {

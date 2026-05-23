@@ -2,7 +2,6 @@ import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -13,7 +12,6 @@ import java.util.Map;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-@Ignore("Requires PostgreSQL")
 public class Test4 extends TestHelper {
 
     private String runJSON(String f, Map<String, ParamValue> values) throws RestError {

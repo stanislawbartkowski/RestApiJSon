@@ -45,6 +45,11 @@ abstract public class TestHelper {
     protected Executors exec;
 
     protected void init(String p) throws RestError {
+        try {
+            DerbyTestDb.initialize();
+        } catch (java.sql.SQLException e) {
+            throw new RestError("Failed to initialize Derby test DB: " + e.getMessage());
+        }
         SetInjector.setInjector();
         RestConfigFactory.setInstance(getPathPar(p), Optional.empty());
         run = ModuleBuild.getI().getInstance(RestRunJson.class);

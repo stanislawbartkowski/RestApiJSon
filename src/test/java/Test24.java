@@ -55,6 +55,7 @@ public class Test24 extends PTestRestHelper {
     }
 
     // parse: true falls back to the legacy parse-and-restringify path.
+    // Heavy: a 100 MB parse needs ~500 MB heap.
     @Test
     public void test2() throws IOException {
         runLoad("/bigparse", "JSON (parse)");

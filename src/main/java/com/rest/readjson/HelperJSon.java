@@ -136,8 +136,7 @@ public class HelperJSon {
 
     public static Pair<JSONObject, Path> readJSP(Helper.ListPaths files, String resfile, Optional<String> opt, Optional<String> authlabel) throws RestError {
         Optional<Path> resourceF = files.getPath(resfile, opt);
-        String s = Helper.readTextFile(resourceF.get());
-        JSONObject o = new JSONObject(s);
+        JSONObject o = Helper.readJsonObject(resourceF.get());
         o = transformO(files, o);
         if (authlabel.isPresent()) o = HelperJSon.transformSec(o, authlabel.get());
         return Pair.with(o, resourceF.get());

@@ -1,7 +1,10 @@
 package com.rest.readjson;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +21,8 @@ import com.rest.restservice.PARAMTYPE;
 import com.rest.restservice.RestLogger;
 import com.rest.restservice.ParamValue;
 import com.rest.runjson.IRunPlugin;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 public class Helper {
 
@@ -106,6 +111,24 @@ public class Helper {
             String s = new String(Files.readAllBytes(path));
             if (isExtension(path, IRestActionJSON.YAMLEXT)) return Helper.convertYamlToJson(s);
             else return s;
+        } catch (IOException e) {
+            throwException("Error while reading " + path.toString(), e);
+        }
+        return null;
+    }
+
+    // Stream a JSON/YAML file directly into a JSONObject without first loading
+    // the entire text into memory. YAML still has to be slurped because the
+    // dataformat-yaml conversion is string-based.
+    public static JSONObject readJsonObject(Path path) throws RestError {
+        try {
+            if (isExtension(path, IRestActionJSON.YAMLEXT)) {
+                String s = new String(Files.readAllBytes(path));
+                return new JSONObject(convertYamlToJson(s));
+            }
+            try (Reader r = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+                return new JSONObject(new JSONTokener(r));
+            }
         } catch (IOException e) {
             throwException("Error while reading " + path.toString(), e);
         }

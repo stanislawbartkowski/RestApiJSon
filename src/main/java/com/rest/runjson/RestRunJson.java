@@ -7,7 +7,6 @@ import com.rest.readjson.Helper;
 import com.rest.readjson.IRestActionJSON;
 import com.rest.readjson.RestError;
 import com.rest.restservice.ParamValue;
-import org.javatuples.Pair;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -150,9 +149,6 @@ public class RestRunJson {
                         Helper.throwException(res.res, e);
                     }
                 }
-                Optional<Pair<String, String>> orename = rConfig.getRenameRes();
-                if (orename.isPresent())
-                    ConvertRes.rename(res.json, orename.get().getValue0(), orename.get().getValue1());
                 res.res = res.json.toString();
             }
             if (res.res == null) {

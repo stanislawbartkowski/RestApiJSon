@@ -77,7 +77,7 @@ Parsing pipeline (`com.rest.readjson`):
 - `RestError` is the project's checked exception thrown across all parsing/execution paths.
 
 Execution pipeline (`com.rest.runjson`):
-- `RestRunJson.executeJson` is the core dispatcher. It allocates temp files when needed, invokes the right `IRunPlugin`, then post-processes the result (validates JSON, applies `ConvertRes.rename`, reads MIXED content files).
+- `RestRunJson.executeJson` is the core dispatcher. It allocates temp files when needed, invokes the right `IRunPlugin`, then post-processes the result (validates JSON, reads MIXED content files).
 - `IRunPlugin.RunResult` carries `res` (stdout-style string), `tempfile`, `fileContent`, `content`, `bytecontent`, `json` between executor and post-processor.
 - `IReturnValue` (inner interface of `RestRunJson`) is what callers receive: `StringValue()`, `ByteValue()`, `fileValue()`, `secondPart()`, `secondBytePart()`. **Important:** for `OUTPUT.TMPFILE` actions, `StringValue()` may be empty or contain stdout — the actual result is in `fileValue()`. The test helpers read `fileValue()` first when present (see `TestHelper.runJSON`, `Test2.runJSON`, `Test3.runJSON`).
 

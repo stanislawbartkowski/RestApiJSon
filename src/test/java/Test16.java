@@ -4,6 +4,8 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.testng.Assert.assertEquals;
 
@@ -15,6 +17,9 @@ public class Test16 extends PTestRestHelper {
      */
     @BeforeClass
     public void startServer() throws Exception {
+        // res15/print is intentionally empty; git does not track empty dirs,
+        // so recreate it on a fresh checkout (CI) before the server starts.
+        Files.createDirectories(Paths.get("src/test/resources/res15/print"));
         TestServer.start("src/test/resources/testpar/restpar15.properties", 7999);
     }
 

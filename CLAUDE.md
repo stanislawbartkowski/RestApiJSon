@@ -66,10 +66,13 @@ Each action file describes one endpoint with fields like:
   "action": "...",
   "format": "JSON|TEXT|ZIP|JS|XML|MIXED|MIXEDBINARY",
   "output": "STDOUT|TMPFILE|INTERNAL",
+  "parse": true,
   "pars": [ { "name": "..." } ] }
 ```
 
 Constants live in `com.rest.readjson.IRestActionJSON` (`PYTHON3`, `SQL`, `SHELL`, `RESOURCE`, `RESOURCEDIR`, plus `FORMAT`, `OUTPUT`, `Method` enums).
+
+**`parse` (RESOURCE + format JSON only, default `false`)** — when false, the resource file bytes are streamed straight to the HTTP response with no parsing or in-heap copy (`GetResourceExecutor` sets `res.fileContent` + `keepFile=true`). When true, the file is parsed via `HelperJSon.readJS`, which means `replace#` template includes and `authlabel` filtering take effect — at the cost of holding the whole JSON tree in memory. Whitespace also gets normalized by the parse/restringify roundtrip, so tests that compare byte-exact JSON output need `parse: true`.
 
 Parsing pipeline (`com.rest.readjson`):
 - `RestActionJSON` reads files from `jdir` directories; supports both `.json` and `.yaml` with shared parameter resolution via `HelperJSon`.

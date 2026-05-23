@@ -1,3 +1,4 @@
 proc: RESOURCE
 dir: big
-format: STREAM
+format: JSON
+parse: true

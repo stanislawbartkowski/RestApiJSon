@@ -31,6 +31,10 @@ public interface IRunPlugin {
         public byte[] bytecontent;
 
         public Optional<File> fileContent = Optional.empty();
+        // When fileContent points at a permanent on-disk resource (rather than
+        // a temp file we own), set this so RestService does not delete the file
+        // after sending the response.
+        public boolean keepFile = false;
     }
 
     default void modifPars(IRestActionJSON irest, String[] path, RestParams par) throws RestError {

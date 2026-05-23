@@ -29,6 +29,12 @@ public class RestRunJson {
 
         Optional<File> fileValue();
 
+        // True when fileValue() points at a permanent resource and must not be
+        // deleted after sending the response.
+        default boolean keepFile() {
+            return false;
+        }
+
     }
 
     final private IRestConfig rConfig;
@@ -185,6 +191,11 @@ public class RestRunJson {
             @Override
             public Optional<File> fileValue() {
                 return res.fileContent;
+            }
+
+            @Override
+            public boolean keepFile() {
+                return res.keepFile;
             }
         };
     }

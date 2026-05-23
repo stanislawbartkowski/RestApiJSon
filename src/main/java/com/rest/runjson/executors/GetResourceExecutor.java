@@ -26,8 +26,6 @@ public class GetResourceExecutor extends AbstractResourceDirExecutor {
         extMap.put(IRestActionJSON.FORMAT.JS, "js");
         extMap.put(IRestActionJSON.FORMAT.XML, "xml");
         extMap.put(IRestActionJSON.FORMAT.ZIP, "zip");
-        // STREAM uses the resource name as-is (any extension).
-        extMap.put(IRestActionJSON.FORMAT.STREAM, "");
     }
 
     @Override
@@ -46,16 +44,20 @@ public class GetResourceExecutor extends AbstractResourceDirExecutor {
             Helper.throwSevere(j.format() + " is not expected as resource");
         }
         boolean isjson = j.format() == IRestActionJSON.FORMAT.JSON;
-        boolean isstream = j.format() == IRestActionJSON.FORMAT.STREAM;
-        String fileName = (isjson || isstream) ? resource : resource + '.' + ext;
+        String fileName = isjson ? resource : resource + '.' + ext;
         String resourcepath = new File(dir, fileName).getPath();
-        if (isstream) {
-            // Hand the resource file straight to the response pipeline.
-            Optional<Path> resourceF = rootdirlist.getPath(resourcepath, Optional.empty());
-            res.fileContent = Optional.of(resourceF.get().toFile());
-        } else if (!isjson) {
+        if (!isjson) {
             Optional<Path> resourceF = rootdirlist.getPath(resourcepath, Optional.empty());
             res.res = Helper.readTextFile(resourceF.get());
-        } else res.json = HelperJSon.readJS(rootdirlist, resourcepath, Helper.authLabel(values));
+        } else if (j.parseJson()) {
+            // Opt-in legacy path: parse the file so replace# / authlabel
+            // transformations from HelperJSon take effect.
+            res.json = HelperJSon.readJS(rootdirlist, resourcepath, Helper.authLabel(values));
+        } else {
+            // Default: stream the resource file straight to the response.
+            Optional<Path> resourceF = rootdirlist.getPath(resourcepath, Optional.empty());
+            res.fileContent = Optional.of(resourceF.get().toFile());
+            res.keepFile = true;
+        }
     }
 }

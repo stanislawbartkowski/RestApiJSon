@@ -48,14 +48,16 @@ public class Test24 extends PTestRestHelper {
         }
     }
 
+    // JSON format streams the file by default — no parse, low memory.
     @Test
     public void test1() throws IOException {
-        runLoad("/big", "JSON");
+        runLoad("/big", "JSON (stream)");
     }
 
+    // parse: true falls back to the legacy parse-and-restringify path.
     @Test
     public void test2() throws IOException {
-        runLoad("/bigstream", "STREAM");
+        runLoad("/bigparse", "JSON (parse)");
     }
 
     private void runLoad(String path, String label) throws IOException {

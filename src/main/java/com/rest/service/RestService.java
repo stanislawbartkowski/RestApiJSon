@@ -52,9 +52,6 @@ public class RestService extends RestHelper.RestServiceHelper {
         mapf.put(IRestActionJSON.FORMAT.XML, RestParams.CONTENT.XML);
         mapf.put(IRestActionJSON.FORMAT.MIXED, RestParams.CONTENT.MIXED);
         mapf.put(IRestActionJSON.FORMAT.MIXEDBINARY, RestParams.CONTENT.MIXED);
-        // STREAM defaults to JSON content type — the typical use case is large
-        // JSON payloads served straight from disk without parsing.
-        mapf.put(IRestActionJSON.FORMAT.STREAM, RestParams.CONTENT.JSON);
     }
 
     @Inject
@@ -153,10 +150,9 @@ public class RestService extends RestHelper.RestServiceHelper {
                 return;
             }
             if (ires.fileValue().isPresent()) {
-                // STREAM points fileValue at the original resource on disk, so do
-                // not delete after sending; other paths use a temp file that we own.
-                boolean removeFile = irest.format() != IRestActionJSON.FORMAT.STREAM;
-                produceResponseFromFile(v, ires.fileValue().get(), removeFile, RestHelper.HTTPOK, Optional.empty());
+                // keepFile() means the file is a permanent resource on disk;
+                // other paths use a temp file that we own and should delete.
+                produceResponseFromFile(v, ires.fileValue().get(), !ires.keepFile(), RestHelper.HTTPOK, Optional.empty());
                 return;
             }
             if (ires.ByteValue() != null) {

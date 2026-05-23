@@ -29,10 +29,7 @@ public interface IRestActionJSON {
         JS("JS"),
         XML("XML"),
         MIXED("MIXED"),
-        MIXEDBINARY("MIXEDBINARY"),
-        // Pipe the resource file bytes directly to the HTTP response. No parse,
-        // no validation, no content held in JVM heap — used to serve large payloads.
-        STREAM("STREAM");
+        MIXEDBINARY("MIXEDBINARY");
 
         private final String m;
 
@@ -95,5 +92,10 @@ public interface IRestActionJSON {
     boolean setEnvir();
 
     boolean updateQuery();
+
+    // When true, RESOURCE/JSON endpoints parse and transform the file before
+    // sending (replace#, authlabel filtering). When false (default), the file
+    // bytes are streamed straight to the response.
+    boolean parseJson();
 
 }

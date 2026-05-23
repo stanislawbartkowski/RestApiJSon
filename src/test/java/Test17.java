@@ -128,44 +128,4 @@ public class Test17 extends TestHelper {
         runtest("testpar9.yaml");
     }
 
-    // TODO: review later — step3.yaml is missing from src/test/resources/jdir17.
-    @Ignore("TODO: review later — step3.yaml is missing from jdir17")
-    @Test
-    public void test12() throws RestError {
-        Helper.ListPaths files = new Helper.ListPaths(jdir17);
-        JSONObject o = HelperJSon.readJS(files, "step3.yaml", Optional.empty());
-        System.out.println(o);
-        JSONArray a = o.optJSONArray("fields");
-        System.out.println(a.length());
-        assertEquals(a.length(), 8);
-    }
-
-    // TODO: review later — step31.yaml is missing from src/test/resources/jdir17.
-    @Ignore("TODO: review later — step31.yaml is missing from jdir17")
-    @Test
-    public void test13() throws RestError {
-        Helper.ListPaths files = new Helper.ListPaths(jdir17);
-        JSONObject o = HelperJSon.readJS(files, "step31.yaml", Optional.empty());
-        System.out.println(o);
-        JSONArray a = o.optJSONArray("fields");
-        assertNotNull(a);
-        System.out.println(a.length());
-        assertEquals(a.length(), 8);
-        assertNotNull(o.optJSONObject("formprops"));
-        assertNotNull(o.getJSONObject("cardprops"));
-    }
-
-    // TODO: review later — step32.yaml is missing from src/test/resources/jdir17.
-    @Ignore("TODO: review later — step32.yaml is missing from jdir17")
-    @Test
-    public void test14() throws RestError {
-        Helper.ListPaths files = new Helper.ListPaths(jdir17);
-        JSONObject o = HelperJSon.readJS(files, "step32.yaml", Optional.empty());
-        System.out.println(o);
-        JSONArray a = o.optJSONArray("fields");
-        assertNotNull(a);
-        System.out.println(a.length());
-        assertEquals(a.length(), 8);
-    }
-
 }

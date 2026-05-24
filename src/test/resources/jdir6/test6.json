@@ -2,5 +2,4 @@
   "proc": "RESOURCE",
   "dir": "resoudir",
   "format": "JSON",
-  "parse": true
 }

@@ -1,3 +1,0 @@
-asdadas
-asdasdasd
-error code

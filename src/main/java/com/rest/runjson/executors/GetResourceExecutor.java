@@ -49,15 +49,16 @@ public class GetResourceExecutor extends AbstractResourceDirExecutor {
         if (!isjson) {
             Optional<Path> resourceF = rootdirlist.getPath(resourcepath, Optional.empty());
             res.res = Helper.readTextFile(resourceF.get());
-        } else if (j.parseJson()) {
-            // Opt-in legacy path: parse the file so replace# / authlabel
-            // transformations from HelperJSon take effect.
-            res.json = HelperJSon.readJS(rootdirlist, resourcepath, Helper.authLabel(values));
         } else {
-            // Default: stream the resource file straight to the response.
             Optional<Path> resourceF = rootdirlist.getPath(resourcepath, Optional.empty());
-            res.fileContent = Optional.of(resourceF.get().toFile());
-            res.keepFile = true;
+            // YAML can't be streamed as JSON — it needs the parse/convert path
+            // regardless of the flag.
+            if (j.parseJson() || Helper.isExtension(resourceF.get(), IRestActionJSON.YAMLEXT)) {
+                res.json = HelperJSon.readJS(rootdirlist, resourcepath, Helper.authLabel(values));
+            } else {
+                res.fileContent = Optional.of(resourceF.get().toFile());
+                res.keepFile = true;
+            }
         }
     }
 }

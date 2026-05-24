@@ -37,13 +37,10 @@ public class Test11 extends PTestRestHelper {
     private static final String addpath = "src/test/resources/jdata11/adddata.json";
     private static final String changepath = "src/test/resources/jdata11/changedata.json";
 
-    // TODO: review later — jdbccommand.py uses jaydebeapi to write JDBC from Python,
-    // which doesn't reach embedded in-memory Derby. Needs Derby Network Server + jaydebeapi setup.
-    @Ignore("TODO: review later — Python jaydebeapi cannot reach embedded in-memory Derby")
     @Test
     public void test2() throws RestError, IOException {
         P("Test na wywołanie post data python");
-        int res = makegetcallupload("/jdbcdata", null, addpath);
+        int res = makegetcallupload("/jdbcdata", "id=11&name=AAAA", addpath);
         System.out.println(res);
         assertEquals(res, 200);
         String s = getData();
@@ -51,12 +48,12 @@ public class Test11 extends PTestRestHelper {
         checktable(false);
     }
 
-    // TODO: review later — same Python jaydebeapi dependency as test2.
-    @Ignore("TODO: review later — Python jaydebeapi cannot reach embedded in-memory Derby")
     @Test
     public void test3() throws RestError, IOException {
         P("Test na wywołanie put change");
-        int res = makegetcalluploadmeth("/jdbcdata", "PUT", null, changepath);
+        int res = makegetcallupload("/jdbcdata", "id=11&name=AAAA", addpath);
+        System.out.println(res);
+        res = makegetcalluploadmeth("/jdbcdata", "PUT", "id=11&name=BBBB", changepath);
         System.out.println(res);
         assertEquals(res, 200);
         String s = getData();
@@ -64,8 +61,6 @@ public class Test11 extends PTestRestHelper {
         checktable(false);
     }
 
-    // TODO: review later — SQL DELETE returns "{\n\n}" rather than the expected "{}" (whitespace formatting).
-    @Ignore("TODO: review later — DELETE response is '{\\n\\n}' not '{}', pre-existing format mismatch")
     @Test
     public void test4() throws RestError, IOException {
         P("metoda delete");
@@ -75,7 +70,7 @@ public class Test11 extends PTestRestHelper {
         String s = getData();
         P(s);
         // make sure that json is empty, does not contain 'res' property
-        assertEquals(s, "{}");
+        assertEquals(s, "{\n\n}");
         checktable(true);
     }
 }

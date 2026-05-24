@@ -1,9 +1,8 @@
-proc: PYTHON3
-output: TMPFILE
-format: JSON
+proc: SQL
+action: UPDATE RESTTEST SET name=? WHERE ID=?
 method: PUT
-upload: true
-setenvir: true
-action:
-  - jdbccommand.py
-  - change
+updatequery: true
+pars:
+- name: name
+- name: id
+  type: int

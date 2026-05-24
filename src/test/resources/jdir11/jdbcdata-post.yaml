@@ -1,9 +1,8 @@
-proc: PYTHON3
-output: TMPFILE
-format: JSON
+proc: SQL
+action: INSERT INTO RESTTEST VALUES(?,?)
 method: POST
-upload: true
-setenvir: true
-action:
-  - jdbccommand.py
-  - add
+updatequery: true
+pars:
+- name: id
+  type: int
+- name: name

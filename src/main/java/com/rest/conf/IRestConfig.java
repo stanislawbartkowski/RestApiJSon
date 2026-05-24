@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface IRestConfig {
 
-    String VERSION = "RestAPIJSON version 1.1.0 (r:2) 2026/05/24";
+    String VERSION = "RestAPIJSON version 1.1.1 2026/05/24";
 
     Set<String> listOfPlugins();
 
